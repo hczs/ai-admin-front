@@ -1,0 +1,316 @@
+<template>
+  <div class="app-container">
+
+    <!-- 顶部查询表单 -->
+    <el-form :inline="true" class="demo-form-inline">
+
+      <el-form-item :label="$t('account.accountNumber')">
+        <el-input v-model="queryParam.account_number" :placeholder="$t('account.pleaseInputAccount')" />
+      </el-form-item>
+
+      <el-form-item :label="$t('account.roles')">
+        <el-select v-model="queryParam.roles" clearable :placeholder="$t('account.selectRole')">
+          <el-option
+            v-for="item in roleList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          >
+            <span :title="item.description" style="float: left">{{ item.name }}</span>
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item :label="$t('common.createTime')">
+        <el-date-picker
+          v-model="queryParam.begin"
+          type="datetime"
+          :placeholder="$t('common.pleaseSelectBegin')"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          default-time="00:00:00"
+        />
+      </el-form-item>
+
+      <el-form-item>
+        <el-date-picker
+          v-model="queryParam.end"
+          type="datetime"
+          :placeholder="$t('common.pleaseSelectEnd')"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          default-time="00:00:00"
+        />
+      </el-form-item>
+      <el-button type="primary" icon="el-icon-search" @click="getQueryList()">{{ $t('common.search') }}</el-button>
+      <el-button type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
+    </el-form>
+
+    <el-button style="float: right" :disabled="addDisable" type="primary" size="medium" icon="el-icon-circle-plus-outline" @click="add()">
+      {{ $t('common.add') }}
+    </el-button>
+    <!-- 数据表格 -->
+    <el-table
+      v-loading="listLoading"
+      :data="tableData"
+      border
+      fit
+    >
+      <el-table-column
+        type="index"
+        :index="indexMethod"
+        :label="$t('common.order')"
+        width="120"
+      />
+      <el-table-column
+        prop="account_number"
+        :label="$t('account.accountNumber')"
+      />
+      <el-table-column
+        :label="$t('account.roles')"
+      >
+        <template slot-scope="scope">
+          <span v-if="scope.row.roles.length === 0 "> {{ $t('account.noRole') }} </span>
+          <span v-else>
+            <span v-for="item in scope.row.roles" :key="item">
+              {{ item }} <br>
+            </span>
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="create_time"
+        :label="$t('common.createTime')"
+      />
+      <el-table-column
+        prop="update_time"
+        :label="$t('common.updateTime')"
+      />
+      <el-table-column
+        :label="$t('common.operation')"
+      >
+        <template slot-scope="scope">
+          <el-button-group>
+            <el-button :disabled="editDisable" type="primary" size="small" icon="el-icon-edit" @click="edit(scope.row.id)">
+              {{ $t('common.edit') }}
+            </el-button>
+            <el-popconfirm
+              :confirm-button-text="$t('common.confirm')"
+              :cancel-button-text="$t('common.cancel')"
+              confirm-button-type="danger"
+              cancel-button-type="info"
+              icon="el-icon-info"
+              icon-color="red"
+              :title="$t('common.deleteConfirm')"
+              @onConfirm="deleteAccount(scope.row.id)"
+            >
+              <el-button slot="reference" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
+                {{ $t('common.delete') }}
+              </el-button>
+            </el-popconfirm>
+          </el-button-group>
+        </template>
+      </el-table-column>
+    </el-table>
+    <!-- 分页组件 -->
+    <div>
+      <el-pagination
+        :hide-on-single-page="false"
+        :current-page="queryParam.page"
+        :page-sizes="[10, 20, 50, 100, 200]"
+        :page-size="queryParam.size"
+        style="padding: 30px 0; text-align: center;"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
+    <!-- 添加/编辑 对话框 -->
+    <el-dialog :title="dialogType === 'edit' ? $t('account.edit') : $t('account.add')" :visible.sync="dialogFormVisible">
+      <el-form :model="account">
+        <el-form-item :label="$t('account.accountNumber')" :label-width="formLabelWidth">
+          <el-input
+            v-model="account.account_number"
+            autocomplete="off"
+            maxlength="16"
+            show-word-limit
+          />
+        </el-form-item>
+        <el-form-item :label="$t('account.password')" :label-width="formLabelWidth">
+          <el-input v-model="account.password" autocomplete="new-password" show-password />
+        </el-form-item>
+        <el-form-item :label="$t('account.roles')" :label-width="formLabelWidth">
+          <el-select v-model="account.roles" multiple :placeholder="$t('account.selectRole')">
+            <el-option
+              v-for="item in roleList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+              <span :title="item.description" style="float: left">{{ item.name }}</span>
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">{{ $t('common.cancel') }}</el-button>
+        <el-button type="primary" @click="submit()">{{ $t('common.confirm') }}</el-button>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+<script>
+import { getAccountList, getAccountById, addAccount, updateAccountById, deleteAccountById } from '@/api/account'
+import { getRoleList } from '@/api/role'
+import { checkPermission } from '@/utils/permission'
+
+// 查询参数
+const queryParam = {
+  page: 1,
+  size: 10,
+  account_number: '',
+  create_time: '',
+  roles: null
+}
+// 角色对象
+const account = {
+  id: '',
+  account_number: '',
+  password: null,
+  roles: []
+}
+export default {
+  data() {
+    return {
+      account: account,
+      listLoading: true,
+      tableData: [],
+      queryParam: queryParam,
+      dialogFormVisible: false,
+      total: 0,
+      dialogType: 'add',
+      formLabelWidth: '150px',
+      roleList: [], // 角色list
+      defaultPage: 1,
+      defaultSize: 10,
+      // 按钮权限
+      addDisable: true,
+      editDisable: true,
+      deleteDisable: true
+    }
+  },
+
+  created() {
+    this.getList(this.queryParam)
+    this.getRoleList()
+    this.checkButtonPermission()
+  },
+
+  methods: {
+    checkPermission,
+    checkButtonPermission() {
+      this.addDisable = !checkPermission(['accountAdd'])
+      this.editDisable = !checkPermission(['accountEdit'])
+      this.deleteDisable = !checkPermission(['accountDelete'])
+    },
+    getList(queryParam) {
+      this.listLoading = true
+      getAccountList(queryParam).then(res => {
+        this.tableData = res.data.results
+        this.total = res.data.count
+        this.listLoading = false
+      }).catch(() => {
+        this.listLoading = false
+      })
+    },
+    getQueryList() {
+      this.queryParam.page = this.defaultPage
+      this.queryParam.size = this.defaultSize
+      this.getList(this.queryParam)
+    },
+    getRoleList() {
+      getRoleList().then(res => {
+        this.roleList = res.data.results
+      })
+    },
+    // 编辑/更新 提交
+    submit() {
+      this.dialogFormVisible = false
+      if (this.dialogType === 'edit') {
+        this.listLoading = true
+        updateAccountById(this.account.id, this.account).then(res => {
+          this.$message({
+            message: this.$t('common.modifiedSuccessfully'),
+            type: 'success'
+          })
+          // 重新获取页面数据
+          this.getList(this.queryParam)
+        }).catch(() => {
+          this.listLoading = false
+          this.$message.error(this.$t('common.modificationFailed'))
+        })
+      }
+      if (this.dialogType === 'add') {
+        this.listLoading = true
+        addAccount(this.account).then(res => {
+          // 重新获取页面数据
+          this.$message({
+            message: this.$t('common.addedSuccessfully'),
+            type: 'success'
+          })
+          this.getList(this.queryParam)
+        }).catch(() => {
+          this.listLoading = false
+          this.$message.error(this.$t('common.addFailed'))
+        })
+      }
+    },
+    add() {
+      this.account = {}
+      this.dialogType = 'add'
+      this.dialogFormVisible = true
+    },
+    edit(id) {
+      this.dialogType = 'edit'
+      this.dialogFormVisible = true
+      getAccountById(id).then(res => {
+        this.account = res.data
+      })
+    },
+    deleteAccount(id) {
+      this.listLoading = true
+      deleteAccountById(id).then(res => {
+        // 重新获取页面数据
+        this.$message({
+          message: this.$t('common.deleteSucceeded'),
+          type: 'success'
+        })
+        this.resetData()
+      }).catch(() => {
+        this.listLoading = false
+        this.$message.error(this.$t('common.deletionFailed'))
+      })
+    },
+    indexMethod(index) {
+      return (this.queryParam.page - 1) * this.queryParam.size + index + 1
+    },
+    // 清空查询条件，重新获取数据
+    resetData() {
+      this.queryParam = {}
+      this.queryParam.page = this.defaultPage
+      this.queryParam.size = this.defaultSize
+      this.getList(this.queryParam)
+    },
+    handleSizeChange(size) {
+      this.queryParam.size = size
+      this.defaultSize = size
+      this.getList(this.queryParam)
+    },
+    handleCurrentChange(page) {
+      this.queryParam.page = page
+      this.defaultPage = page
+      this.getList(this.queryParam)
+    }
+  }
+}
+</script>
