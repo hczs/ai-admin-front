@@ -29,9 +29,12 @@
       <el-button type="primary" icon="el-icon-search" @click="getQueryList()">{{ $t('common.search') }}</el-button>
       <el-button type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
     </el-form>
-    <el-button style="float: right" :disabled="addDisable" type="primary" size="medium" icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">
-      {{ $t('dataset.fileUpload') }}
-    </el-button>
+    <div style="float: right">
+      <a :href="BASE_API + '/business/file/download/'"><el-button type="primary" size="medium" icon="el-icon-download">样例数据下载</el-button></a>
+      <el-button style="margin-left: 10px" :disabled="addDisable" type="primary" size="medium" icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">
+        {{ $t('dataset.fileUpload') }}
+      </el-button>
+    </div>
     <el-table
       v-loading="listLoading"
       :data="tableData"
@@ -52,14 +55,14 @@
         prop="file_size"
         :label="$t('dataset.fileSize')"
       />
-      <el-table-column
+      <!-- <el-table-column
         prop="file_path"
         :label="$t('dataset.filePath')"
       />
       <el-table-column
         prop="extract_path"
         :label="$t('dataset.extractPath')"
-      />
+      /> -->
       <el-table-column
         prop="create_time"
         :label="$t('common.createTime')"
@@ -109,8 +112,9 @@
     <!-- 添加/编辑 对话框 -->
     <el-dialog :title="$t('dataset.fileUpload')" :visible.sync="dialogFormVisible">
       <el-upload
+        ref="elupload"
         class="upload-demo"
-        action="http://127.0.0.1:8000/api/business/file/"
+        :action="BASE_API + '/business/file/'"
         name="dataset"
         multiple
         :on-success="handleFileUploadSuccess"
@@ -137,6 +141,7 @@ const queryParam = {
 export default {
   data() {
     return {
+      BASE_API: process.env.VUE_APP_BASE_API,
       tableData: [],
       listLoading: true,
       queryParam: queryParam,
@@ -144,6 +149,7 @@ export default {
       defaultPage: 1,
       defaultSize: 10,
       dialogFormVisible: false,
+      filelist: [],
       // 按钮权限
       addDisable: true,
       deleteDisable: true
@@ -190,9 +196,14 @@ export default {
     },
     // 文件上传相关
     // 上传成功，刷新页面
-    handleFileUploadSuccess() {
+    handleFileUploadSuccess(response, file, filelist) {
+      if (response.code === 200) {
+        this.$message.success(this.$t('dataset.uploadSuccess'))
+      } else if (response.code === 400) {
+        file.status = 'error'
+        this.$message.error(this.$t('dataset.atomicError'))
+      }
       this.getList(this.queryParam)
-      this.$message.success(this.$t('dataset.uploadSuccess'))
     },
     // 上传之前，检查文件类型
     handleBeforeUpload(file) {
