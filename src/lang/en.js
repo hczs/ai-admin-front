@@ -265,15 +265,16 @@ export default {
   // 数据集相关
   dataset: {
     fileName: 'File name',
-    fileSize: 'File size(Byte)',
+    fileSize: 'File size',
     filePath: 'Storage path',
     extractPath: 'Decompression path',
     fileUpload: 'File upload',
     pleaseInputFileName: 'Please enter a file name',
     clickUpload: 'Click here to upload the file',
-    uploadTips: 'Note: only zip files can be uploaded',
+    uploadTips: 'Note: only zip files can be uploaded, The data package shall contain data atomic files, including: xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、config.json; For different traffic prediction tasks, different atomic files may be used, and a dataset may not contain all six kinds of atomic files.',
     uploadSuccess: 'File upload succeeded!',
-    uploadError: 'Please upload the data package in ZIP format!'
+    uploadError: 'Please upload the data package in ZIP format!',
+    atomicError: 'Please check whether the files in the package contain only: xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、config.json'
   },
   // 任务
   task: {
