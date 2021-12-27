@@ -278,6 +278,26 @@ export default {
   },
   // 任务
   task: {
+    // 任务执行参数
+    task: 'task',
+    model: 'model',
+    dataset: 'dataset',
+    config_file: 'config_file',
+    saved_model: 'saved_model',
+    train: 'train',
+    batch_size: 'batch_size',
+    train_rate: 'train_rate',
+    eval_rate: 'eval_rate',
+    learning_rate: 'learning_rate',
+    max_epoch: 'max_epoch',
+    gpu: 'gpu',
+    gpu_id: 'gpu_id',
+    // 任务参数
+    traffic_state_pred: 'Traffic State Prediction',
+    traj_loc_pred: 'Trajectory Next-Location Prediction',
+    road_representation: 'Road Network Representation Learning',
+    eta: 'Estimated Time of Arrival',
+    map_matching: 'Map Matching',
     taskName: 'Task Name',
     taskDescription: 'Task Description',
     dataFile: 'Dataset File',
@@ -294,7 +314,10 @@ export default {
     execute: 'Execute',
     executing: 'Executing',
     completed: 'Completed',
-    taskUpdateSuccess: 'Task updated successfully!'
+    taskUpdateSuccess: 'Task updated successfully!',
+    taskError: 'Please select a task name to execute',
+    modelError: 'Please select the model name to execute',
+    datasetError: 'Please select a dataset file'
   }
 
 }
