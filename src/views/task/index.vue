@@ -38,58 +38,59 @@
     >
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
+          <el-form label-position="left" label-width="auto">
             <el-form-item :label="$t('task.taskName')">
               <span>{{ props.row.task_name }}</span>
             </el-form-item>
             <el-form-item :label="$t('task.taskDescription')">
               <span>{{ props.row.task_description }}</span>
             </el-form-item>
-            <el-form-item :label="$t('task.dataFile')">
-              <span>{{ props.row.data_file }}</span>
-            </el-form-item>
             <el-form-item :label="$t('task.status')">
               <span v-if="props.row.task_status === 0"> 未开始 </span>
               <span v-if="props.row.task_status === 1"> 进行中 </span>
               <span v-if="props.row.task_status === 2"> 已完成 </span>
             </el-form-item>
-            <el-form-item label="task">
-              <span>{{ props.row.task }}</span>
+            <el-form-item :label="$t('task.task')">
+              <span v-if="props.row.task === 'traffic_state_pred'"> {{ $t('task.traffic_state_pred') }} </span>
+              <span v-if="props.row.task === 'traj_loc_pred'"> {{ $t('task.traj_loc_pred') }} </span>
+              <span v-if="props.row.task === 'road_representation'"> {{ $t('task.road_representation') }} </span>
+              <span v-if="props.row.task === 'eta'"> {{ $t('task.eta') }} </span>
+              <span v-if="props.row.task === 'map_matching'"> {{ $t('task.map_matching') }} </span>
             </el-form-item>
-            <el-form-item label="model">
+            <el-form-item :label="$t('task.model')">
               <span>{{ props.row.model }}</span>
             </el-form-item>
-            <el-form-item label="dataset">
+            <el-form-item :label="$t('task.dataset')">
               <span>{{ props.row.dataset }}</span>
             </el-form-item>
-            <el-form-item label="config_file">
+            <el-form-item :label="$t('task.config_file')">
               <span>{{ props.row.config_file }}</span>
             </el-form-item>
-            <el-form-item label="saved_model">
+            <el-form-item :label="$t('task.saved_model')">
               <span>{{ props.row.saved_model }}</span>
             </el-form-item>
-            <el-form-item label="train">
+            <el-form-item :label="$t('task.train')">
               <span>{{ props.row.train }}</span>
             </el-form-item>
-            <el-form-item label="batch_size">
+            <el-form-item :label="$t('task.batch_size')">
               <span>{{ props.row.batch_size }}</span>
             </el-form-item>
-            <el-form-item label="train_rate">
+            <el-form-item :label="$t('task.train_rate')">
               <span>{{ props.row.train_rate }}</span>
             </el-form-item>
-            <el-form-item label="eval_rate">
+            <el-form-item :label="$t('task.eval_rate')">
               <span>{{ props.row.eval_rate }}</span>
             </el-form-item>
-            <el-form-item label="learning_rate">
+            <el-form-item :label="$t('task.learning_rate')">
               <span>{{ props.row.learning_rate }}</span>
             </el-form-item>
-            <el-form-item label="max_epoch">
+            <el-form-item :label="$t('task.max_epoch')">
               <span>{{ props.row.max_epoch }}</span>
             </el-form-item>
-            <el-form-item label="gpu">
+            <el-form-item :label="$t('task.gpu')">
               <span>{{ props.row.gpu }}</span>
             </el-form-item>
-            <el-form-item label="gpu_id">
+            <el-form-item :label="$t('task.gpu_id')">
               <span>{{ props.row.gpu_id }}</span>
             </el-form-item>
           </el-form>
@@ -104,14 +105,16 @@
       <el-table-column
         prop="task_name"
         :label="$t('task.taskName')"
+        width="100"
       />
       <el-table-column
-        prop="data_file"
+        prop="dataset"
         :label="$t('task.dataFile')"
       />
       <el-table-column
         prop="task_status"
         :label="$t('task.status')"
+        width="100"
       >
         <template slot-scope="scope">
           <span v-if="scope.row.task_status === 0"> 未开始 </span>
@@ -122,14 +125,19 @@
       <el-table-column
         prop="creator"
         :label="$t('task.creator')"
+        width="100"
+      />
+      <el-table-column
+        prop="execute_time"
+        :label="$t('task.executeTime')"
+      />
+      <el-table-column
+        prop="execute_end_time"
+        :label="$t('task.executeEndTime')"
       />
       <el-table-column
         prop="create_time"
         :label="$t('common.createTime')"
-      />
-      <el-table-column
-        prop="update_time"
-        :label="$t('common.updateTime')"
       />
       <el-table-column
         :label="$t('common.operation')"
@@ -158,7 +166,7 @@
             <el-button v-if="scope.row.task_status === 0" style="width: 120px" :disabled="executeDisable" type="primary" size="small" icon="el-icon-video-play" @click="execute(scope.row.id)">
               {{ $t('task.execute') }}
             </el-button>
-            <el-button v-if="scope.row.task_status === 1" style="width: 120px" disabled="true" type="primary" size="small" icon="el-icon-loading" @click="execute(scope.row.id)">
+            <el-button v-if="scope.row.task_status === 1" style="width: 120px" disabled type="primary" size="small" icon="el-icon-loading">
               {{ $t('task.executing') }}
             </el-button>
             <el-button v-if="scope.row.task_status === 2" style="width: 120px" type="success" size="small" icon="el-icon-circle-check">
@@ -183,6 +191,26 @@
         @current-change="handleCurrentChange"
       />
     </div>
+
+    <!-- 任务执行弹出框 -->
+    <el-dialog :title="$t('task.selectExecuteTime')" :visible.sync="executeTaskDialogVisible">
+      <el-form ref="executeForm" :model="executeForm" :rules="executeRules">
+        <el-form-item :label="$t('task.executeTime')" label-width="auto" prop="executeTime">
+          <el-date-picker
+            v-model="executeForm.executeTime"
+            class="date-picker"
+            type="datetime"
+            :placeholder="$t('task.selectExecuteTime')"
+            value-format="yyyy-MM-dd HH:mm:ss"
+          />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="executeTaskDialogVisible = false">{{ $t('common.cancel') }}</el-button>
+        <el-button @click="executeNow">{{ $t('task.executeNow') }}</el-button>
+        <el-button type="primary" @click="executeAtTime">{{ $t('task.executeAt') }}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -191,6 +219,17 @@ import { getTaskList, executeTaskById, deleteTaskById } from '@/api/task'
 
 export default {
   data() {
+    const validateExecuteTime = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error(this.$t('task.executeTimeError')))
+      } else {
+        if (new Date(value) < new Date()) {
+          callback(new Error(this.$t('task.executeTimeEarlyError')))
+        } else {
+          callback()
+        }
+      }
+    }
     return {
       tableData: [],
       listLoading: true,
@@ -202,10 +241,16 @@ export default {
       total: 0,
       defaultPage: 1,
       defaultSize: 10,
+      executeTaskDialogVisible: false,
+      executeForm: { executeTime: '' },
+      executeId: 0,
       // 按钮权限
       executeDisable: true,
       editDisable: true,
-      deleteDisable: true
+      deleteDisable: true,
+      executeRules: {
+        executeTime: [{ type: 'date', required: true, trigger: 'blur', validator: validateExecuteTime }]
+      }
     }
   },
   created() {
@@ -224,6 +269,7 @@ export default {
       this.listLoading = true
       getTaskList(this.queryParam).then(res => {
         this.tableData = res.data.results
+        this.total = res.data.count
         this.listLoading = false
       }).catch(() => {
         this.listLoading = false
@@ -241,10 +287,20 @@ export default {
     },
     // 执行任务
     execute(id) {
-      executeTaskById(id).then(res => {
-        console.log(res)
+      this.executeTaskDialogVisible = true
+      this.executeId = id
+    },
+    executeNow() {
+      executeTaskById(this.executeId).then(res => {
         this.getList()
       })
+      this.executeTaskDialogVisible = false
+    },
+    executeAtTime() {
+      executeTaskById(this.executeId, this.executeForm.executeTime).then(res => {
+        this.getList()
+      })
+      this.executeTaskDialogVisible = false
     },
     // 清空查询条件，重新获取数据
     resetData() {
@@ -269,16 +325,7 @@ export default {
 }
 </script>
 <style>
-  .demo-table-expand {
-    font-size: 0;
-  }
-  .demo-table-expand label {
-    width: 100px;
-    color: #99a9bf;
-  }
-  .demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
-  }
+.el-picker-panel__footer .el-button--text.el-picker-panel__link-btn {
+  display: none;
+}
 </style>

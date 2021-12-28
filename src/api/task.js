@@ -53,9 +53,10 @@ export function deleteTaskById(taskId) {
 }
 
 // 执行
-export function executeTaskById(taskId) {
+export function executeTaskById(taskId, execute_time) {
   return request({
     url: `/business/task/${taskId}/execute/`,
-    method: 'get'
+    method: 'get',
+    params: { execute_time: execute_time }
   })
 }

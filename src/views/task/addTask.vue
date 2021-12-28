@@ -33,7 +33,7 @@
           </el-select>
         </el-form-item> -->
         <!-- 以下为任务执行参数配置 -->
-        <el-divider content-position="center">以下为任务执行参数配置</el-divider>
+        <el-divider content-position="center">{{ $t('task.taskParamTip') }}</el-divider>
         <el-form-item :label="$t('task.task')" prop="task">
           <el-select v-model="task.task" style="float: left" placeholder="请选择">
             <el-option
@@ -100,7 +100,7 @@
           <el-input-number v-model.number="task.gpu_id" controls-position="right" />
         </el-form-item>
         <!-- 如果需要配置更多参数，可以上传配置文件 -->
-        <el-divider content-position="center">如果需要配置更多参数，可以上传配置文件</el-divider>
+        <el-divider content-position="center">{{ $t('task.taskMoreParamTip') }}</el-divider>
         <el-form-item :label="$t('task.config_file')">
           <el-upload
             ref="upload"
@@ -160,7 +160,6 @@ export default {
         { id: '5', label: this.$t('task.map_matching'), value: 'map_matching' }],
       rules: {
         task_name: [{ required: true, trigger: 'blur', validator: validateTaskName }],
-        // data_file: [{ required: true, message: this.$t('task.dataFileError') }],
         task: [{ required: true, message: this.$t('task.taskError') }],
         model: [{ required: true, message: this.$t('task.modelError') }],
         dataset: [{ required: true, message: this.$t('task.datasetError') }],
@@ -197,8 +196,6 @@ export default {
     this.getList()
   },
   updated() {
-    console.log('updated')
-    console.log('store:', this.$store.state.app.language)
     // 在updated里面更新数组会触发死循环
     // this.taskParamList = [
     //   { id: '1', label: this.$t('task.traffic_state_pred'), value: 'traffic_state_pred' },

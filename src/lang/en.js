@@ -317,7 +317,16 @@ export default {
     taskUpdateSuccess: 'Task updated successfully!',
     taskError: 'Please select a task name to execute',
     modelError: 'Please select the model name to execute',
-    datasetError: 'Please select a dataset file'
+    datasetError: 'Please select a dataset file',
+    executeTime: 'Execution time',
+    executeEndTime: 'Execution end time',
+    selectExecuteTime: 'Please select task execution time',
+    executeNow: 'No time selected, execute now',
+    executeAt: 'Execute at selected time',
+    executeTimeError: 'Execution time cannot be empty',
+    executeTimeEarlyError: 'The execution time cannot be earlier than the current time',
+    taskParamTip: 'The following is the task execution parameter configuration',
+    taskMoreParamTip: 'If you need to configure more parameters, you can upload the configuration file'
   }
 
 }
