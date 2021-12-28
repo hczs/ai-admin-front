@@ -1,6 +1,6 @@
 <template>
   <div class="app-container" style="text-align: center; width: 100%;">
-    <div style="width: 60%; margin: 0 auto">
+    <div style="width: 60%; margin-left: 5%">
       <el-form ref="elForm" :rules="rules" :model="task" label-width="auto" label-position="left">
         <el-form-item :label="$t('task.taskName')" prop="task_name">
           <el-input
@@ -22,7 +22,7 @@
             clearable
           />
         </el-form-item>
-        <el-form-item :label="$t('task.dataFile')" prop="data_file">
+        <!-- <el-form-item :label="$t('task.dataFile')" prop="data_file">
           <el-select v-model="task.data_file" style="float: left" placeholder="请选择">
             <el-option
               v-for="file in fileList"
@@ -31,20 +31,20 @@
               :value="file.id"
             />
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <!-- 以下为任务执行参数配置 -->
-        <div style="text-align: left">以下为任务执行参数配置：<br><br></div>
-        <el-form-item label="task" prop="task">
+        <el-divider content-position="center">以下为任务执行参数配置</el-divider>
+        <el-form-item :label="$t('task.task')" prop="task">
           <el-select v-model="task.task" style="float: left" placeholder="请选择">
             <el-option
               v-for="item in taskParamList"
               :key="item.id"
-              :label="item.value"
+              :label="item.label"
               :value="item.value"
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="model" prop="model">
+        <el-form-item :label="$t('task.model')" prop="model">
           <el-input
             v-model="task.model"
             autocomplete="off"
@@ -53,28 +53,60 @@
             maxlength="20"
           />
         </el-form-item>
-        <el-form-item label="dataset" prop="dataset">
-          <el-input
-            v-model="task.dataset"
-            autocomplete="off"
-            clearable
-            show-word-limit
-            maxlength="20"
-          />
+        <el-form-item :label="$t('task.dataset')" prop="dataset">
+          <el-select v-model="task.dataset" filterable style="float: left" placeholder="请选择">
+            <el-option
+              v-for="file in fileList"
+              :key="file.id"
+              :label="file.file_name"
+              :value="file.file_name"
+            />
+          </el-select>
         </el-form-item>
-        <el-form-item label="config_file">
-          <!-- <el-input
-            v-model="task.config_file"
-            autocomplete="off"
-            clearable
-            show-word-limit
-            maxlength="100"
-          /> -->
+        <el-form-item :label="$t('task.saved_model')" style="text-align: left">
+          <el-radio-group v-model="task.saved_model">
+            <el-radio :label="true">是</el-radio>
+            <el-radio :label="false">否</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item :label="$t('task.train')" style="text-align: left">
+          <el-radio-group v-model="task.train">
+            <el-radio :label="true">是</el-radio>
+            <el-radio :label="false">否</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item :label="$t('task.batch_size')" prop="batch_size" style="text-align: left">
+          <el-input-number v-model.number="task.batch_size" controls-position="right" />
+        </el-form-item>
+        <el-form-item :label="$t('task.train_rate')" prop="train_rate" style="text-align: left">
+          <el-input-number v-model.number="task.train_rate" controls-position="right" />
+        </el-form-item>
+        <el-form-item :label="$t('task.eval_rate')" prop="eval_rate" style="text-align: left">
+          <el-input-number v-model.number="task.eval_rate" controls-position="right" />
+        </el-form-item>
+        <el-form-item :label="$t('task.learning_rate')" prop="learning_rate" style="text-align: left">
+          <el-input-number v-model.number="task.learning_rate" controls-position="right" />
+        </el-form-item>
+        <el-form-item :label="$t('task.max_epoch')" prop="max_epoch" style="text-align: left">
+          <el-input-number v-model.number="task.max_epoch" controls-position="right" />
+        </el-form-item>
+        <el-form-item :label="$t('task.gpu')" style="text-align: left">
+          <el-radio-group v-model="task.gpu">
+            <el-radio :label="true">是</el-radio>
+            <el-radio :label="false">否</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item :label="$t('task.gpu_id')" prop="gpu_id" style="text-align: left">
+          <el-input-number v-model.number="task.gpu_id" controls-position="right" />
+        </el-form-item>
+        <!-- 如果需要配置更多参数，可以上传配置文件 -->
+        <el-divider content-position="center">如果需要配置更多参数，可以上传配置文件</el-divider>
+        <el-form-item :label="$t('task.config_file')">
           <el-upload
             ref="upload"
             style="text-align: left"
             class="upload-demo"
-            action="http://127.0.0.1:8000/api/business/task/upload/"
+            :action="BASE_API + '/business/task/upload/'"
             name="config"
             :limit="fileLimit"
             :on-success="handleFileUploadSuccess"
@@ -83,79 +115,9 @@
             accept="application/json"
           >
             <el-button size="small" type="primary"> {{ $t('dataset.clickUpload') }}</el-button>
-            <div slot="tip" class="el-upload__tip">{{ $t('task.uploadTips') }}</div>
+            <div slot="tip" class="el-upload__tip">{{ $t('task.uploadTips') }}
+              <a :href="BASE_API + '/business/task/download_config/'" style="margin-left: 10px;"><el-button type="info" size="mini" icon="el-icon-download">{{ $t('task.downloadExample') }}</el-button></a></div>
           </el-upload>
-        </el-form-item>
-        <el-form-item label="saved_model" style="text-align: left">
-          <el-radio-group v-model="task.saved_model">
-            <el-radio :label="true">是</el-radio>
-            <el-radio :label="false">否</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="train" style="text-align: left">
-          <el-radio-group v-model="task.train">
-            <el-radio :label="true">是</el-radio>
-            <el-radio :label="false">否</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="batch_size" prop="batch_size" style="text-align: left">
-          <el-input-number v-model.number="task.batch_size" controls-position="right" />
-        </el-form-item>
-        <el-form-item label="train_rate" prop="train_rate" style="text-align: left">
-          <el-input-number v-model.number="task.train_rate" controls-position="right" />
-          <!-- <el-input
-            v-model.number="task.train_rate"
-            autocomplete="off"
-            clearable
-            show-word-limit
-            maxlength="20"
-          /> -->
-        </el-form-item>
-        <el-form-item label="eval_rate" prop="eval_rate" style="text-align: left">
-          <el-input-number v-model.number="task.eval_rate" controls-position="right" />
-          <!-- <el-input
-            v-model.number="task.eval_rate"
-            autocomplete="off"
-            clearable
-            show-word-limit
-            maxlength="20"
-          /> -->
-        </el-form-item>
-        <el-form-item label="learning_rate" prop="learning_rate" style="text-align: left">
-          <el-input-number v-model.number="task.learning_rate" controls-position="right" />
-          <!-- <el-input
-            v-model.number="task.learning_rate"
-            autocomplete="off"
-            clearable
-            show-word-limit
-            maxlength="20"
-          /> -->
-        </el-form-item>
-        <el-form-item label="max_epoch" prop="max_epoch" style="text-align: left">
-          <el-input-number v-model.number="task.max_epoch" controls-position="right" />
-          <!-- <el-input
-            v-model.number="task.max_epoch"
-            autocomplete="off"
-            clearable
-            show-word-limit
-            maxlength="20"
-          /> -->
-        </el-form-item>
-        <el-form-item label="gpu" style="text-align: left">
-          <el-radio-group v-model="task.gpu">
-            <el-radio :label="true">是</el-radio>
-            <el-radio :label="false">否</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="gpu_id" prop="gpu_id" style="text-align: left">
-          <el-input-number v-model.number="task.gpu_id" controls-position="right" />
-          <!-- <el-input
-            v-model.number="task.gpu_id"
-            autocomplete="off"
-            clearable
-            show-word-limit
-            maxlength="20"
-          /> -->
         </el-form-item>
       </el-form>
       <el-button @click="resetForm()">{{ $t('common.clear') }}</el-button>
@@ -184,6 +146,7 @@ export default {
       }
     }
     return {
+      BASE_API: process.env.VUE_APP_BASE_API,
       task: {
         task_name: ''
       },
@@ -191,17 +154,17 @@ export default {
       formLabelWidth: '10%',
       fileList: [],
       taskParamList: [
-        { id: '1', value: 'traffic_state_pred' },
-        { id: '2', value: 'traj_loc_pred' },
-        { id: '3', value: 'road_representation' },
-        { id: '4', value: 'eta' },
-        { id: '5', value: 'map_matching' }],
+        { id: '1', label: this.$t('task.traffic_state_pred'), value: 'traffic_state_pred' },
+        { id: '2', label: this.$t('task.traj_loc_pred'), value: 'traj_loc_pred' },
+        { id: '3', label: this.$t('task.road_representation'), value: 'road_representation' },
+        { id: '4', label: this.$t('task.eta'), value: 'eta' },
+        { id: '5', label: this.$t('task.map_matching'), value: 'map_matching' }],
       rules: {
         task_name: [{ required: true, trigger: 'blur', validator: validateTaskName }],
-        data_file: [{ required: true, message: this.$t('task.dataFileError') }],
-        task: [{ required: true, message: this.$t('task.numberError') }],
-        model: [{ required: true, message: this.$t('task.numberError') }],
-        dataset: [{ required: true, message: this.$t('task.numberError') }],
+        // data_file: [{ required: true, message: this.$t('task.dataFileError') }],
+        task: [{ required: true, message: this.$t('task.taskError') }],
+        model: [{ required: true, message: this.$t('task.modelError') }],
+        dataset: [{ required: true, message: this.$t('task.datasetError') }],
         batch_size: [{ type: 'number', message: this.$t('task.numberError') }],
         train_rate: [{ type: 'number', message: this.$t('task.numberError') }],
         eval_rate: [{ type: 'number', message: this.$t('task.numberError') }],
@@ -209,6 +172,17 @@ export default {
         max_epoch: [{ type: 'number', message: this.$t('task.numberError') }],
         gpu_id: [{ type: 'number', message: this.$t('task.numberError') }]
       }
+    }
+  },
+  computed: {
+    // TODO 下拉列表中英文切换
+    isEdit() {
+      return this.$store.state.app.language // 需要监听的数据
+    }
+  },
+  watch: {
+    isEdit(newVal, oldVal) {
+      console.log(newVal, oldVal)
     }
   },
   created() {
@@ -222,6 +196,17 @@ export default {
     }
     // 获取数据集文件列表
     this.getList()
+  },
+  updated() {
+    console.log('updated')
+    console.log('store:', this.$store.state.app.language)
+    // 在updated里面更新数组会触发死循环
+    // this.taskParamList = [
+    //   { id: '1', label: this.$t('task.traffic_state_pred'), value: 'traffic_state_pred' },
+    //   { id: '2', label: this.$t('task.traj_loc_pred'), value: 'traj_loc_pred' },
+    //   { id: '3', label: this.$t('task.road_representation'), value: 'road_representation' },
+    //   { id: '4', label: this.$t('task.eta'), value: 'eta' },
+    //   { id: '5', label: this.$t('task.map_matching'), value: 'map_matching' }]
   },
   methods: {
     getList() {
@@ -272,6 +257,7 @@ export default {
       this.task = {}
       console.log(this.task.max_epoch)
     },
+
     // 文件上传相关
     // 上传成功，刷新页面
     handleFileUploadSuccess(response) {

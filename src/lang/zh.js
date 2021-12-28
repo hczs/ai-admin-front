@@ -277,10 +277,31 @@ export default {
   },
   // 任务
   task: {
+    // 任务执行参数
+    task: '要执行的任务名',
+    model: '要执行的模型名',
+    dataset: '要执行的数据集',
+    config_file: '自定义的配置文件名',
+    saved_model: '是否保存训练好的模型',
+    train: '如果模型已经预训练过了，是否要重新训练模型',
+    batch_size: '训练集和验证集的批次大小',
+    train_rate: '训练集在整个数据集中所占的比例',
+    eval_rate: '验证集在整个数据集中所占的比例',
+    learning_rate: '学习率',
+    max_epoch: '最大的训练轮数',
+    gpu: '是否使用GPU',
+    gpu_id: '使用的GPU的ID',
+    // 任务参数
+    traffic_state_pred: '交通状态预测',
+    traj_loc_pred: '轨迹下一跳预测',
+    road_representation: '路网表征学习',
+    eta: '到达时间预测',
+    map_matching: '路网匹配',
     taskName: '任务名称',
     taskDescription: '任务描述',
     dataFile: '数据集文件',
     uploadTips: '请上传JSON文件',
+    downloadExample: '下载配置文件样例',
     uploadError: '请上传JSON格式的文件！',
     taskCreateSuccess: '任务创建成功！',
     taskNameError: '请输入任务名',
@@ -294,8 +315,8 @@ export default {
     executing: '进行中',
     completed: '已完成',
     taskUpdateSuccess: '任务更新成功！',
-    dataFileError: '请选择数据集文件',
-    taskError: '请填写task参数',
-    model: '请填写model参数'
+    taskError: '请选择要执行的任务名',
+    modelError: '请选择要执行的模型名',
+    datasetError: '请选择数据集文件'
   }
 }

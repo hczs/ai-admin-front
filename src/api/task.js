@@ -59,3 +59,11 @@ export function executeTaskById(taskId) {
     method: 'get'
   })
 }
+
+// 下载
+export function download_config() {
+  return request({
+    url: `/business/task/download/`,
+    method: 'get'
+  })
+}
