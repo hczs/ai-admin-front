@@ -317,6 +317,15 @@ export default {
     taskUpdateSuccess: '任务更新成功！',
     taskError: '请选择要执行的任务名',
     modelError: '请选择要执行的模型名',
-    datasetError: '请选择数据集文件'
+    datasetError: '请选择数据集文件',
+    executeTime: '执行时间',
+    executeEndTime: '执行结束时间',
+    selectExecuteTime: '请选择任务执行时间',
+    executeNow: '不选时间，立即执行',
+    executeAt: '在选定时间执行',
+    executeTimeError: '执行时间不能为空',
+    executeTimeEarlyError: '执行时间不能早于当前时间',
+    taskParamTip: '以下为任务执行参数配置',
+    taskMoreParamTip: '如果需要配置更多参数，可以上传配置文件'
   }
 }
