@@ -302,6 +302,7 @@ export default {
     taskDescription: 'Task Description',
     dataFile: 'Dataset File',
     uploadTips: 'Please upload JSON file',
+    downloadExample: 'download sample configuration',
     uploadError: 'Please upload the data package in JSON format!',
     taskCreateSuccess: 'Task created successfully!',
     taskNameError: 'Please enter task name',

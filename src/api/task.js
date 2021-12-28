@@ -60,3 +60,11 @@ export function executeTaskById(taskId, execute_time) {
     params: { execute_time: execute_time }
   })
 }
+
+// 下载
+export function download_config() {
+  return request({
+    url: `/business/task/download/`,
+    method: 'get'
+  })
+}

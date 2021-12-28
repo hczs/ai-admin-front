@@ -301,6 +301,7 @@ export default {
     taskDescription: '任务描述',
     dataFile: '数据集文件',
     uploadTips: '请上传JSON文件',
+    downloadExample: '下载配置文件样例',
     uploadError: '请上传JSON格式的文件！',
     taskCreateSuccess: '任务创建成功！',
     taskNameError: '请输入任务名',

@@ -115,7 +115,8 @@
             accept="application/json"
           >
             <el-button size="small" type="primary"> {{ $t('dataset.clickUpload') }}</el-button>
-            <div slot="tip" class="el-upload__tip">{{ $t('task.uploadTips') }}</div>
+            <div slot="tip" class="el-upload__tip">{{ $t('task.uploadTips') }}
+              <a :href="BASE_API + '/business/task/download_config/'" style="margin-left: 10px;"><el-button type="info" size="mini" icon="el-icon-download">{{ $t('task.downloadExample') }}</el-button></a></div>
           </el-upload>
         </el-form-item>
       </el-form>
@@ -253,6 +254,7 @@ export default {
       this.task = {}
       console.log(this.task.max_epoch)
     },
+
     // 文件上传相关
     // 上传成功，刷新页面
     handleFileUploadSuccess(response) {
