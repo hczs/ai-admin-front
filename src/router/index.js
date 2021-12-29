@@ -175,23 +175,23 @@ export const asyncRoutes = [
         path: 'index',
         component: () => import('@/views/dataset/index'),
         name: 'dataset manage',
-        meta: { title: 'datasetManage', icon: 'template', permissions: ['admin', 'datasetManage'] }
+        meta: { title: 'datasetManage', icon: 'resource', permissions: ['admin', 'datasetManage'] }
       }
     ]
   },
 
-  {
-    path: '/resources',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/resource/index'),
-        name: 'resources manage',
-        meta: { title: 'resourceManage', icon: 'resource', permissions: ['admin', 'resourceManage'] }
-      }
-    ]
-  },
+  // {
+  //   path: '/resources',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/resource/index'),
+  //       name: 'resources manage',
+  //       meta: { title: 'resourceManage', icon: 'resource', permissions: ['admin', 'resourceManage'] }
+  //     }
+  //   ]
+  // },
 
   {
     path: '/templates',
