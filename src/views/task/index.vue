@@ -190,6 +190,7 @@ import { checkPermission } from '@/utils/permission'
 import { getTaskList, executeTaskById, deleteTaskById } from '@/api/task'
 
 export default {
+
   data() {
     return {
       tableData: [],
