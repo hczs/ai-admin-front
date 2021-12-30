@@ -16,3 +16,11 @@ export function deleteFileById(fileId) {
     method: 'delete'
   })
 }
+
+// 展示
+export function showFileByFileName(file_name) {
+  return request({
+    url: `/business/file/${file_name}get_gis_view/`,
+    method: 'get'
+  })
+}
