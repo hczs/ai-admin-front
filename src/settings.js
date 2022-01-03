@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'AI管理平台后台管理',
+  title: 'AI管理平台',
 
   /**
    * @type {boolean} true | false
