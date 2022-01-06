@@ -221,6 +221,7 @@ export default {
   // 公共使用，例如新增按钮，删除等等
   common: {
     edit: '编辑',
+    view: '展示',
     add: '新增',
     delete: '删除',
     createTime: '创建时间',

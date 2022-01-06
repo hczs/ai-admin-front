@@ -218,6 +218,7 @@ import { checkPermission } from '@/utils/permission'
 import { getTaskList, executeTaskById, deleteTaskById } from '@/api/task'
 
 export default {
+
   data() {
     const validateExecuteTime = (rule, value, callback) => {
       if (!value) {
