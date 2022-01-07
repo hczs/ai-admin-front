@@ -117,9 +117,10 @@
         width="100"
       >
         <template slot-scope="scope">
-          <span v-if="scope.row.task_status === 0"> 未开始 </span>
-          <span v-if="scope.row.task_status === 1"> 进行中 </span>
-          <span v-if="scope.row.task_status === 2"> 已完成 </span>
+          <span v-if="scope.row.task_status === 0"> {{ $t('task.noStart') }} </span>
+          <span v-if="scope.row.task_status === 1"> {{ $t('task.executing') }} </span>
+          <span v-if="scope.row.task_status === 2"> {{ $t('task.completed') }} </span>
+          <span v-if="scope.row.task_status === -1"> {{ $t('task.executeError') }} </span>
         </template>
       </el-table-column>
       <el-table-column
@@ -144,11 +145,19 @@
       >
         <template slot-scope="scope">
           <el-button-group style="width: 120px">
-            <router-link :to="'/tasks/editTask/'+scope.row.id">
-              <el-button style="width: 120px" :disabled="editDisable" type="primary" size="small" icon="el-icon-edit">
+
+            <!-- <el-button style="width: 120px" :disabled="editDisable" type="primary" size="small" icon="el-icon-edit">
                 {{ $t('common.edit') }}
-              </el-button>
-            </router-link>
+              </el-button> -->
+            <el-link :disabled="!editDisable && ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )" icon="el-icon-edit">
+              <span v-if="!editDisable && ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )">
+                {{ $t('common.edit') }}
+              </span>
+              <router-link v-else :to="'/tasks/editTask/'+scope.row.id" disabled>
+                {{ $t('common.edit') }}
+              </router-link>
+            </el-link>
+
             <el-popconfirm
               :confirm-button-text="$t('common.confirm')"
               :cancel-button-text="$t('common.cancel')"
@@ -159,19 +168,38 @@
               :title="$t('common.deleteConfirm')"
               @onConfirm="deleteTask(scope.row.id)"
             >
-              <el-button slot="reference" style="width: 120px" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
+              <el-link slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
+              <!-- <el-button slot="reference" style="width: 120px" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
                 {{ $t('common.delete') }}
-              </el-button>
+              </el-button> -->
             </el-popconfirm>
-            <el-button v-if="scope.row.task_status === 0" style="width: 120px" :disabled="executeDisable" type="primary" size="small" icon="el-icon-video-play" @click="execute(scope.row.id)">
+            <el-link v-if="scope.row.task_status === 0" :disabled="executeDisable" icon="el-icon-video-play" @click="execute(scope.row.id)">
               {{ $t('task.execute') }}
-            </el-button>
-            <el-button v-if="scope.row.task_status === 1" style="width: 120px" disabled type="primary" size="small" icon="el-icon-loading">
+            </el-link>
+            <el-link v-if="scope.row.task_status === -1" :disabled="executeDisable" icon="el-icon-video-play" @click="execute(scope.row.id)">
+              {{ $t('task.reExecute') }}
+            </el-link>
+            <el-link v-if="scope.row.task_status === 1" disabled icon="el-icon-loading">
               {{ $t('task.executing') }}
-            </el-button>
-            <el-button v-if="scope.row.task_status === 2" style="width: 120px" type="success" size="small" icon="el-icon-circle-check">
+            </el-link>
+            <el-link v-if="scope.row.task_status === 2" :disabled="executeDisable" icon="el-icon-view" @click="catEvaluate(scope.row.id)">
+              {{ $t('task.catEvaluate') }}
+            </el-link>
+            <el-link v-if="scope.row.task_status !== 0" :disabled="executeDisable" icon="el-icon-document" @click="catLog(scope.row.id)">
+              {{ $t('task.catLog') }}
+            </el-link>
+            <!-- <el-button style="width: 120px" :disabled="executeDisable" type="primary" size="small" icon="el-icon-video-play" @click="execute(scope.row.id)">
+              {{ $t('task.execute') }}
+            </el-button> -->
+            <!-- <el-button v-if="scope.row.task_status === 1" style="width: 120px" disabled type="primary" size="small" icon="el-icon-loading">
+              {{ $t('task.executing') }}
+            </el-button> -->
+            <!-- <el-button v-if="scope.row.task_status === 2" style="width: 120px" type="success" size="small" icon="el-icon-circle-check">
               {{ $t('task.completed') }}
-            </el-button>
+            </el-button> -->
+            <!-- <el-button v-if="scope.row.task_status !== 0" style="width: 120px" type="success" size="small" icon="el-icon-circle-check">
+              {{ $t('task.completed') }}
+            </el-button> -->
           </el-button-group>
         </template>
       </el-table-column>
@@ -211,11 +239,179 @@
         <el-button type="primary" @click="executeAtTime">{{ $t('task.executeAt') }}</el-button>
       </span>
     </el-dialog>
+
+    <!-- 日志查看弹出框 -->
+    <el-dialog
+      title="运行日志"
+      :visible.sync="logDialogVisible"
+      width="80%"
+      class="dialog-div"
+    >
+      <div style="white-space: pre-line; margin: 20px" v-html="logData" />
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="logDialogVisible = false">{{ $t('common.cancel') }}</el-button>
+        <a style="margin-left: 10px" :href="BASE_API + '/business/task/' + task.id + '/download_log/'">
+          <el-button type="primary" icon="el-icon-download">
+            {{ $t('task.downloadLog') }}
+          </el-button></a>
+      </span>
+    </el-dialog>
+
+    <!-- 评价指标弹出框 -->
+    <el-dialog
+      title="评价指标查看"
+      :visible.sync="evaluateDialogVisible"
+      width="80%"
+      class="dialog-div"
+    >
+      <div style="height: 100%">
+        <!-- 交通状态预测、到达时间估计表格 -->
+        <el-table
+          v-if="task.task === 'eta' || task.task === 'traffic_state_pred'"
+          :data="evaluateData"
+          style="width: 100%"
+          height="100%"
+          border
+          fit
+        >
+          <el-table-column
+            type="index"
+            :index="stateIndexMethod"
+            :label="$t('common.order')"
+            fixed
+            width="100px"
+          />
+          <el-table-column
+            prop="MAE"
+            label="MAE"
+          />
+          <el-table-column
+            prop="MAPE"
+            label="MAPE"
+          />
+          <el-table-column
+            prop="MSE"
+            label="MSE"
+          />
+          <el-table-column
+            prop="RMSE"
+            label="RMSE"
+          />
+          <el-table-column
+            v-if="masked_MAE !== null"
+            prop="masked_MAE"
+            label="masked_MAE"
+          />
+          <el-table-column
+            prop="masked_MAPE"
+            label="masked_MAPE"
+          />
+          <el-table-column
+            prop="masked_MSE"
+            label="masked_MSE"
+          />
+          <el-table-column
+            prop="masked_RMSE"
+            label="masked_RMSE"
+          />
+          <el-table-column
+            prop="R2"
+            label="R2"
+          />
+          <el-table-column
+            prop="EVAR"
+            label="EVAR"
+          />
+          <el-table-column
+            v-if="Precision !== null"
+            prop="Precision"
+            label="Precision"
+          />
+          <el-table-column
+            prop="Recall"
+            label="Recall"
+          />
+          <el-table-column
+            prop="F1-Score"
+            label="F1-Score"
+          />
+          <el-table-column
+            prop="MAP"
+            label="MAP"
+          />
+          <el-table-column
+            prop="PCC"
+            label="PCC"
+          />
+        </el-table>
+
+        <!-- 路网匹配表格 -->
+        <el-table
+          v-if="task.task === 'map_matching'"
+          :data="evaluateData"
+          style="width: 100%"
+          height="100%"
+          border
+          fit
+        >
+          <el-table-column
+            type="index"
+            :index="stateIndexMethod"
+            :label="$t('common.order')"
+            fixed
+            width="100px"
+          />
+          <el-table-column
+            prop="RMF"
+            label="RMF"
+          />
+          <el-table-column
+            prop="AN"
+            label="AN"
+          />
+          <el-table-column
+            prop="AL"
+            label="AL"
+          />
+        </el-table>
+
+        <!-- 轨迹下一跳表格 -->
+        <el-table
+          v-if="task.task === 'traj_loc_pred'"
+          :data="evaluateData"
+          style="width: 100%"
+          height="100%"
+          border
+          fit
+        >
+          <el-table-column
+            type="index"
+            :index="stateIndexMethod"
+            :label="$t('common.order')"
+            fixed
+            width="100px"
+          />
+          <el-table-column
+            prop="Recall"
+            label="Recall"
+          />
+        </el-table>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="evaluateDialogVisible = false">{{ $t('common.cancel') }}</el-button>
+        <a style="margin-left: 10px" :href="BASE_API + '/business/evaluate/download/?task=' + task.id">
+          <el-button type="primary" icon="el-icon-download">
+            {{ $t('task.downEvaluate') }}
+          </el-button></a>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { checkPermission } from '@/utils/permission'
-import { getTaskList, executeTaskById, deleteTaskById } from '@/api/task'
+import { getTaskList, getTaskById, executeTaskById,
+  deleteTaskById, getExecuteLogById, getStateEvaluateList,
+  getMapMatchingEvaluateList, getTrajEvaluateList } from '@/api/task'
 
 export default {
 
@@ -232,12 +428,18 @@ export default {
       }
     }
     return {
+      BASE_API: process.env.VUE_APP_BASE_API,
       tableData: [],
+      task: {},
       listLoading: true,
       queryParam: {
         page: 1,
         size: 10,
         task_name: ''
+      },
+      evaluateQueryParam: {
+        page: 1,
+        size: 20
       },
       total: 0,
       defaultPage: 1,
@@ -245,10 +447,14 @@ export default {
       executeTaskDialogVisible: false,
       executeForm: { executeTime: '' },
       executeId: 0,
+      logDialogVisible: false, // 日志查看弹出框
+      logData: '', // 日志数据
+      evaluateDialogVisible: false,
       // 按钮权限
       executeDisable: true,
       editDisable: true,
       deleteDisable: true,
+      evaluateData: [],
       executeRules: {
         executeTime: [{ type: 'date', required: true, trigger: 'blur', validator: validateExecuteTime }]
       }
@@ -274,6 +480,50 @@ export default {
         this.listLoading = false
       }).catch(() => {
         this.listLoading = false
+      })
+    },
+    // 回显任务数据
+    getById(id) {
+      getTaskById(id).then(res => {
+        this.task = res.data
+      })
+    },
+    // 查看日志
+    catLog(id) {
+      this.task.id = id
+      this.logDialogVisible = true
+      getExecuteLogById(id).then(res => {
+        console.log(res.data)
+        this.logData = res.data
+      })
+    },
+    // 查看评价指标
+    catEvaluate(id) {
+      // 获取当前任务相关数据
+      getTaskById(id).then(res => {
+        this.task = res.data
+        if (this.task.task === 'traffic_state_pred' || this.task.task === 'eta') {
+        // 走交通状态预测和到达时间估计接口
+          this.evaluateQueryParam.task = this.task.id
+          getStateEvaluateList(this.evaluateQueryParam).then(res => {
+            this.evaluateData = res.data.results
+          })
+        } else if (this.task.task === 'map_matching') {
+          // 走路网匹配接口
+          this.evaluateQueryParam.task = this.task.id
+          getMapMatchingEvaluateList(this.evaluateQueryParam).then(res => {
+            this.evaluateData = res.data.results
+          })
+        } else if (this.task.task === 'traj_loc_pred') {
+          // 走轨迹下一跳预测接口
+          getTrajEvaluateList(this.evaluateQueryParam).then(res => {
+            this.evaluateData = res.data.results
+          })
+        } else {
+          // 路网表征学习，无评价指标
+          this.evaluateData = []
+        }
+        this.evaluateDialogVisible = true
       })
     },
     getQueryList() {
@@ -321,6 +571,10 @@ export default {
     },
     indexMethod(index) {
       return (this.queryParam.page - 1) * this.queryParam.size + index + 1
+    },
+    // 交通状态预测，序号生成
+    stateIndexMethod(index) {
+      return (this.evaluateQueryParam.page - 1) * this.evaluateQueryParam.size + index + 1
     }
   }
 }
@@ -329,4 +583,53 @@ export default {
 .el-picker-panel__footer .el-button--text.el-picker-panel__link-btn {
   display: none;
 }
+/* dialog进度条 */
+/* 使顶部进行吸顶 */
+.dialog-div .top {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0px;
+ }
+
+/* 表单大小设置 */
+.dialog-div .el-dialog {
+  margin: 0 auto !important;
+  height: 80%;
+  overflow: hidden;
+}
+
+.dialog-div .el-dialog__body {
+  position: absolute;
+  left: 0;
+  top: 54px;
+  bottom: 70px;
+  right: 0;
+  padding: 0;
+  z-index: 1;
+  overflow: hidden;
+  overflow-y: auto;
+}
+/**表单 确定和取消 按钮的位置 */
+.dialog-div .el-dialog__footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* 弹出框滚动条 */
+/* 设置滚动条的样式 */
+/**解决了滚动条之间发生错位的现象 */
+::-webkit-scrollbar {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+  /* 滚动条的颜色 */
+  background-color: #e4e4e4;
+ }
+
 </style>

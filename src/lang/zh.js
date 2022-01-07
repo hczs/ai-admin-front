@@ -312,9 +312,11 @@ export default {
     status: '任务状态',
     creator: '任务创建者',
     numberError: '请输入数字类型的值',
+    noStart: '未开始',
     execute: '执行',
     executing: '进行中',
     completed: '已完成',
+    executeError: '执行错误',
     taskUpdateSuccess: '任务更新成功！',
     taskError: '请选择要执行的任务名',
     modelError: '请选择要执行的模型名',
@@ -326,7 +328,13 @@ export default {
     executeAt: '在选定时间执行',
     executeTimeError: '执行时间不能为空',
     executeTimeEarlyError: '执行时间不能早于当前时间',
-    taskParamTip: '以下为任务执行参数配置',
-    taskMoreParamTip: '如果需要配置更多参数，可以上传配置文件'
+    taskParamTip: '注意：任务名、模型名和数据集有严格的对应关系',
+    taskMoreParamTip: '如果需要配置更多参数，可以上传配置文件',
+    clickViewCorresponding: '点击查看任务名、模型名和数据集的对应关系',
+    catLog: '查看运行日志',
+    catEvaluate: '查看评价指标',
+    downloadLog: '下载日志文件',
+    reExecute: '重新执行',
+    downEvaluate: '下载评价指标文件'
   }
 }
