@@ -74,7 +74,8 @@ export default {
     datasetManage: 'Dataset Management',
     taskList: 'Task List',
     tasksAdd: 'New Task',
-    tasksEdit: 'Edit Task'
+    tasksEdit: 'Edit Task',
+    datasetView: 'Show Dataset'
   },
   navbar: {
     dashboard: 'Dashboard',
