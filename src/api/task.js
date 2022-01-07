@@ -68,3 +68,38 @@ export function download_config() {
     method: 'get'
   })
 }
+
+// 查看运行日志
+export function getExecuteLogById(taskId) {
+  return request({
+    url: `/business/task/${taskId}/get_log/`,
+    method: 'get'
+  })
+}
+
+// 交通状态预测、到达时间估计，根据任务id获取相应指标数据
+export function getStateEvaluateList(queryParam) {
+  return request({
+    url: '/business/evaluate/',
+    method: 'get',
+    params: queryParam
+  })
+}
+
+// 路网匹配
+export function getMapMatchingEvaluateList(queryParam) {
+  return request({
+    url: '/business/map_matching/',
+    method: 'get',
+    params: queryParam
+  })
+}
+
+// 轨迹下一跳
+export function getTrajEvaluateList(queryParam) {
+  return request({
+    url: '/business/traj_loc/',
+    method: 'get',
+    params: queryParam
+  })
+}

@@ -312,9 +312,11 @@ export default {
     status: 'Task Status',
     creator: 'creator',
     numberError: 'Please enter a value of numeric type',
+    noStart: 'Not started',
     execute: 'Execute',
     executing: 'Executing',
     completed: 'Completed',
+    executeError: 'Execution error',
     taskUpdateSuccess: 'Task updated successfully!',
     taskError: 'Please select a task name to execute',
     modelError: 'Please select the model name to execute',
@@ -326,8 +328,14 @@ export default {
     executeAt: 'Execute at selected time',
     executeTimeError: 'Execution time cannot be empty',
     executeTimeEarlyError: 'The execution time cannot be earlier than the current time',
-    taskParamTip: 'The following is the task execution parameter configuration',
-    taskMoreParamTip: 'If you need to configure more parameters, you can upload the configuration file'
+    taskParamTip: 'Note: task name, model name and dataset have strict correspondence',
+    taskMoreParamTip: 'If you need to configure more parameters, you can upload the configuration file',
+    clickViewCorresponding: 'Click to view the correspondence between task name, model name and dataset',
+    catLog: 'View run log',
+    catEvaluate: 'View evaluation indicators',
+    downloadLog: 'Download log file',
+    reExecute: 'Re execute',
+    downEvaluate: 'Download evaluation index file'
   }
 
 }

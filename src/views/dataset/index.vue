@@ -86,9 +86,10 @@
               :title="$t('common.deleteConfirm')"
               @onConfirm="deleteFile(scope.row.id)"
             >
-              <el-button slot="reference" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
+              <el-link slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
+              <!-- <el-button slot="reference" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
                 {{ $t('common.delete') }}
-              </el-button>
+              </el-button> -->
             </el-popconfirm>
           </el-button-group>
         </template>
