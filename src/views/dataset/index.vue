@@ -91,11 +91,12 @@
                 {{ $t('common.delete') }}
               </el-button> -->
             </el-popconfirm>
-            <router-link :to="'/dataset/show_dataset/'+scope.row.file_name">
-              <el-button :disabled="editDisable" type="primary" size="small" icon="el-icon-edit">
+            <el-link style="margin-left: 10px" icon="el-icon-view">
+              <router-link :to="'/dataset/show_dataset/'+scope.row.file_name">
                 {{ $t('common.view') }}
-              </el-button>
-            </router-link>
+              </router-link>
+            </el-link>
+
           </el-button-group>
         </template>
       </el-table-column>
