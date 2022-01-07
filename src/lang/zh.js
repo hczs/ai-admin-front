@@ -74,7 +74,8 @@ export default {
     datasetManage: '数据集管理',
     taskList: '任务列表',
     tasksAdd: '新建任务',
-    tasksEdit: '编辑任务'
+    tasksEdit: '编辑任务',
+    datasetView: '数据集展示'
   },
   navbar: {
     dashboard: '首页',

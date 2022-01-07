@@ -200,18 +200,18 @@ export const asyncRoutes = [
   //   ]
   // },
 
-  {
-    path: '/templates',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/template/index'),
-        name: 'templates manage',
-        meta: { title: 'templateManage', icon: 'template', permissions: ['admin', 'templateManage'] }
-      }
-    ]
-  },
+  // {
+  //   path: '/templates',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/template/index'),
+  //       name: 'templates manage',
+  //       meta: { title: 'templateManage', icon: 'template', permissions: ['admin', 'templateManage'] }
+  //     }
+  //   ]
+  // },
 
   // {
   //   path: 'external-link',
