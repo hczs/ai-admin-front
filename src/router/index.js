@@ -176,6 +176,13 @@ export const asyncRoutes = [
         component: () => import('@/views/dataset/index'),
         name: 'dataset manage',
         meta: { title: 'datasetManage', icon: 'resource', permissions: ['admin', 'datasetManage'] }
+      },
+      {
+        path: 'show_dataset/:file_name',
+        component: () => import('@/views/dataset/show_dataset'),
+        name: 'dataset_view',
+        meta: { title: 'datasetView', icon: '', permissions: ['admin', 'datasetManage'] },
+        hidden: true
       }
     ]
   },

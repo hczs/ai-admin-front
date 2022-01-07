@@ -414,6 +414,7 @@ import { getTaskList, getTaskById, executeTaskById,
   getMapMatchingEvaluateList, getTrajEvaluateList } from '@/api/task'
 
 export default {
+
   data() {
     const validateExecuteTime = (rule, value, callback) => {
       if (!value) {

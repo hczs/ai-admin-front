@@ -221,6 +221,7 @@ export default {
   // 公共使用，例如新增按钮，删除等等
   common: {
     edit: 'Edit',
+    view: 'Show dataset',
     add: 'Add',
     delete: 'Delete',
     createTime: 'Creation Time',
