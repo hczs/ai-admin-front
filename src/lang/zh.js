@@ -271,10 +271,10 @@ export default {
     fileUpload: '文件上传',
     pleaseInputFileName: '请输入文件名称',
     clickUpload: '点击这里上传文件',
-    uploadTips: '注意：只能上传ZIP文件，数据包应包含数据原子文件，包括：xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、config.json；对于不同的交通预测任务，可能用到不同的原子文件，同一个数据集不一定包含全部六种原子文件。',
+    uploadTips: '注意：只能上传ZIP文件，数据包应包含数据原子文件，包括：xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、config.json；对于不同的交通预测任务，可能用到不同的原子文件，同一个数据集不一定包含全部几种原子文件。',
     uploadSuccess: '文件上传成功！',
     uploadError: '请上传ZIP格式的数据包！',
-    atomicError: '请检查数据包中的文件是否只包含：xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、config.json'
+    atomicError: '请检查数据包中的文件是否只包含：xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、config.json'
   },
   // 任务
   task: {
