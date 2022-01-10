@@ -123,6 +123,7 @@ export default {
     // 新增
     order: '序号',
     name: '权限名称',
+    id: '权限ID',
     type: '权限类型',
     code: '权限码',
     parent: '上级权限',
@@ -221,6 +222,8 @@ export default {
   },
   // 公共使用，例如新增按钮，删除等等
   common: {
+    yes: '是',
+    no: '否',
     edit: '编辑',
     view: '展示',
     add: '新增',
@@ -265,6 +268,7 @@ export default {
   },
   // 数据集相关
   dataset: {
+    datasetDownload: '样例数据下载',
     fileName: '文件名称',
     fileSize: '文件大小',
     filePath: '存储路径',
@@ -272,10 +276,10 @@ export default {
     fileUpload: '文件上传',
     pleaseInputFileName: '请输入文件名称',
     clickUpload: '点击这里上传文件',
-    uploadTips: '注意：只能上传ZIP文件，数据包应包含数据原子文件，包括：xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、config.json；对于不同的交通预测任务，可能用到不同的原子文件，同一个数据集不一定包含全部六种原子文件。',
+    uploadTips: '注意：只能上传ZIP文件，数据包应包含数据原子文件，包括：xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、config.json；对于不同的交通预测任务，可能用到不同的原子文件，同一个数据集不一定包含全部几种原子文件。',
     uploadSuccess: '文件上传成功！',
     uploadError: '请上传ZIP格式的数据包！',
-    atomicError: '请检查数据包中的文件是否只包含：xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、config.json'
+    atomicError: '请检查数据包中的文件是否只包含：xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、config.json'
   },
   // 任务
   task: {
@@ -333,6 +337,8 @@ export default {
     taskMoreParamTip: '如果需要配置更多参数，可以上传配置文件',
     clickViewCorresponding: '点击查看任务名、模型名和数据集的对应关系',
     catLog: '查看运行日志',
+    logview: '运行日志',
+    eva_view: '评价指标查看',
     catEvaluate: '查看评价指标',
     downloadLog: '下载日志文件',
     reExecute: '重新执行',

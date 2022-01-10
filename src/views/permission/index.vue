@@ -55,7 +55,7 @@
       />
       <el-table-column
         prop="id"
-        label="权限ID"
+        :label="$t('permission.id')"
       />
       <el-table-column
         prop="name"

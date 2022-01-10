@@ -30,7 +30,7 @@
       <el-button type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
     </el-form>
     <div style="float: right">
-      <a :href="BASE_API + '/business/file/download/'"><el-button type="primary" size="medium" icon="el-icon-download">样例数据下载</el-button></a>
+      <a :href="BASE_API + '/business/file/download/'"><el-button type="primary" size="medium" icon="el-icon-download">{{ lable=$t('dataset.datasetDownload') }}</el-button></a>
       <el-button style="margin-left: 10px" :disabled="addDisable" type="primary" size="medium" icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">
         {{ $t('dataset.fileUpload') }}
       </el-button>

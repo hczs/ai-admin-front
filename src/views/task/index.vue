@@ -242,7 +242,7 @@
 
     <!-- 日志查看弹出框 -->
     <el-dialog
-      title="运行日志"
+      :title="$t('task.logview')"
       :visible.sync="logDialogVisible"
       width="80%"
       class="dialog-div"
@@ -259,7 +259,7 @@
 
     <!-- 评价指标弹出框 -->
     <el-dialog
-      title="评价指标查看"
+      :title="$t('task.eva_view')"
       :visible.sync="evaluateDialogVisible"
       width="80%"
       class="dialog-div"

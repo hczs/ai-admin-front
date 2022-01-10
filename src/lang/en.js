@@ -123,6 +123,7 @@ export default {
     // 新增
     order: 'Serial Number',
     name: 'Permission Name',
+    id: 'Permission ID',
     type: 'Permission Type',
     code: 'Permission Code',
     parent: 'Superior Authority',
@@ -221,6 +222,8 @@ export default {
   },
   // 公共使用，例如新增按钮，删除等等
   common: {
+    yes: 'yes',
+    no: 'no',
     edit: 'Edit',
     view: 'Show dataset',
     add: 'Add',
@@ -266,6 +269,7 @@ export default {
   },
   // 数据集相关
   dataset: {
+    datasetDownload: ' Download Sample',
     fileName: 'File name',
     fileSize: 'File size',
     filePath: 'Storage path',
@@ -273,10 +277,10 @@ export default {
     fileUpload: 'File upload',
     pleaseInputFileName: 'Please enter a file name',
     clickUpload: 'Click here to upload the file',
-    uploadTips: 'Note: only zip files can be uploaded, The data package shall contain data atomic files, including: xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、config.json; For different traffic prediction tasks, different atomic files may be used, and a dataset may not contain all six kinds of atomic files.',
+    uploadTips: 'Note: only zip files can be uploaded, The data package shall contain data atomic files, including: xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、config.json; For different traffic prediction tasks, different atomic files may be used, and a dataset may not contain all kinds of atomic files.',
     uploadSuccess: 'File upload succeeded!',
     uploadError: 'Please upload the data package in ZIP format!',
-    atomicError: 'Please check whether the files in the package contain only: xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、config.json'
+    atomicError: 'Please check whether the files in the package contain only: xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、config.json'
   },
   // 任务
   task: {
@@ -334,6 +338,8 @@ export default {
     taskMoreParamTip: 'If you need to configure more parameters, you can upload the configuration file',
     clickViewCorresponding: 'Click to view the correspondence between task name, model name and dataset',
     catLog: 'View run log',
+    logview: 'Task Log',
+    eva_view: 'Evaluation Result',
     catEvaluate: 'View evaluation indicators',
     downloadLog: 'Download log file',
     reExecute: 'Re execute',
