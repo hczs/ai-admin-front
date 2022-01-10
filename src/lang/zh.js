@@ -74,7 +74,8 @@ export default {
     datasetManage: '数据集管理',
     taskList: '任务列表',
     tasksAdd: '新建任务',
-    tasksEdit: '编辑任务'
+    tasksEdit: '编辑任务',
+    datasetView: '数据集展示'
   },
   navbar: {
     dashboard: '首页',
@@ -122,6 +123,7 @@ export default {
     // 新增
     order: '序号',
     name: '权限名称',
+    id: '权限ID',
     type: '权限类型',
     code: '权限码',
     parent: '上级权限',
@@ -220,6 +222,8 @@ export default {
   },
   // 公共使用，例如新增按钮，删除等等
   common: {
+    yes: '是',
+    no: '否',
     edit: '编辑',
     view: '展示',
     add: '新增',
@@ -264,6 +268,7 @@ export default {
   },
   // 数据集相关
   dataset: {
+    datasetDownload: '样例数据下载',
     fileName: '文件名称',
     fileSize: '文件大小',
     filePath: '存储路径',
@@ -312,9 +317,11 @@ export default {
     status: '任务状态',
     creator: '任务创建者',
     numberError: '请输入数字类型的值',
+    noStart: '未开始',
     execute: '执行',
     executing: '进行中',
     completed: '已完成',
+    executeError: '执行错误',
     taskUpdateSuccess: '任务更新成功！',
     taskError: '请选择要执行的任务名',
     modelError: '请选择要执行的模型名',
@@ -326,7 +333,15 @@ export default {
     executeAt: '在选定时间执行',
     executeTimeError: '执行时间不能为空',
     executeTimeEarlyError: '执行时间不能早于当前时间',
-    taskParamTip: '以下为任务执行参数配置',
-    taskMoreParamTip: '如果需要配置更多参数，可以上传配置文件'
+    taskParamTip: '注意：任务名、模型名和数据集有严格的对应关系',
+    taskMoreParamTip: '如果需要配置更多参数，可以上传配置文件',
+    clickViewCorresponding: '点击查看任务名、模型名和数据集的对应关系',
+    catLog: '查看运行日志',
+    logview: '运行日志',
+    eva_view: '评价指标查看',
+    catEvaluate: '查看评价指标',
+    downloadLog: '下载日志文件',
+    reExecute: '重新执行',
+    downEvaluate: '下载评价指标文件'
   }
 }

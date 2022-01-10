@@ -74,7 +74,8 @@ export default {
     datasetManage: 'Dataset Management',
     taskList: 'Task List',
     tasksAdd: 'New Task',
-    tasksEdit: 'Edit Task'
+    tasksEdit: 'Edit Task',
+    datasetView: 'Show Dataset'
   },
   navbar: {
     dashboard: 'Dashboard',
@@ -122,6 +123,7 @@ export default {
     // 新增
     order: 'Serial Number',
     name: 'Permission Name',
+    id: 'Permission ID',
     type: 'Permission Type',
     code: 'Permission Code',
     parent: 'Superior Authority',
@@ -220,6 +222,8 @@ export default {
   },
   // 公共使用，例如新增按钮，删除等等
   common: {
+    yes: 'yes',
+    no: 'no',
     edit: 'Edit',
     view: 'Show dataset',
     add: 'Add',
@@ -265,6 +269,7 @@ export default {
   },
   // 数据集相关
   dataset: {
+    datasetDownload: ' Download Sample',
     fileName: 'File name',
     fileSize: 'File size',
     filePath: 'Storage path',
@@ -313,9 +318,11 @@ export default {
     status: 'Task Status',
     creator: 'creator',
     numberError: 'Please enter a value of numeric type',
+    noStart: 'Not started',
     execute: 'Execute',
     executing: 'Executing',
     completed: 'Completed',
+    executeError: 'Execution error',
     taskUpdateSuccess: 'Task updated successfully!',
     taskError: 'Please select a task name to execute',
     modelError: 'Please select the model name to execute',
@@ -327,8 +334,16 @@ export default {
     executeAt: 'Execute at selected time',
     executeTimeError: 'Execution time cannot be empty',
     executeTimeEarlyError: 'The execution time cannot be earlier than the current time',
-    taskParamTip: 'The following is the task execution parameter configuration',
-    taskMoreParamTip: 'If you need to configure more parameters, you can upload the configuration file'
+    taskParamTip: 'Note: task name, model name and dataset have strict correspondence',
+    taskMoreParamTip: 'If you need to configure more parameters, you can upload the configuration file',
+    clickViewCorresponding: 'Click to view the correspondence between task name, model name and dataset',
+    catLog: 'View run log',
+    logview: 'Task Log',
+    eva_view: 'Evaluation Result',
+    catEvaluate: 'View evaluation indicators',
+    downloadLog: 'Download log file',
+    reExecute: 'Re execute',
+    downEvaluate: 'Download evaluation index file'
   }
 
 }

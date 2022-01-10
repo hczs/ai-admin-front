@@ -89,9 +89,10 @@
       >
         <template slot-scope="scope">
           <el-button-group>
-            <el-button :disabled="editDisable" type="primary" size="small" icon="el-icon-edit" @click="edit(scope.row.id)">
+            <el-link :disabled="editDisable" icon="el-icon-edit" @click="edit(scope.row.id)">{{ $t('common.edit') }}</el-link>
+            <!-- <el-button :disabled="editDisable" type="primary" size="small" icon="el-icon-edit" @click="edit(scope.row.id)">
               {{ $t('common.edit') }}
-            </el-button>
+            </el-button> -->
             <el-popconfirm
               :confirm-button-text="$t('common.confirm')"
               :cancel-button-text="$t('common.cancel')"
@@ -102,9 +103,10 @@
               :title="$t('common.deleteConfirm')"
               @onConfirm="deleteAccount(scope.row.id)"
             >
-              <el-button slot="reference" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
+              <el-link slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
+              <!-- <el-button slot="reference" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
                 {{ $t('common.delete') }}
-              </el-button>
+              </el-button> -->
             </el-popconfirm>
           </el-button-group>
         </template>

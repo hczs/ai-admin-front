@@ -30,7 +30,7 @@
       <el-button type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
     </el-form>
     <div style="float: right">
-      <a :href="BASE_API + '/business/file/download/'"><el-button type="primary" size="medium" icon="el-icon-download">样例数据下载</el-button></a>
+      <a :href="BASE_API + '/business/file/download/'"><el-button type="primary" size="medium" icon="el-icon-download">{{ lable=$t('dataset.datasetDownload') }}</el-button></a>
       <el-button style="margin-left: 10px" :disabled="addDisable" type="primary" size="medium" icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">
         {{ $t('dataset.fileUpload') }}
       </el-button>
@@ -86,15 +86,17 @@
               :title="$t('common.deleteConfirm')"
               @onConfirm="deleteFile(scope.row.id)"
             >
-              <el-button slot="reference" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
+              <el-link slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
+              <!-- <el-button slot="reference" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
                 {{ $t('common.delete') }}
-              </el-button>
+              </el-button> -->
             </el-popconfirm>
-            <router-link :to="path='/dataset/show_dataset/'+scope.row.file_name,">
-              <el-button :disabled="editDisable" type="primary" size="small" icon="el-icon-edit">
+            <el-link v-if="scope.row.dataset_status === 1" style="margin-left: 10px" icon="el-icon-view">
+              <router-link :to="'/dataset/show_dataset/'+scope.row.file_name">
                 {{ $t('common.view') }}
-              </el-button>
-            </router-link>
+              </router-link>
+            </el-link>
+            <el-link v-if="scope.row.dataset_status === 0" disabled style="margin-left: 10px" icon="el-icon-loading">处理中</el-link>
           </el-button-group>
         </template>
       </el-table-column>

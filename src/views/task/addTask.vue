@@ -34,6 +34,11 @@
         </el-form-item> -->
         <!-- 以下为任务执行参数配置 -->
         <el-divider content-position="center">{{ $t('task.taskParamTip') }}</el-divider>
+        <el-link target="_blank" type="info" href="https://github.com/LibCity/Bigscity-LibCity-Docs-zh_CN/blob/master/source/user_guide/data/dataset_for_task.md">
+          {{ $t('task.clickViewCorresponding') }}
+        </el-link>
+        <br>
+        <br>
         <el-form-item :label="$t('task.task')" prop="task">
           <el-select v-model="task.task" style="float: left" placeholder="请选择">
             <el-option
@@ -45,13 +50,14 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('task.model')" prop="model">
-          <el-input
-            v-model="task.model"
-            autocomplete="off"
-            clearable
-            show-word-limit
-            maxlength="20"
-          />
+          <el-select v-model="task.model" default-first-option allow-create filterable style="float: left" placeholder="请选择">
+            <el-option
+              v-for="model in modelList"
+              :key="model"
+              :label="model"
+              :value="model"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item :label="$t('task.dataset')" prop="dataset">
           <el-select v-model="task.dataset" filterable style="float: left" placeholder="请选择">
@@ -65,14 +71,14 @@
         </el-form-item>
         <el-form-item :label="$t('task.saved_model')" style="text-align: left">
           <el-radio-group v-model="task.saved_model">
-            <el-radio :label="true">是</el-radio>
-            <el-radio :label="false">否</el-radio>
+            <el-radio :label="$t('common.yes')" />
+            <el-radio :label="$t('common.no')" />
           </el-radio-group>
         </el-form-item>
         <el-form-item :label="$t('task.train')" style="text-align: left">
           <el-radio-group v-model="task.train">
-            <el-radio :label="true">是</el-radio>
-            <el-radio :label="false">否</el-radio>
+            <el-radio :label="$t('common.yes')" />
+            <el-radio :label="$t('common.no')" />
           </el-radio-group>
         </el-form-item>
         <el-form-item :label="$t('task.batch_size')" prop="batch_size" style="text-align: left">
@@ -92,8 +98,8 @@
         </el-form-item>
         <el-form-item :label="$t('task.gpu')" style="text-align: left">
           <el-radio-group v-model="task.gpu">
-            <el-radio :label="true">是</el-radio>
-            <el-radio :label="false">否</el-radio>
+            <el-radio :label="$t('common.yes')" />
+            <el-radio :label="$t('common.no')" />
           </el-radio-group>
         </el-form-item>
         <el-form-item :label="$t('task.gpu_id')" prop="gpu_id" style="text-align: left">
@@ -153,6 +159,7 @@ export default {
       fileLimit: 1,
       formLabelWidth: '10%',
       fileList: [],
+      modelList: ['CRANN', 'DeepTTE', 'IVMM', 'GeoSAN', 'AutoEncoder', 'MultiSTGCnet', 'DKFN', 'FNN', 'GWNET', 'MSTGCN', 'STTN', ' STNN', 'RNN', 'MSTGCNCommon', ' AutoEncoder', 'CONVGCNCommon', 'STGCN', 'GSNet', 'FPMC', 'HMMM', 'GTS', 'STMGAT', 'DMVSTNet', 'ASTGCN', 'ToGCN', 'DSAN', 'ATST-LSTM', 'ChebConv', 'MultiSTGCnetCommon', 'CCRNN', 'TGCN', 'STDN', 'ST-RNN', 'ATDM', 'SERM', 'DCRNN', 'DeepMove', 'LINE', ' GMAN', 'CARA', 'CSTN', ' IVMM', ' ASTGCN', 'ACFM', 'MTGNN', 'STMatching', 'STAGGCN', 'TTPNet', 'HGCN', 'ACFMCommon', ' ATST-LSTM', 'STResNet', 'STResNetCommon', 'STNN', 'CONVGCN', ' ASTGCNCommon', 'GEML', 'STG2Seq', 'STAN', 'HST-LSTM', 'GMAN', ' STAGGCN', 'LSTPM', 'STSGCN', 'ResLSTM', 'AGCRN', 'Seq2Seq', 'DGCN', 'ASTGCNCommon', 'TGCLSTM'],
       taskParamList: [
         { id: '1', label: this.$t('task.traffic_state_pred'), value: 'traffic_state_pred' },
         { id: '2', label: this.$t('task.traj_loc_pred'), value: 'traj_loc_pred' },
@@ -206,14 +213,25 @@ export default {
     //   { id: '5', label: this.$t('task.map_matching'), value: 'map_matching' }]
   },
   methods: {
+    // 解决el-input-number将null值处理为0的bug
+    numberToEmpty(data) {
+      for (var index in data) {
+        if (data[index] === null) {
+          data[index] = undefined
+        }
+      }
+      return data
+    },
+    // 获取数据集list
     getList() {
       getFileList().then(res => {
         this.fileList = res.data.results
       })
     },
+    // 回显任务数据
     getById(id) {
       getTaskById(id).then(res => {
-        this.task = res.data
+        this.task = this.numberToEmpty(res.data)
       })
     },
     submit() {
