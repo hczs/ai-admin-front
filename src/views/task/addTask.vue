@@ -240,12 +240,15 @@ export default {
           this.loading = false
           return
         }
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         // 判断是更新还是新增
         if (this.task.id) {
-          console.log('更新')
-          console.log(this.task.id)
           updateTaskById(this.task.id, this.task).then(res => {
-            console.log(res)
             this.$message.success(this.$t('task.taskUpdateSuccess'))
             // 路由跳转到list
             this.$router.push({ path: '/tasks' })
@@ -262,15 +265,14 @@ export default {
             }
           })
         }
+        loading.close()
       })
     },
     resetForm() {
-      console.log(this.task.max_epoch)
       this.$refs['elForm'].clearValidate()
       this.$refs['upload'].clearFiles()
       this.$refs['elForm'].resetFields()
       this.task = {}
-      console.log(this.task.max_epoch)
     },
 
     // 文件上传相关
