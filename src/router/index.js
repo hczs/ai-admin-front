@@ -148,7 +148,7 @@ export const asyncRoutes = [
       {
         path: 'index',
         component: () => import('@/views/task/index'),
-        name: 'tasks manage',
+        name: 'tasks list',
         meta: { title: 'taskList', icon: '', permissions: ['admin', 'taskList'] }
       },
       {

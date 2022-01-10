@@ -492,8 +492,9 @@ export default {
     catLog(id) {
       this.task.id = id
       this.logDialogVisible = true
+      // 每次查看日志，刷新所有任务状态
+      this.getList()
       getExecuteLogById(id).then(res => {
-        console.log(res.data)
         this.logData = res.data
       })
     },
