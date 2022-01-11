@@ -268,6 +268,7 @@
         <!-- 交通状态预测、到达时间估计表格 -->
         <el-table
           v-if="task.task === 'eta' || task.task === 'traffic_state_pred'"
+          v-loading="evaluateListLoading"
           :data="evaluateData"
           style="width: 100%"
           height="100%"
@@ -298,7 +299,6 @@
             :label="$t('task.RMSE')"
           />
           <el-table-column
-            v-if="masked_MAE !== null"
             prop="masked_MAE"
             :label="$t('task.masked_MAE')"
           />
@@ -348,6 +348,7 @@
         <!-- 路网匹配表格 -->
         <el-table
           v-if="task.task === 'map_matching'"
+          v-loading="evaluateListLoading"
           :data="evaluateData"
           style="width: 100%"
           height="100%"
@@ -378,6 +379,7 @@
         <!-- 轨迹下一跳表格 -->
         <el-table
           v-if="task.task === 'traj_loc_pred'"
+          v-loading="evaluateListLoading"
           :data="evaluateData"
           style="width: 100%"
           height="100%"
@@ -450,6 +452,7 @@ export default {
       logDialogVisible: false, // 日志查看弹出框
       logData: '', // 日志数据
       evaluateDialogVisible: false,
+      evaluateListLoading: false,
       // 按钮权限
       executeDisable: true,
       editDisable: true,
@@ -500,6 +503,8 @@ export default {
     },
     // 查看评价指标
     catEvaluate(id) {
+      this.evaluateDialogVisible = true
+      this.evaluateListLoading = true
       // 获取当前任务相关数据
       getTaskById(id).then(res => {
         this.task = res.data
@@ -524,8 +529,8 @@ export default {
           // 路网表征学习，无评价指标
           this.evaluateData = []
         }
-        this.evaluateDialogVisible = true
       })
+      this.evaluateListLoading = false
     },
     getQueryList() {
       this.queryParam.page = this.defaultPage
