@@ -96,7 +96,13 @@
                 {{ $t('common.view') }}
               </router-link>
             </el-link>
-            <el-link v-if="scope.row.dataset_status === 0" disabled style="margin-left: 10px" icon="el-icon-loading">处理中</el-link>
+            <el-link v-if="scope.row.dataset_status === 2" style="margin-left: 10px" icon="el-icon-view">
+              <router-link :to="'/dataset/show_dataset/'+scope.row.file_name">
+                {{ $t('common.view') }}
+              </router-link>
+            </el-link>
+            <el-link v-if="scope.row.dataset_status === -1" disabled style="margin-left: 10px">{{ $t('dataset.showFail') }}</el-link>
+            <el-link v-if="scope.row.dataset_status === 0" disabled style="margin-left: 10px" icon="el-icon-loading">{{ $t('dataset.processing') }}</el-link>
           </el-button-group>
         </template>
       </el-table-column>
