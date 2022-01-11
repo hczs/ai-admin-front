@@ -298,7 +298,6 @@
             label="RMSE"
           />
           <el-table-column
-            v-if="masked_MAE !== null"
             prop="masked_MAE"
             label="masked_MAE"
           />
