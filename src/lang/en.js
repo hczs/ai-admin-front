@@ -273,6 +273,8 @@ export default {
     fileName: 'File name',
     fileSize: 'File size',
     filePath: 'Storage path',
+    processing: 'Processing',
+    showFail: 'No View can be shown',
     extractPath: 'Decompression path',
     fileUpload: 'File upload',
     pleaseInputFileName: 'Please enter a file name',
@@ -343,7 +345,25 @@ export default {
     catEvaluate: 'View evaluation indicators',
     downloadLog: 'Download log file',
     reExecute: 'Re execute',
-    downEvaluate: 'Download evaluation index file'
+    downEvaluate: 'Download evaluation index file',
+    MAE: 'MAE',
+    MAPE: 'MAPE',
+    MSE: 'MSE',
+    RMSE: 'RMSE',
+    masked_MAE: 'masked_MAE',
+    masked_MAPE: 'masked_MAPE',
+    masked_MSE: 'masked_MSE',
+    masked_RMSE: 'masked_RMSE',
+    R2: 'R2',
+    EVAR: 'EVAR',
+    Precision: 'Precision',
+    Recall: 'Recall',
+    F1Score: 'F1Score',
+    MAP: 'MAP',
+    PCC: 'PCC',
+    RMF: 'RMF',
+    AN: 'AN',
+    AL: 'AL'
   }
 
 }

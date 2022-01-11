@@ -269,6 +269,8 @@ export default {
   // 数据集相关
   dataset: {
     datasetDownload: '样例数据下载',
+    processing: '数据集处理中',
+    showFail: '该数据集无法展示',
     fileName: '文件名称',
     fileSize: '文件大小',
     filePath: '存储路径',
@@ -342,6 +344,24 @@ export default {
     catEvaluate: '查看评价指标',
     downloadLog: '下载日志文件',
     reExecute: '重新执行',
-    downEvaluate: '下载评价指标文件'
+    downEvaluate: '下载评价指标文件',
+    MAE: '平均绝对误差',
+    MAPE: '均绝对比例误差',
+    MSE: '均方差',
+    RMSE: '均方根误差',
+    masked_MAE: '平均绝对误差(掩码)',
+    masked_MAPE: '均绝对比例误差(掩码)',
+    masked_MSE: '均方差(掩码)',
+    masked_RMSE: '均方根误差(掩码)',
+    R2: '可决系数',
+    EVAR: 'EVAR参数',
+    Precision: '准确率',
+    Recall: '召回率',
+    F1Score: 'F1值',
+    MAP: '平均准确率',
+    PCC: '皮尔逊相关系数',
+    RMF: 'RMF值',
+    AN: 'AN值',
+    AL: 'AL值'
   }
 }

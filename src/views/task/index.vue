@@ -283,65 +283,65 @@
           />
           <el-table-column
             prop="MAE"
-            label="MAE"
+            :label="$t('task.MAE')"
           />
           <el-table-column
             prop="MAPE"
-            label="MAPE"
+            :label="$t('task.MAPE')"
           />
           <el-table-column
             prop="MSE"
-            label="MSE"
+            :label="$t('task.MSE')"
           />
           <el-table-column
             prop="RMSE"
-            label="RMSE"
+            :label="$t('task.RMSE')"
           />
           <el-table-column
             v-if="masked_MAE !== null"
             prop="masked_MAE"
-            label="masked_MAE"
+            :label="$t('task.masked_MAE')"
           />
           <el-table-column
             prop="masked_MAPE"
-            label="masked_MAPE"
+            :label="$t('task.masked_MAPE')"
           />
           <el-table-column
             prop="masked_MSE"
-            label="masked_MSE"
+            :label="$t('task.masked_MSE')"
           />
           <el-table-column
             prop="masked_RMSE"
-            label="masked_RMSE"
+            :label="$t('task.masked_RMSE')"
           />
           <el-table-column
             prop="R2"
-            label="R2"
+            :label="$t('task.R2')"
           />
           <el-table-column
             prop="EVAR"
-            label="EVAR"
+            :label="$t('task.EVAR')"
           />
           <el-table-column
             v-if="Precision !== null"
             prop="Precision"
-            label="Precision"
+            :label="$t('task.Precision')"
           />
           <el-table-column
             prop="Recall"
-            label="Recall"
+            :label="$t('task.Recall')"
           />
           <el-table-column
             prop="F1-Score"
-            label="F1-Score"
+            :label="$t('task.F1Score')"
           />
           <el-table-column
             prop="MAP"
-            label="MAP"
+            :label="$t('task.MAP')"
           />
           <el-table-column
             prop="PCC"
-            label="PCC"
+            :label="$t('task.PCC')"
           />
         </el-table>
 
@@ -363,15 +363,15 @@
           />
           <el-table-column
             prop="RMF"
-            label="RMF"
+            :label="$t('task.RMF')"
           />
           <el-table-column
             prop="AN"
-            label="AN"
+            :label="$t('task.AN')"
           />
           <el-table-column
             prop="AL"
-            label="AL"
+            :label="$t('task.AL')"
           />
         </el-table>
 
@@ -393,7 +393,7 @@
           />
           <el-table-column
             prop="Recall"
-            label="Recall"
+            :label="$t('task.Recall')"
           />
         </el-table>
       </div>
