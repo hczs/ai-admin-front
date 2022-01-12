@@ -155,7 +155,7 @@ export const asyncRoutes = [
         path: 'addTask',
         component: () => import('@/views/task/addTask'),
         name: 'tasks add',
-        meta: { title: 'tasksAdd', icon: '', permissions: ['admin', 'taskAdd'] }
+        meta: { title: 'tasksAdd', icon: '', permissions: ['admin', 'tasksAdd'] }
       },
       {
         path: 'editTask/:id',

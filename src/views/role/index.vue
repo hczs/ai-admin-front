@@ -85,7 +85,7 @@
               :title="$t('common.deleteConfirm')"
               @onConfirm="deleteRole(scope.row.id)"
             >
-              <el-link slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
+              <el-link v-if="!deleteDisable" slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
               <!-- <el-button slot="reference" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
                 {{ $t('common.delete') }}
               </el-button> -->
@@ -111,11 +111,11 @@
     </div>
     <!-- 添加/编辑 对话框 -->
     <el-dialog :title="dialogType === 'edit' ? $t('role.edit') : $t('role.add')" :visible.sync="dialogFormVisible">
-      <el-form :model="role">
-        <el-form-item :label="$t('role.name')" :label-width="formLabelWidth">
+      <el-form ref="roleForm" :model="role" :rules="rules">
+        <el-form-item :label="$t('role.name')" :label-width="formLabelWidth" prop="name">
           <el-input v-model="role.name" maxlength="16" show-word-limit autocomplete="off" />
         </el-form-item>
-        <el-form-item :label="$t('role.description')" :label-width="formLabelWidth">
+        <el-form-item :label="$t('role.description')" :label-width="formLabelWidth" prop="description">
           <el-input v-model="role.description" autocomplete="off" />
         </el-form-item>
         <el-form-item :label="$t('role.permissions')" :label-width="formLabelWidth">
@@ -137,7 +137,7 @@
   </div>
 </template>
 <script>
-import { getRoleList, getRoleById, addRole, deleteRoleById, updateRoleById } from '@/api/role'
+import { getRoleList, getRoleById, addRole, deleteRoleById, updateRoleById, roleExists } from '@/api/role'
 import { getPermissionTree } from '@/api/permission'
 import { checkPermission } from '@/utils/permission'
 
@@ -146,17 +146,28 @@ const defaultQueryParam = {
   page: 1,
   size: 10
 }
-// 角色对象
-const defaultRole = {
-  id: '',
-  name: '',
-  description: '',
-  permissions: []
-}
 export default {
   data() {
+    const validateRoleName = (rule, value, callback) => {
+      if (value.length === 0) {
+        callback(new Error(this.$t('role.roleNameError')))
+      } else {
+        this.role.role_name = value
+        roleExists(this.role).then(res => {
+          if (res.code !== 200 && this.role.id !== res.msg.id) {
+            callback(new Error(this.$t('role.roleNameExistsError')))
+          } else {
+            callback()
+          }
+        })
+      }
+    }
     return {
-      role: defaultRole,
+      role: {
+        name: '',
+        description: '',
+        permissionTree: []
+      },
       listLoading: true,
       tableData: [],
       queryParam: defaultQueryParam,
@@ -174,7 +185,12 @@ export default {
       // 按钮权限
       addDisable: true,
       editDisable: true,
-      deleteDisable: true
+      deleteDisable: true,
+      // 表单校验
+      rules: {
+        name: [{ required: true, trigger: 'blur', validator: validateRoleName }],
+        description: [{ required: true, message: this.$t('role.descriptionError'), trigger: 'blur' }]
+      }
     }
   },
 
@@ -215,41 +231,53 @@ export default {
     },
     // 编辑/更新 提交
     submit() {
-      this.dialogFormVisible = false
-      this.role.permissions = this.$refs.tree.getCheckedKeys()
-      if (this.dialogType === 'edit') {
-        this.listLoading = true
-        updateRoleById(this.role.id, this.role).then(res => {
-          this.$message({
-            message: this.$t('common.modifiedSuccessfully'),
-            type: 'success'
+      this.$refs['roleForm'].validate(valid => {
+        if (!valid) {
+          return false
+        }
+        this.dialogFormVisible = false
+        this.role.permissions = this.$refs.tree.getCheckedKeys()
+        if (this.dialogType === 'edit') {
+          this.listLoading = true
+          updateRoleById(this.role.id, this.role).then(res => {
+            this.$message({
+              message: this.$t('common.modifiedSuccessfully'),
+              type: 'success'
+            })
+            // 重新获取页面数据
+            this.getList(this.queryParam)
+          }).catch(() => {
+            this.listLoading = false
+            this.$message.error(this.$t('common.modificationFailed'))
           })
+        }
+        if (this.dialogType === 'add') {
+          this.listLoading = true
+          addRole(this.role).then(res => {
           // 重新获取页面数据
-          this.getList(this.queryParam)
-        }).catch(() => {
-          this.listLoading = false
-          this.$message.error(this.$t('common.modificationFailed'))
-        })
-      }
-      if (this.dialogType === 'add') {
-        this.listLoading = true
-        addRole(this.role).then(res => {
-          // 重新获取页面数据
-          this.$message({
-            message: this.$t('common.addedSuccessfully'),
-            type: 'success'
+            this.$message({
+              message: this.$t('common.addedSuccessfully'),
+              type: 'success'
+            })
+            this.getList(this.queryParam)
+          }).catch(() => {
+            this.listLoading = false
+            this.$message.error(this.$t('common.addFailed'))
           })
-          this.getList(this.queryParam)
-        }).catch(() => {
-          this.listLoading = false
-          this.$message.error(this.$t('common.addFailed'))
-        })
-      }
+        }
+      })
     },
     // 新增按钮点击弹窗
     add() {
       this.dialogFormVisible = true
-      this.role = defaultRole
+      this.role = {
+        name: '',
+        description: '',
+        permissionTree: []
+      }
+      if (this.$refs['roleForm']) {
+        this.$refs['roleForm'].resetFields()
+      }
       // 编辑过的才需要清空树节点
       if (this.dialogType === 'edit') {
         this.$refs.tree.setCheckedKeys(this.role.permissions)
@@ -258,6 +286,9 @@ export default {
     },
     // 编辑按钮点击弹窗
     edit(id) {
+      if (this.$refs['roleForm']) {
+        this.$refs['roleForm'].resetFields()
+      }
       getRoleById(id).then(res => {
         this.role = res.data
         this.$refs.tree.setCheckedKeys(this.role.permissions)
