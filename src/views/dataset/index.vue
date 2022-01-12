@@ -86,7 +86,7 @@
               :title="$t('common.deleteConfirm')"
               @onConfirm="deleteFile(scope.row.id)"
             >
-              <el-link slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
+              <el-link v-if="!deleteDisable" slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
               <!-- <el-button slot="reference" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
                 {{ $t('common.delete') }}
               </el-button> -->

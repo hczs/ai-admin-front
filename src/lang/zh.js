@@ -253,7 +253,11 @@ export default {
     description: '角色描述',
     permissions: '角色权限',
     edit: '编辑角色',
-    add: '添加角色'
+    add: '添加角色',
+    roleNameError: '请填写角色名称',
+    roleNameExistsError: '角色名称已存在',
+    descriptionError: '请填写角色描述',
+    permissionTreeError: '请为角色分配权限'
   },
   // 账号相关
   account: {
@@ -264,7 +268,13 @@ export default {
     selectRole: '请选择账户角色',
     password: '密码',
     pleaseInputAccount: '请输入账号',
-    noRole: '未分配角色'
+    noRole: '未分配角色',
+    accountNumberError: '请输入账号',
+    accountNumberExistsError: '账号已存在',
+    addedSuccessfully: '该账号初始密码为：',
+    resetPassword: '重置密码',
+    resetPasswordSuccessfully: '密码重置成功！',
+    resetPasswordFailed: '密码重置失败，未知错误'
   },
   // 数据集相关
   dataset: {

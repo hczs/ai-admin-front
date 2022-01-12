@@ -42,3 +42,12 @@ export function updateRoleById(roleId, data) {
     data
   })
 }
+
+// 角色是否存在
+export function roleExists(data) {
+  return request({
+    url: '/auth/role/exists/',
+    method: 'post',
+    data
+  })
+}

@@ -71,14 +71,14 @@
         </el-form-item>
         <el-form-item :label="$t('task.saved_model')" style="text-align: left">
           <el-radio-group v-model="task.saved_model">
-            <el-radio :label="$t('common.yes')" />
-            <el-radio :label="$t('common.no')" />
+            <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
+            <el-radio :label="false">{{ $t('common.no') }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item :label="$t('task.train')" style="text-align: left">
           <el-radio-group v-model="task.train">
-            <el-radio :label="$t('common.yes')" />
-            <el-radio :label="$t('common.no')" />
+            <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
+            <el-radio :label="false">{{ $t('common.no') }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item :label="$t('task.batch_size')" prop="batch_size" style="text-align: left">
@@ -98,8 +98,8 @@
         </el-form-item>
         <el-form-item :label="$t('task.gpu')" style="text-align: left">
           <el-radio-group v-model="task.gpu">
-            <el-radio :label="$t('common.yes')" />
-            <el-radio :label="$t('common.no')" />
+            <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
+            <el-radio :label="false">{{ $t('common.no') }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item :label="$t('task.gpu_id')" prop="gpu_id" style="text-align: left">

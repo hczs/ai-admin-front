@@ -149,8 +149,8 @@
             <!-- <el-button style="width: 120px" :disabled="editDisable" type="primary" size="small" icon="el-icon-edit">
                 {{ $t('common.edit') }}
               </el-button> -->
-            <el-link :disabled="!editDisable && ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )" icon="el-icon-edit">
-              <span v-if="!editDisable && ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )">
+            <el-link style="margin-left: 10px" :disabled="editDisable || ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )" icon="el-icon-edit">
+              <span v-if="editDisable || ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )">
                 {{ $t('common.edit') }}
               </span>
               <router-link v-else :to="'/tasks/editTask/'+scope.row.id" disabled>
@@ -168,24 +168,26 @@
               :title="$t('common.deleteConfirm')"
               @onConfirm="deleteTask(scope.row.id)"
             >
-              <el-link slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
+              <el-link v-if="!deleteDisable" slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">
+                {{ $t('common.delete') }}
+              </el-link>
               <!-- <el-button slot="reference" style="width: 120px" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
                 {{ $t('common.delete') }}
               </el-button> -->
             </el-popconfirm>
-            <el-link v-if="scope.row.task_status === 0" :disabled="executeDisable" icon="el-icon-video-play" @click="execute(scope.row.id)">
+            <el-link v-if="scope.row.task_status === 0" style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-video-play" @click="execute(scope.row.id)">
               {{ $t('task.execute') }}
             </el-link>
-            <el-link v-if="scope.row.task_status === -1" :disabled="executeDisable" icon="el-icon-video-play" @click="execute(scope.row.id)">
+            <el-link v-if="scope.row.task_status === -1" style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-video-play" @click="execute(scope.row.id)">
               {{ $t('task.reExecute') }}
             </el-link>
-            <el-link v-if="scope.row.task_status === 1" disabled icon="el-icon-loading">
+            <el-link v-if="scope.row.task_status === 1" style="margin-left: 10px" disabled icon="el-icon-loading">
               {{ $t('task.executing') }}
             </el-link>
-            <el-link v-if="scope.row.task_status === 2" :disabled="executeDisable" icon="el-icon-view" @click="catEvaluate(scope.row.id)">
+            <el-link v-if="scope.row.task_status === 2" style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-view" @click="catEvaluate(scope.row.id)">
               {{ $t('task.catEvaluate') }}
             </el-link>
-            <el-link v-if="scope.row.task_status !== 0" :disabled="executeDisable" icon="el-icon-document" @click="catLog(scope.row.id)">
+            <el-link v-if="scope.row.task_status !== 0" style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-document" @click="catLog(scope.row.id)">
               {{ $t('task.catLog') }}
             </el-link>
             <!-- <el-button style="width: 120px" :disabled="executeDisable" type="primary" size="small" icon="el-icon-video-play" @click="execute(scope.row.id)">
