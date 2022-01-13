@@ -13,7 +13,7 @@ export default {
   data() {
     return {
       reportUrl: '',
-      BASE_API: process.env.VUE_APP_BASE_API
+      BASE_API: window.global_url.Base_url
     }
   },
   created() {
