@@ -432,7 +432,7 @@ export default {
       }
     }
     return {
-      BASE_API: process.env.VUE_APP_BASE_API,
+      BASE_API: window.global_url.Base_url,
       tableData: [],
       task: {},
       listLoading: true,

@@ -154,7 +154,7 @@ const queryParam = {
 export default {
   data() {
     return {
-      BASE_API: process.env.VUE_APP_BASE_API,
+      BASE_API: window.global_url.Base_url,
       tableData: [],
       listLoading: true,
       queryParam: queryParam,
