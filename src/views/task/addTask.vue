@@ -251,14 +251,14 @@ export default {
           updateTaskById(this.task.id, this.task).then(res => {
             this.$message.success(this.$t('task.taskUpdateSuccess'))
             // 路由跳转到list
-            this.$router.push({ path: '/tasks' })
+            this.$router.push({ path: '/taskList/index' })
           })
         } else {
           addTask(this.task).then(res => {
             if (res.code === 201) {
               this.$message.success(this.$t('task.taskCreateSuccess'))
               // 路由跳转到list
-              this.$router.push({ path: '/tasks' })
+              this.$router.push({ path: '/taskList/index' })
             } else {
               this.$message.error(this.$t('task.taskCreateError'))
               console.log(res.msg)

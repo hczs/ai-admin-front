@@ -153,7 +153,7 @@
               <span v-if="editDisable || ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )">
                 {{ $t('common.edit') }}
               </span>
-              <router-link v-else :to="'/tasks/editTask/'+scope.row.id" disabled>
+              <router-link v-else :to="'/taskEdit/editTask/'+scope.row.id" disabled>
                 {{ $t('common.edit') }}
               </router-link>
             </el-link>
