@@ -348,7 +348,7 @@ export default {
     executeTimeEarlyError: 'The execution time cannot be earlier than the current time',
     taskParamTip: 'Note: task name, model name and dataset have strict correspondence',
     taskMoreParamTip: 'If you need to configure more parameters, you can upload the configuration file',
-    clickViewCorresponding: 'Click to view the correspondence between task name, model name and dataset',
+    clickViewCorresponding: 'There is a strict correspondence between task name, model name and dataset (click to view)',
     catLog: 'View run log',
     logview: 'Task Log',
     eva_view: 'Evaluation Result',
@@ -373,7 +373,9 @@ export default {
     PCC: 'PCC',
     RMF: 'RMF',
     AN: 'AN',
-    AL: 'AL'
+    AL: 'AL',
+    maxEpochTip: 'The larger the maximum number of training rounds is, the longer the time will be spent',
+    clickUpload: 'Click upload JSON file'
   }
 
 }
