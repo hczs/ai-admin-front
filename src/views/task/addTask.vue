@@ -1,7 +1,7 @@
 <template>
   <div class="app-container" style="text-align: center; width: 100%;">
-    <div style="width: 60%; margin-left: 5%">
-      <el-form ref="elForm" :rules="rules" :model="task" label-width="auto" label-position="left">
+    <div style="width: 70%; margin-left: 5%">
+      <el-form ref="elForm" :rules="rules" :model="task" label-width="auto" label-position="left" status-icon>
         <el-form-item :label="$t('task.taskName')" prop="task_name">
           <el-input
             v-model="task.task_name"
@@ -22,6 +22,28 @@
             clearable
           />
         </el-form-item>
+        <el-form-item :label="$t('task.max_epoch')" prop="max_epoch" style="text-align: left">
+          <el-popover
+            placement="top-start"
+            width="200"
+            trigger="hover"
+            :content="$t('task.maxEpochTip')"
+          >
+            <el-input-number slot="reference" v-model.number="task.max_epoch" controls-position="right" />
+          </el-popover>
+
+        </el-form-item>
+        <el-form-item :label="$t('task.gpu')" style="text-align: left">
+
+          <el-radio-group v-model="task.gpu">
+            <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
+            <el-radio :label="false">{{ $t('common.no') }}</el-radio>
+          </el-radio-group>
+
+        </el-form-item>
+        <el-form-item v-if="task.gpu" :label="$t('task.gpu_id')" prop="gpu_id" style="text-align: left">
+          <el-input-number v-model.number="task.gpu_id" controls-position="right" />
+        </el-form-item>
         <!-- <el-form-item :label="$t('task.dataFile')" prop="data_file">
           <el-select v-model="task.data_file" style="float: left"  >
             <el-option
@@ -33,12 +55,12 @@
           </el-select>
         </el-form-item> -->
         <!-- 以下为任务执行参数配置 -->
-        <el-divider content-position="center">{{ $t('task.taskParamTip') }}</el-divider>
-        <el-link target="_blank" type="info" href="https://github.com/LibCity/Bigscity-LibCity-Docs-zh_CN/blob/master/source/user_guide/data/dataset_for_task.md">
-          {{ $t('task.clickViewCorresponding') }}
-        </el-link>
-        <br>
-        <br>
+        <el-divider content-position="center">
+          <!-- {{ $t('task.taskParamTip') }} -->
+          <el-link target="_blank" type="primary" href="https://github.com/LibCity/Bigscity-LibCity-Docs-zh_CN/blob/master/source/user_guide/data/dataset_for_task.md">
+            {{ $t('task.clickViewCorresponding') }}
+          </el-link>
+        </el-divider>
         <el-form-item :label="$t('task.task')" prop="task">
           <el-select v-model="task.task" style="float: left">
             <el-option
@@ -69,7 +91,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('task.saved_model')" style="text-align: left">
+        <!-- <el-form-item :label="$t('task.saved_model')" style="text-align: left">
           <el-radio-group v-model="task.saved_model">
             <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
             <el-radio :label="false">{{ $t('common.no') }}</el-radio>
@@ -80,8 +102,8 @@
             <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
             <el-radio :label="false">{{ $t('common.no') }}</el-radio>
           </el-radio-group>
-        </el-form-item>
-        <el-form-item :label="$t('task.batch_size')" prop="batch_size" style="text-align: left">
+        </el-form-item> -->
+        <!-- <el-form-item :label="$t('task.batch_size')" prop="batch_size" style="text-align: left">
           <el-input-number v-model.number="task.batch_size" controls-position="right" />
         </el-form-item>
         <el-form-item :label="$t('task.train_rate')" prop="train_rate" style="text-align: left">
@@ -92,22 +114,11 @@
         </el-form-item>
         <el-form-item :label="$t('task.learning_rate')" prop="learning_rate" style="text-align: left">
           <el-input-number v-model.number="task.learning_rate" controls-position="right" />
-        </el-form-item>
-        <el-form-item :label="$t('task.max_epoch')" prop="max_epoch" style="text-align: left">
-          <el-input-number v-model.number="task.max_epoch" controls-position="right" />
-        </el-form-item>
-        <el-form-item :label="$t('task.gpu')" style="text-align: left">
-          <el-radio-group v-model="task.gpu">
-            <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
-            <el-radio :label="false">{{ $t('common.no') }}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item :label="$t('task.gpu_id')" prop="gpu_id" style="text-align: left">
-          <el-input-number v-model.number="task.gpu_id" controls-position="right" />
-        </el-form-item>
+        </el-form-item> -->
         <!-- 如果需要配置更多参数，可以上传配置文件 -->
         <el-divider content-position="center">{{ $t('task.taskMoreParamTip') }}</el-divider>
         <el-form-item :label="$t('task.config_file')">
+          <!-- <el-button-group> -->
           <el-upload
             ref="upload"
             style="text-align: left"
@@ -120,10 +131,22 @@
             :on-exceed="handleOnExceed"
             accept="application/json"
           >
-            <el-button size="small" type="primary"> {{ $t('dataset.clickUpload') }}</el-button>
-            <div slot="tip" class="el-upload__tip">{{ $t('task.uploadTips') }}
-              <a :href="BASE_API + '/business/task/download_config/'" style="margin-left: 10px;"><el-button type="info" size="mini" icon="el-icon-download">{{ $t('task.downloadExample') }}</el-button></a></div>
+            <el-button slot="trigger" size="small" type="primary"> {{ $t('task.clickUpload') }}</el-button>
+            <!-- <div slot="tip" class="el-upload__tip">{{ $t('task.uploadTips') }}
+              <a :href="BASE_API + '/business/task/download_config/'" style="margin-left: 10px;">
+                <el-button type="info" size="mini" icon="el-icon-download">{{ $t('task.downloadExample') }}
+                </el-button>
+              </a>
+            </div> -->
+            <a :href="BASE_API + '/business/task/download_config/'" style="margin-left: 10px;">
+              <el-button type="info" size="mini" icon="el-icon-download">
+                {{ $t('task.downloadExample') }}
+              </el-button>
+            </a>
+
           </el-upload>
+
+          <!-- </el-button-group> -->
         </el-form-item>
       </el-form>
       <el-button @click="resetForm()">{{ $t('common.clear') }}</el-button>
@@ -154,7 +177,11 @@ export default {
     return {
       BASE_API: window.global_url.Base_url,
       task: {
-        task_name: ''
+        task_name: '',
+        max_epoch: 1,
+        task: 'traffic_state_pred',
+        model: 'GRU',
+        gpu: false
       },
       fileLimit: 1,
       formLabelWidth: '10%',
@@ -251,14 +278,14 @@ export default {
           updateTaskById(this.task.id, this.task).then(res => {
             this.$message.success(this.$t('task.taskUpdateSuccess'))
             // 路由跳转到list
-            this.$router.push({ path: '/tasks' })
+            this.$router.push({ path: '/taskList/index' })
           })
         } else {
           addTask(this.task).then(res => {
             if (res.code === 201) {
               this.$message.success(this.$t('task.taskCreateSuccess'))
               // 路由跳转到list
-              this.$router.push({ path: '/tasks' })
+              this.$router.push({ path: '/taskList/index' })
             } else {
               this.$message.error(this.$t('task.taskCreateError'))
               console.log(res.msg)
@@ -296,3 +323,9 @@ export default {
   }
 }
 </script>
+<style>
+/* .upload-demo{
+		display: inline;
+	} */
+
+</style>

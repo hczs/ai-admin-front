@@ -347,7 +347,7 @@ export default {
     executeTimeEarlyError: '执行时间不能早于当前时间',
     taskParamTip: '注意：任务名、模型名和数据集有严格的对应关系',
     taskMoreParamTip: '如果需要配置更多参数，可以上传配置文件',
-    clickViewCorresponding: '点击查看任务名、模型名和数据集的对应关系',
+    clickViewCorresponding: '任务名、模型名和数据集有严格的对应关系（点击查看）',
     catLog: '查看运行日志',
     logview: '运行日志',
     eva_view: '评价指标查看',
@@ -372,6 +372,8 @@ export default {
     PCC: '皮尔逊相关系数',
     RMF: 'RMF值',
     AN: 'AN值',
-    AL: 'AL值'
+    AL: 'AL值',
+    maxEpochTip: '最大训练轮数设置的越大，耗费时间越长',
+    clickUpload: '点击上传JSON文件'
   }
 }

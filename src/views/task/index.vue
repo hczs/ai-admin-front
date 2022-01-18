@@ -42,7 +42,7 @@
             <el-form-item :label="$t('task.taskName')">
               <span>{{ props.row.task_name }}</span>
             </el-form-item>
-            <el-form-item :label="$t('task.taskDescription')">
+            <el-form-item v-if="props.row.task_description !== null" :label="$t('task.taskDescription')">
               <span>{{ props.row.task_description }}</span>
             </el-form-item>
             <el-form-item :label="$t('task.status')">
@@ -63,10 +63,10 @@
             <el-form-item :label="$t('task.dataset')">
               <span>{{ props.row.dataset }}</span>
             </el-form-item>
-            <el-form-item :label="$t('task.config_file')">
+            <el-form-item v-if="props.row.config_file !== null" :label="$t('task.config_file')">
               <span>{{ props.row.config_file }}</span>
             </el-form-item>
-            <el-form-item :label="$t('task.saved_model')">
+            <!-- <el-form-item :label="$t('task.saved_model')">
               <span>{{ props.row.saved_model }}</span>
             </el-form-item>
             <el-form-item :label="$t('task.train')">
@@ -83,14 +83,14 @@
             </el-form-item>
             <el-form-item :label="$t('task.learning_rate')">
               <span>{{ props.row.learning_rate }}</span>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item :label="$t('task.max_epoch')">
               <span>{{ props.row.max_epoch }}</span>
             </el-form-item>
             <el-form-item :label="$t('task.gpu')">
               <span>{{ props.row.gpu }}</span>
             </el-form-item>
-            <el-form-item :label="$t('task.gpu_id')">
+            <el-form-item v-if="props.row.gpu" :label="$t('task.gpu_id')">
               <span>{{ props.row.gpu_id }}</span>
             </el-form-item>
           </el-form>
@@ -153,7 +153,7 @@
               <span v-if="editDisable || ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )">
                 {{ $t('common.edit') }}
               </span>
-              <router-link v-else :to="'/tasks/editTask/'+scope.row.id" disabled>
+              <router-link v-else :to="'/taskEdit/editTask/'+scope.row.id" disabled>
                 {{ $t('common.edit') }}
               </router-link>
             </el-link>
@@ -325,7 +325,6 @@
             :label="$t('task.EVAR')"
           />
           <el-table-column
-            v-if="Precision !== null"
             prop="Precision"
             :label="$t('task.Precision')"
           />
