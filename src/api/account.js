@@ -51,3 +51,12 @@ export function updatePassword(data) {
     data
   })
 }
+
+// 账号是否存在
+export function accountExists(data) {
+  return request({
+    url: '/auth/account/exists/',
+    method: 'post',
+    data
+  })
+}

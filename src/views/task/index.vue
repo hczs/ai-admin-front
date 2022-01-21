@@ -42,7 +42,7 @@
             <el-form-item :label="$t('task.taskName')">
               <span>{{ props.row.task_name }}</span>
             </el-form-item>
-            <el-form-item :label="$t('task.taskDescription')">
+            <el-form-item v-if="props.row.task_description !== null" :label="$t('task.taskDescription')">
               <span>{{ props.row.task_description }}</span>
             </el-form-item>
             <el-form-item :label="$t('task.status')">
@@ -63,10 +63,10 @@
             <el-form-item :label="$t('task.dataset')">
               <span>{{ props.row.dataset }}</span>
             </el-form-item>
-            <el-form-item :label="$t('task.config_file')">
+            <el-form-item v-if="props.row.config_file !== null" :label="$t('task.config_file')">
               <span>{{ props.row.config_file }}</span>
             </el-form-item>
-            <el-form-item :label="$t('task.saved_model')">
+            <!-- <el-form-item :label="$t('task.saved_model')">
               <span>{{ props.row.saved_model }}</span>
             </el-form-item>
             <el-form-item :label="$t('task.train')">
@@ -83,14 +83,14 @@
             </el-form-item>
             <el-form-item :label="$t('task.learning_rate')">
               <span>{{ props.row.learning_rate }}</span>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item :label="$t('task.max_epoch')">
               <span>{{ props.row.max_epoch }}</span>
             </el-form-item>
             <el-form-item :label="$t('task.gpu')">
               <span>{{ props.row.gpu }}</span>
             </el-form-item>
-            <el-form-item :label="$t('task.gpu_id')">
+            <el-form-item v-if="props.row.gpu" :label="$t('task.gpu_id')">
               <span>{{ props.row.gpu_id }}</span>
             </el-form-item>
           </el-form>
@@ -149,11 +149,11 @@
             <!-- <el-button style="width: 120px" :disabled="editDisable" type="primary" size="small" icon="el-icon-edit">
                 {{ $t('common.edit') }}
               </el-button> -->
-            <el-link :disabled="!editDisable && ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )" icon="el-icon-edit">
-              <span v-if="!editDisable && ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )">
+            <el-link style="margin-left: 10px" :disabled="editDisable || ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )" icon="el-icon-edit">
+              <span v-if="editDisable || ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )">
                 {{ $t('common.edit') }}
               </span>
-              <router-link v-else :to="'/tasks/editTask/'+scope.row.id" disabled>
+              <router-link v-else :to="'/taskEdit/editTask/'+scope.row.id" disabled>
                 {{ $t('common.edit') }}
               </router-link>
             </el-link>
@@ -168,24 +168,26 @@
               :title="$t('common.deleteConfirm')"
               @onConfirm="deleteTask(scope.row.id)"
             >
-              <el-link slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
+              <el-link v-if="!deleteDisable" slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">
+                {{ $t('common.delete') }}
+              </el-link>
               <!-- <el-button slot="reference" style="width: 120px" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
                 {{ $t('common.delete') }}
               </el-button> -->
             </el-popconfirm>
-            <el-link v-if="scope.row.task_status === 0" :disabled="executeDisable" icon="el-icon-video-play" @click="execute(scope.row.id)">
+            <el-link v-if="scope.row.task_status === 0" style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-video-play" @click="execute(scope.row.id)">
               {{ $t('task.execute') }}
             </el-link>
-            <el-link v-if="scope.row.task_status === -1" :disabled="executeDisable" icon="el-icon-video-play" @click="execute(scope.row.id)">
+            <el-link v-if="scope.row.task_status === -1" style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-video-play" @click="execute(scope.row.id)">
               {{ $t('task.reExecute') }}
             </el-link>
-            <el-link v-if="scope.row.task_status === 1" disabled icon="el-icon-loading">
+            <el-link v-if="scope.row.task_status === 1" style="margin-left: 10px" disabled icon="el-icon-loading">
               {{ $t('task.executing') }}
             </el-link>
-            <el-link v-if="scope.row.task_status === 2" :disabled="executeDisable" icon="el-icon-view" @click="catEvaluate(scope.row.id)">
+            <el-link v-if="scope.row.task_status === 2" style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-view" @click="catEvaluate(scope.row.id)">
               {{ $t('task.catEvaluate') }}
             </el-link>
-            <el-link v-if="scope.row.task_status !== 0" :disabled="executeDisable" icon="el-icon-document" @click="catLog(scope.row.id)">
+            <el-link v-if="scope.row.task_status !== 0" style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-document" @click="catLog(scope.row.id)">
               {{ $t('task.catLog') }}
             </el-link>
             <!-- <el-button style="width: 120px" :disabled="executeDisable" type="primary" size="small" icon="el-icon-video-play" @click="execute(scope.row.id)">
@@ -268,6 +270,7 @@
         <!-- 交通状态预测、到达时间估计表格 -->
         <el-table
           v-if="task.task === 'eta' || task.task === 'traffic_state_pred'"
+          v-loading="evaluateListLoading"
           :data="evaluateData"
           style="width: 100%"
           height="100%"
@@ -298,7 +301,6 @@
             :label="$t('task.RMSE')"
           />
           <el-table-column
-            v-if="masked_MAE !== null"
             prop="masked_MAE"
             :label="$t('task.masked_MAE')"
           />
@@ -323,7 +325,6 @@
             :label="$t('task.EVAR')"
           />
           <el-table-column
-            v-if="Precision !== null"
             prop="Precision"
             :label="$t('task.Precision')"
           />
@@ -348,6 +349,7 @@
         <!-- 路网匹配表格 -->
         <el-table
           v-if="task.task === 'map_matching'"
+          v-loading="evaluateListLoading"
           :data="evaluateData"
           style="width: 100%"
           height="100%"
@@ -378,6 +380,7 @@
         <!-- 轨迹下一跳表格 -->
         <el-table
           v-if="task.task === 'traj_loc_pred'"
+          v-loading="evaluateListLoading"
           :data="evaluateData"
           style="width: 100%"
           height="100%"
@@ -428,7 +431,7 @@ export default {
       }
     }
     return {
-      BASE_API: process.env.VUE_APP_BASE_API,
+      BASE_API: window.global_url.Base_url,
       tableData: [],
       task: {},
       listLoading: true,
@@ -450,6 +453,7 @@ export default {
       logDialogVisible: false, // 日志查看弹出框
       logData: '', // 日志数据
       evaluateDialogVisible: false,
+      evaluateListLoading: false,
       // 按钮权限
       executeDisable: true,
       editDisable: true,
@@ -500,6 +504,8 @@ export default {
     },
     // 查看评价指标
     catEvaluate(id) {
+      this.evaluateDialogVisible = true
+      this.evaluateListLoading = true
       // 获取当前任务相关数据
       getTaskById(id).then(res => {
         this.task = res.data
@@ -524,8 +530,8 @@ export default {
           // 路网表征学习，无评价指标
           this.evaluateData = []
         }
-        this.evaluateDialogVisible = true
       })
+      this.evaluateListLoading = false
     },
     getQueryList() {
       this.queryParam.page = this.defaultPage

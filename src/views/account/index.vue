@@ -89,7 +89,7 @@
       >
         <template slot-scope="scope">
           <el-button-group>
-            <el-link :disabled="editDisable" icon="el-icon-edit" @click="edit(scope.row.id)">{{ $t('common.edit') }}</el-link>
+            <el-link :disabled="editDisable" style="margin-left: 10px" icon="el-icon-edit" @click="edit(scope.row.id)">{{ $t('common.edit') }}</el-link>
             <!-- <el-button :disabled="editDisable" type="primary" size="small" icon="el-icon-edit" @click="edit(scope.row.id)">
               {{ $t('common.edit') }}
             </el-button> -->
@@ -103,11 +103,12 @@
               :title="$t('common.deleteConfirm')"
               @onConfirm="deleteAccount(scope.row.id)"
             >
-              <el-link slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
+              <el-link v-if="!deleteDisable" slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
               <!-- <el-button slot="reference" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
                 {{ $t('common.delete') }}
               </el-button> -->
             </el-popconfirm>
+            <el-link :disabled="editDisable" style="margin-left: 10px" icon="el-icon-refresh-right" @click="openResetDialog(scope.row.id)">{{ $t('account.resetPassword') }}</el-link>
           </el-button-group>
         </template>
       </el-table-column>
@@ -129,8 +130,8 @@
     </div>
     <!-- 添加/编辑 对话框 -->
     <el-dialog :title="dialogType === 'edit' ? $t('account.edit') : $t('account.add')" :visible.sync="dialogFormVisible">
-      <el-form :model="account">
-        <el-form-item :label="$t('account.accountNumber')" :label-width="formLabelWidth">
+      <el-form ref="accountForm" :model="account" :rules="rules">
+        <el-form-item :label="$t('account.accountNumber')" :label-width="formLabelWidth" prop="account_number">
           <el-input
             v-model="account.account_number"
             autocomplete="off"
@@ -138,9 +139,9 @@
             show-word-limit
           />
         </el-form-item>
-        <el-form-item :label="$t('account.password')" :label-width="formLabelWidth">
+        <!-- <el-form-item :label="$t('account.password')" :label-width="formLabelWidth" prop="password">
           <el-input v-model="account.password" autocomplete="new-password" show-password />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item :label="$t('account.roles')" :label-width="formLabelWidth">
           <el-select v-model="account.roles" multiple :placeholder="$t('account.selectRole')">
             <el-option
@@ -159,10 +160,25 @@
         <el-button type="primary" @click="submit()">{{ $t('common.confirm') }}</el-button>
       </div>
     </el-dialog>
+    <!-- 重置密码弹出框 -->
+    <el-dialog
+      :title="$t('account.resetPassword')"
+      :visible.sync="resetPasswordDialogVisible"
+    >
+      <el-form ref="passwordForm" :model="account" :rules="passwdRules">
+        <el-form-item :label="$t('account.password')" :label-width="formLabelWidth" prop="password">
+          <el-input v-model="account.password" autocomplete="new-password" show-password />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="resetPasswordDialogVisible = false">{{ $t('common.cancel') }}</el-button>
+        <el-button type="primary" @click="resetPassword">{{ $t('common.confirm') }}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { getAccountList, getAccountById, addAccount, updateAccountById, deleteAccountById } from '@/api/account'
+import { getAccountList, getAccountById, addAccount, updateAccountById, deleteAccountById, accountExists } from '@/api/account'
 import { getRoleList } from '@/api/role'
 import { checkPermission } from '@/utils/permission'
 
@@ -183,6 +199,27 @@ const account = {
 }
 export default {
   data() {
+    const validateAccountNumber = (rule, value, callback) => {
+      if (value.length === 0) {
+        callback(new Error(this.$t('account.accountNumberError')))
+      } else {
+        this.account.account_number = value
+        accountExists(this.account).then(res => {
+          if (res.code !== 200 && this.account.id !== res.msg.id) {
+            callback(new Error(this.$t('account.accountNumberExistsError')))
+          } else {
+            callback()
+          }
+        })
+      }
+    }
+    const validatePassword = (rule, value, callback) => {
+      if (!value || value.length < 6) {
+        callback(new Error(this.$t('login.passwordError')))
+      } else {
+        callback()
+      }
+    }
     return {
       account: account,
       listLoading: true,
@@ -195,10 +232,19 @@ export default {
       roleList: [], // 角色list
       defaultPage: 1,
       defaultSize: 10,
+      resetPasswordDialogVisible: false, // 重置密码弹出框
       // 按钮权限
       addDisable: true,
       editDisable: true,
-      deleteDisable: true
+      deleteDisable: true,
+      // 表单校验
+      rules: {
+        account_number: [{ required: true, trigger: 'blur', validator: validateAccountNumber }]
+      },
+      // 重置密码表单校验
+      passwdRules: {
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+      }
     }
   },
 
@@ -215,6 +261,7 @@ export default {
       this.editDisable = !checkPermission(['accountEdit'])
       this.deleteDisable = !checkPermission(['accountDelete'])
     },
+    // 获取列表数据
     getList(queryParam) {
       this.listLoading = true
       getAccountList(queryParam).then(res => {
@@ -237,38 +284,54 @@ export default {
     },
     // 编辑/更新 提交
     submit() {
-      this.dialogFormVisible = false
-      if (this.dialogType === 'edit') {
-        this.listLoading = true
-        updateAccountById(this.account.id, this.account).then(res => {
-          this.$message({
-            message: this.$t('common.modifiedSuccessfully'),
-            type: 'success'
+      this.$refs['accountForm'].validate(valid => {
+        if (!valid) {
+          return false
+        }
+        this.dialogFormVisible = false
+        if (this.dialogType === 'edit') {
+          this.listLoading = true
+          updateAccountById(this.account.id, this.account).then(res => {
+            this.$message({
+              message: this.$t('common.modifiedSuccessfully'),
+              type: 'success'
+            })
+            // 重新获取页面数据
+            this.getList(this.queryParam)
+          }).catch(() => {
+            this.listLoading = false
+            this.$message.error(this.$t('common.modificationFailed'))
           })
+        }
+        if (this.dialogType === 'add') {
+          this.listLoading = true
+          addAccount(this.account).then(res => {
           // 重新获取页面数据
-          this.getList(this.queryParam)
-        }).catch(() => {
-          this.listLoading = false
-          this.$message.error(this.$t('common.modificationFailed'))
-        })
-      }
-      if (this.dialogType === 'add') {
-        this.listLoading = true
-        addAccount(this.account).then(res => {
-          // 重新获取页面数据
-          this.$message({
-            message: this.$t('common.addedSuccessfully'),
-            type: 'success'
+            // this.$message({
+            //   message: this.$t('common.addedSuccessfully'),
+            //   type: 'success'
+            // })
+            this.$notify({
+              title: this.$t('common.addedSuccessfully'),
+              message: this.$t('account.addedSuccessfully') + res.data.raw_password,
+              type: 'success',
+              duration: 10000
+            })
+            this.getList(this.queryParam)
+          }).catch(() => {
+            this.listLoading = false
+            this.$message.error(this.$t('common.addFailed'))
           })
-          this.getList(this.queryParam)
-        }).catch(() => {
-          this.listLoading = false
-          this.$message.error(this.$t('common.addFailed'))
-        })
-      }
+        }
+      })
     },
     add() {
-      this.account = {}
+      this.account = {
+        id: '',
+        account_number: '',
+        password: null,
+        roles: []
+      }
       this.dialogType = 'add'
       this.dialogFormVisible = true
     },
@@ -277,6 +340,34 @@ export default {
       this.dialogFormVisible = true
       getAccountById(id).then(res => {
         this.account = res.data
+      })
+    },
+    // 打开重置密码对话框
+    openResetDialog(id) {
+      this.resetPasswordDialogVisible = true
+      getAccountById(id).then(res => {
+        this.account = res.data
+      })
+    },
+    // 重置密码提交
+    resetPassword() {
+      this.$refs['passwordForm'].validate(valid => {
+        if (!valid) {
+          return false
+        }
+        updateAccountById(this.account.id, this.account).then(res => {
+          this.$message({
+            message: this.$t('account.resetPasswordSuccessfully'),
+            type: 'success'
+          })
+          // 重新获取页面数据
+          this.getList(this.queryParam)
+          this.resetPasswordDialogVisible = false
+        }).catch(() => {
+          this.listLoading = false
+          this.resetPasswordDialogVisible = false
+          this.$message.error(this.$t('common.resetPasswordFailed'))
+        })
       })
     },
     deleteAccount(id) {

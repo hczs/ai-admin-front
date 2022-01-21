@@ -53,10 +53,10 @@
         :label="$t('permission.order')"
         width="120"
       />
-      <el-table-column
+      <!-- <el-table-column
         prop="id"
         :label="$t('permission.id')"
-      />
+      /> -->
       <el-table-column
         prop="name"
         :label="$t('permission.name')"

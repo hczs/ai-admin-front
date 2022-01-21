@@ -99,6 +99,96 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user permissions
  */
 export const asyncRoutes = [
+
+  {
+    path: '/taskList',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/task/index'),
+        name: 'tasks list',
+        meta: { title: 'taskList', icon: 'task1', permissions: ['admin', 'taskList'] }
+      }
+    ]
+  },
+
+  {
+    path: '/taskAdd',
+    component: Layout,
+    children: [
+      {
+        path: 'addTask',
+        component: () => import('@/views/task/addTask'),
+        name: 'tasks add',
+        meta: { title: 'tasksAdd', icon: 'taskadd', permissions: ['admin', 'tasksAdd'] }
+      }
+    ]
+  },
+
+  {
+    path: '/taskEdit',
+    component: Layout,
+    children: [
+      {
+        path: 'editTask/:id',
+        component: () => import('@/views/task/addTask'),
+        name: 'tasks edit',
+        meta: { title: 'tasksEdit', icon: '', permissions: ['admin', 'taskEdit'] },
+        hidden: true
+      }
+    ]
+  },
+
+  // {
+  //   path: '/tasks',
+  //   component: Layout,
+  //   redirect: '/tasks/index',
+  //   name: 'tasks manage',
+  //   meta: { title: 'taskManage', icon: 'task1', permissions: ['admin', 'taskManage'] },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/task/index'),
+  //       name: 'tasks list',
+  //       meta: { title: 'taskList', icon: '', permissions: ['admin', 'taskList'] }
+  //     },
+  //     {
+  //       path: 'addTask',
+  //       component: () => import('@/views/task/addTask'),
+  //       name: 'tasks add',
+  //       meta: { title: 'tasksAdd', icon: '', permissions: ['admin', 'tasksAdd'] }
+  //     },
+  //     {
+  //       path: 'editTask/:id',
+  //       component: () => import('@/views/task/addTask'),
+  //       name: 'tasks edit',
+  //       meta: { title: 'tasksEdit', icon: '', permissions: ['admin', 'taskEdit'] },
+  //       hidden: true
+  //     }
+  //   ]
+  // },
+
+  {
+    path: '/dataset',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/dataset/index'),
+        name: 'dataset manage',
+        meta: { title: 'datasetManage', icon: 'resource', permissions: ['admin', 'datasetManage'] }
+      },
+      {
+        path: 'show_dataset/:file_name',
+        component: () => import('@/views/dataset/show_dataset'),
+        name: 'dataset_view',
+        meta: { title: 'datasetView', icon: '', permissions: ['admin', 'datasetManage'] },
+        hidden: true
+      }
+    ]
+  },
+
   {
     path: '/accounts',
     component: Layout,
@@ -134,55 +224,6 @@ export const asyncRoutes = [
         component: () => import('@/views/permission/index'),
         name: 'permissions manage',
         meta: { title: 'permissionManage', icon: 'permission', permissions: ['admin', 'permissionQuery'] }
-      }
-    ]
-  },
-
-  {
-    path: '/tasks',
-    component: Layout,
-    redirect: '/tasks/index',
-    name: 'tasks manage',
-    meta: { title: 'taskManage', icon: 'task1', permissions: ['admin', 'taskManage'] },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/task/index'),
-        name: 'tasks list',
-        meta: { title: 'taskList', icon: '', permissions: ['admin', 'taskList'] }
-      },
-      {
-        path: 'addTask',
-        component: () => import('@/views/task/addTask'),
-        name: 'tasks add',
-        meta: { title: 'tasksAdd', icon: '', permissions: ['admin', 'taskAdd'] }
-      },
-      {
-        path: 'editTask/:id',
-        component: () => import('@/views/task/addTask'),
-        name: 'tasks edit',
-        meta: { title: 'tasksEdit', icon: '', permissions: ['admin', 'taskEdit'] },
-        hidden: true
-      }
-    ]
-  },
-
-  {
-    path: '/dataset',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/dataset/index'),
-        name: 'dataset manage',
-        meta: { title: 'datasetManage', icon: 'resource', permissions: ['admin', 'datasetManage'] }
-      },
-      {
-        path: 'show_dataset/:file_name',
-        component: () => import('@/views/dataset/show_dataset'),
-        name: 'dataset_view',
-        meta: { title: 'datasetView', icon: '', permissions: ['admin', 'datasetManage'] },
-        hidden: true
       }
     ]
   },

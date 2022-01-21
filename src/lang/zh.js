@@ -255,7 +255,11 @@ export default {
     description: '角色描述',
     permissions: '角色权限',
     edit: '编辑角色',
-    add: '添加角色'
+    add: '添加角色',
+    roleNameError: '请填写角色名称',
+    roleNameExistsError: '角色名称已存在',
+    descriptionError: '请填写角色描述',
+    permissionTreeError: '请为角色分配权限'
   },
   // 账号相关
   account: {
@@ -266,7 +270,13 @@ export default {
     selectRole: '请选择账户角色',
     password: '密码',
     pleaseInputAccount: '请输入账号',
-    noRole: '未分配角色'
+    noRole: '未分配角色',
+    accountNumberError: '请输入账号',
+    accountNumberExistsError: '账号已存在',
+    addedSuccessfully: '该账号初始密码为：',
+    resetPassword: '重置密码',
+    resetPasswordSuccessfully: '密码重置成功！',
+    resetPasswordFailed: '密码重置失败，未知错误'
   },
   // 数据集相关
   dataset: {
@@ -345,7 +355,7 @@ export default {
     executeTimeEarlyError: '执行时间不能早于当前时间',
     taskParamTip: '注意：任务名、模型名和数据集有严格的对应关系',
     taskMoreParamTip: '如果需要配置更多参数，可以上传配置文件',
-    clickViewCorresponding: '点击查看任务名、模型名和数据集的对应关系',
+    clickViewCorresponding: '任务名、模型名和数据集有严格的对应关系（点击查看）',
     catLog: '查看运行日志',
     logview: '运行日志',
     eva_view: '评价指标查看',
@@ -370,6 +380,8 @@ export default {
     PCC: '皮尔逊相关系数',
     RMF: 'RMF值',
     AN: 'AN值',
-    AL: 'AL值'
+    AL: 'AL值',
+    maxEpochTip: '最大训练轮数设置的越大，耗费时间越长',
+    clickUpload: '点击上传JSON文件'
   }
 }

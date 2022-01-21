@@ -256,7 +256,11 @@ export default {
     description: 'Role Description',
     permissions: 'Role Permissions',
     edit: 'Edit Role',
-    add: 'Add Role'
+    add: 'Add Role',
+    roleNameError: 'Please enter role name',
+    roleNameExistsError: 'Role name already exists',
+    descriptionError: 'Please enter role description',
+    permissionTreeError: 'Please assign permissions to the role'
   },
   // 账号相关
   account: {
@@ -267,7 +271,13 @@ export default {
     selectRole: 'Please select account role',
     password: 'Password',
     pleaseInputAccount: 'Please enter an account',
-    noRole: 'Unassigned role'
+    noRole: 'Unassigned role',
+    accountNumberError: 'Please enter the account number',
+    accountNumberExistsError: 'Account already exists',
+    addedSuccessfully: 'The initial password of the account is: ',
+    resetPassword: 'reset password',
+    resetPasswordSuccessfully: 'Password reset succeeded!',
+    resetPasswordFailed: 'Password reset failed, unknown error'
   },
   // 数据集相关
   dataset: {
@@ -346,7 +356,7 @@ export default {
     executeTimeEarlyError: 'The execution time cannot be earlier than the current time',
     taskParamTip: 'Note: task name, model name and dataset have strict correspondence',
     taskMoreParamTip: 'If you need to configure more parameters, you can upload the configuration file',
-    clickViewCorresponding: 'Click to view the correspondence between task name, model name and dataset',
+    clickViewCorresponding: 'There is a strict correspondence between task name, model name and dataset (click to view)',
     catLog: 'View run log',
     logview: 'Task Log',
     eva_view: 'Evaluation Result',
@@ -371,7 +381,9 @@ export default {
     PCC: 'PCC',
     RMF: 'RMF',
     AN: 'AN',
-    AL: 'AL'
+    AL: 'AL',
+    maxEpochTip: 'The larger the maximum number of training rounds is, the longer the time will be spent',
+    clickUpload: 'Click upload JSON file'
   }
 
 }
