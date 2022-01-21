@@ -246,7 +246,9 @@ export default {
     modificationFailed: 'Modification failed',
     deleteSucceeded: 'Delete succeeded',
     deletionFailed: 'Deletion failed',
-    submit: 'Submit'
+    submit: 'Submit',
+    pleasechoose: 'please choose',
+    getview: 'show dataset'
   },
   // 角色相关
   role: {
@@ -285,14 +287,20 @@ export default {
     filePath: 'Storage path',
     processing: 'Processing',
     showFail: 'No View can be shown',
+    Remainshow: 'remain to be shown',
     extractPath: 'Decompression path',
     fileUpload: 'File upload',
     pleaseInputFileName: 'Please enter a file name',
     clickUpload: 'Click here to upload the file',
     uploadTips: 'Note: only zip files can be uploaded, The data package shall contain data atomic files, including: xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、config.json; For different traffic prediction tasks, different atomic files may be used, and a dataset may not contain all kinds of atomic files.',
     uploadSuccess: 'File upload succeeded!',
+    background: 'choose background',
+    background_ing: 'Dataset-visible Processing',
     uploadError: 'Please upload the data package in ZIP format!',
-    atomicError: 'Please check whether the files in the package contain only: xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、config.json'
+    atomicError: 'Please check whether the files in the package contain only: xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、config.json',
+    google: 'google map',
+    origin: 'pure street',
+    amap: 'amap-CHN'
   },
   // 任务
   task: {
