@@ -103,7 +103,14 @@
             </el-link>
             <el-link v-if="scope.row.dataset_status === -1" disabled style="margin-left: 10px">{{ $t('dataset.showFail') }}</el-link>
             <el-link v-if="scope.row.dataset_status === 0" disabled style="margin-left: 10px" icon="el-icon-loading">{{ $t('dataset.processing') }}</el-link>
+            <el-link v-if="scope.row.dataset_status === 3" disabled style="margin-left: 10px">{{ $t('dataset.Remainshow') }}</el-link>
+            <div style="float: right">
+              <el-button style="margin-left: 10px" :disabled="addDisable" type="primary" size="mini" icon="el-icon-circle-plus-outline" @click="openSekectMap(scope.row.id)">
+                {{ $t('common.getview') }}
+              </el-button>
+            </div>
           </el-button-group>
+
         </template>
       </el-table-column>
     </el-table>
@@ -138,10 +145,26 @@
         <div slot="tip" class="el-upload__tip">{{ $t('dataset.uploadTips') }}</div>
       </el-upload>
     </el-dialog>
+    <!--  -->
+    <el-dialog :title="$t('common.getview')" :visible.sync="showFormVisible">
+      <el-form ref="elForm1" :rules="rules" :model="dataset" label-width="auto" label-position="left">
+        <el-form-item :label="$t('dataset.background')" prop="background">
+          <el-select v-model="background" :placeholder="$t('common.pleasechoose')">
+            <el-option
+              v-for="item in backgroundParamList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <el-button type="primary" icon="el-icon-view" @click="getBackground()">{{ $t('common.getview') }}</el-button>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { getFileList, deleteFileById } from '@/api/file'
+import { getFileList, deleteFileById, generate_background_byID } from '@/api/file'
 import { checkPermission } from '@/utils/permission'
 
 // 查询参数
@@ -155,17 +178,29 @@ export default {
   data() {
     return {
       BASE_API: process.env.VUE_APP_BASE_API,
+      dataset: {
+      },
+      backgroundParamList: [
+        { id: '1', label: this.$t('dataset.google') },
+        { id: '2', label: this.$t('dataset.origin') },
+        { id: '3', label: this.$t('dataset.amap') }],
+      rules: {
+        background: [{ required: false, message: this.$t('common.pleasechoose') }]
+      },
       tableData: [],
       listLoading: true,
+      background: '',
       queryParam: queryParam,
       total: 0,
       defaultPage: 1,
       defaultSize: 10,
       dialogFormVisible: false,
+      showFormVisible: false,
       filelist: [],
       // 按钮权限
       addDisable: true,
-      deleteDisable: true
+      deleteDisable: true,
+      file: {}
     }
   },
   created() {
@@ -186,6 +221,21 @@ export default {
         this.listLoading = false
       }).catch(() => {
         this.listLoading = false
+      })
+    },
+    openSekectMap(id) {
+      this.file.id = id
+      this.showFormVisible = true
+    },
+    getBackground() {
+      generate_background_byID(this.file.id, this.background).then(res => {
+        this.showFormVisible = false
+        // 重新获取页面数据
+        this.$message({
+          message: this.$t('dataset.background_ing'),
+          type: 'success'
+        })
+        this.resetData()
       })
     },
     getQueryList() {

@@ -24,3 +24,21 @@ export function showFileByFileName(file_name) {
     method: 'get'
   })
 }
+
+// 新增展示
+export function generate_background_byID(fileId, background) {
+  return request({
+    url: `/business/file/${fileId}/generate_gis_view/`,
+    method: 'get',
+    params: { background: background }
+  })
+}
+
+// 执行
+export function executeTaskById(taskId, execute_time) {
+  return request({
+    url: `/business/task/${taskId}/execute/`,
+    method: 'get',
+    params: { execute_time: execute_time }
+  })
+}
