@@ -177,7 +177,6 @@ const queryParam = {
 export default {
   data() {
     return {
-<<<<<<< HEAD
       BASE_API: process.env.VUE_APP_BASE_API,
       dataset: {
       },
@@ -188,9 +187,6 @@ export default {
       rules: {
         background: [{ required: false, message: this.$t('common.pleasechoose') }]
       },
-=======
-      BASE_API: window.global_url.Base_url,
->>>>>>> 55aa2826f5f432a6de811f30be25587d5fcd0455
       tableData: [],
       listLoading: true,
       background: '',

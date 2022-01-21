@@ -62,11 +62,7 @@
           </el-link>
         </el-divider>
         <el-form-item :label="$t('task.task')" prop="task">
-<<<<<<< HEAD
           <el-select v-model="task.task" style="float: left" :placeholder="$t('common.pleasechoose')">
-=======
-          <el-select v-model="task.task" style="float: left">
->>>>>>> 55aa2826f5f432a6de811f30be25587d5fcd0455
             <el-option
               v-for="item in taskParamList"
               :key="item.id"
@@ -76,11 +72,7 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('task.model')" prop="model">
-<<<<<<< HEAD
           <el-select v-model="task.model" default-first-option allow-create filterable style="float: left" :placeholder="$t('common.pleasechoose')">
-=======
-          <el-select v-model="task.model" default-first-option allow-create filterable style="float: left">
->>>>>>> 55aa2826f5f432a6de811f30be25587d5fcd0455
             <el-option
               v-for="model in modelList"
               :key="model"
@@ -90,11 +82,7 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('task.dataset')" prop="dataset">
-<<<<<<< HEAD
           <el-select v-model="task.dataset" filterable style="float: left" :placeholder="$t('common.pleasechoose')">
-=======
-          <el-select v-model="task.dataset" filterable style="float: left">
->>>>>>> 55aa2826f5f432a6de811f30be25587d5fcd0455
             <el-option
               v-for="file in fileList"
               :key="file.id"
