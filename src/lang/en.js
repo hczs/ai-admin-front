@@ -301,7 +301,11 @@ export default {
     atomicError: 'Please check whether the files in the package contain only: xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、config.json',
     google: 'google map',
     origin: 'pure street',
-    amap: 'amap-CHN'
+    google_s: 'google map satellite',
+    amap: 'amap-CHN',
+    amap_s: 'amap-CHN-satellite',
+    traffic: 'traffic map',
+    transport: 'street-line-black'
   },
   // 任务
   task: {

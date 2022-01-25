@@ -299,8 +299,12 @@ export default {
     uploadError: '请上传ZIP格式的数据包！',
     atomicError: '请检查数据包中的文件是否只包含：xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、config.json',
     google: '谷歌地图',
+    google_s: '谷歌卫星地图',
     origin: '原始街道地图',
-    amap: '高德地图'
+    amap: '高德地图',
+    amap_s: '高德卫星地图',
+    traffic: '交通地图',
+    transport: '道路路线-黑白'
   },
   // 任务
   task: {
