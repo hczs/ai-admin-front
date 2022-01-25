@@ -68,6 +68,21 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: 'dashboard', icon: 'dashboard' }
     }]
+  },
+
+  {
+    path: '/evaluate',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        params: { taskIds: '', taskType: '' },
+        component: () => import('@/views/evaluate/index'),
+        name: 'evaluate',
+        meta: { title: 'evaluate', icon: 'task1' },
+        hidden: true
+      }
+    ]
   }
 
   // {

@@ -103,3 +103,21 @@ export function getTrajEvaluateList(queryParam) {
     params: queryParam
   })
 }
+
+// 交通状态预测折线图返回数据
+export function getStateLineData(queryParam) {
+  return request({
+    url: '/business/evaluate/contrast_line',
+    method: 'get',
+    params: queryParam
+  })
+}
+
+// 轨迹下一跳、到达时间估计和路网匹配折线图返回数据
+export function getOtherLineData(queryParam) {
+  return request({
+    url: '/business/evaluate/other_contrast_line',
+    method: 'get',
+    params: queryParam
+  })
+}
