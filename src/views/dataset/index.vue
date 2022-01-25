@@ -187,8 +187,12 @@ export default {
       },
       backgroundParamList: [
         { id: '1', label: this.$t('dataset.google') },
-        { id: '2', label: this.$t('dataset.origin') },
-        { id: '3', label: this.$t('dataset.amap') }],
+        { id: '2', label: this.$t('dataset.google_s') },
+        { id: '3', label: this.$t('dataset.amap') },
+        { id: '4', label: this.$t('dataset.amap_s') },
+        { id: '5', label: this.$t('dataset.origin') },
+        { id: '6', label: this.$t('dataset.traffic') },
+        { id: '7', label: this.$t('dataset.transport') }],
       rules: {
         background: [{ required: false, message: this.$t('common.pleasechoose') }]
       },
