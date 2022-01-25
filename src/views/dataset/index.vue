@@ -105,9 +105,14 @@
             <el-link v-if="scope.row.dataset_status === 0" disabled style="margin-left: 10px" icon="el-icon-loading">{{ $t('dataset.processing') }}</el-link>
             <el-link v-if="scope.row.dataset_status === 3" disabled style="margin-left: 10px">{{ $t('dataset.Remainshow') }}</el-link>
             <div style="float: right">
-              <el-button style="margin-left: 10px" :disabled="addDisable" type="primary" size="mini" icon="el-icon-circle-plus-outline" @click="openSekectMap(scope.row.id)">
-                {{ $t('common.getview') }}
-              </el-button>
+              <el-link v-if="scope.row.dataset_status == -1" disabled style="margin-right: 10px" />
+              <el-link v-if="scope.row.dataset_status == 0" disabled style="margin-right: 10px" />
+              <el-link v-if="scope.row.dataset_status == 1" style="margin-right: 10px" icon="el-icon-circle-plus-outline" @click="openSekectMap(scope.row.id)">{{ $t('common.getview') }}
+              </el-link>
+              <el-link v-if="scope.row.dataset_status == 2" style="margin-right: 10px" icon="el-icon-circle-plus-outline" @click="openSekectMap(scope.row.id)">{{ $t('common.getview') }}
+              </el-link>
+              <el-link v-if="scope.row.dataset_status == 3" style="margin-right: 10px" icon="el-icon-circle-plus-outline" @click="openSekectMap(scope.row.id)">{{ $t('common.getview') }}
+              </el-link>
             </div>
           </el-button-group>
 
