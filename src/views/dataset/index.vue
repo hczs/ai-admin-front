@@ -104,7 +104,7 @@
             <el-link v-if="scope.row.dataset_status === -1" disabled style="margin-left: 10px">{{ $t('dataset.showFail') }}</el-link>
             <el-link v-if="scope.row.dataset_status === 0" disabled style="margin-left: 10px" icon="el-icon-loading">{{ $t('dataset.processing') }}</el-link>
             <el-link v-if="scope.row.dataset_status === 3" disabled style="margin-left: 10px">{{ $t('dataset.Remainshow') }}</el-link>
-            <div style="float: right">
+            <div style="margin-left: 10px">
               <el-link v-if="scope.row.dataset_status == -1" disabled style="margin-right: 10px" />
               <el-link v-if="scope.row.dataset_status == 0" disabled style="margin-right: 10px" />
               <el-link v-if="scope.row.dataset_status == 1" style="margin-right: 10px" icon="el-icon-circle-plus-outline" @click="openSekectMap(scope.row.id)">{{ $t('common.getview') }}
