@@ -7,7 +7,29 @@
         <el-input v-model="queryParam.task_name" />
       </el-form-item>
 
-      <el-form-item :label="$t('common.createTime')">
+      <el-form-item :label="$t('task.task_type')">
+        <el-select v-model="queryParam.task" style="float: left">
+          <el-option
+            v-for="item in taskParamList"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item :label="$t('task.status')">
+        <el-select v-model="queryParam.task_status" style="float: left">
+          <el-option
+            v-for="item in taskStatusList"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+
+      <!-- <el-form-item :label="$t('common.createTime')">
         <el-date-picker
           v-model="queryParam.begin"
           type="datetime"
@@ -25,17 +47,23 @@
           value-format="yyyy-MM-dd HH:mm:ss"
           default-time="00:00:00"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-button type="primary" icon="el-icon-search" @click="getQueryList()">{{ $t('common.search') }}</el-button>
       <el-button type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
     </el-form>
+    <el-button type="primary" style="float: right" @click="contrast()">{{ $t('task.modelEvaluateContrast') }}</el-button>
     <!-- 数据表格 -->
     <el-table
+      ref="taskTable"
       v-loading="listLoading"
+      fit
       :data="tableData"
       border
-      fit
     >
+      <el-table-column
+        type="selection"
+        width="55"
+      />
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" label-width="auto">
@@ -46,9 +74,10 @@
               <span>{{ props.row.task_description }}</span>
             </el-form-item>
             <el-form-item :label="$t('task.status')">
-              <span v-if="props.row.task_status === 0"> 未开始 </span>
-              <span v-if="props.row.task_status === 1"> 进行中 </span>
-              <span v-if="props.row.task_status === 2"> 已完成 </span>
+              <span v-if="props.row.task_status === 0"> {{ $t('task.noStart') }} </span>
+              <span v-if="props.row.task_status === 1"> {{ $t('task.executing') }} </span>
+              <span v-if="props.row.task_status === 2"> {{ $t('task.completed') }} </span>
+              <span v-if="props.row.task_status === -1"> {{ $t('task.executeError') }} </span>
             </el-form-item>
             <el-form-item :label="$t('task.task')">
               <span v-if="props.row.task === 'traffic_state_pred'"> {{ $t('task.traffic_state_pred') }} </span>
@@ -93,6 +122,9 @@
             <el-form-item v-if="props.row.gpu" :label="$t('task.gpu_id')">
               <span>{{ props.row.gpu_id }}</span>
             </el-form-item>
+            <el-form-item :label="$t('common.createTime')">
+              <span>{{ props.row.create_time }}</span>
+            </el-form-item>
           </el-form>
         </template>
       </el-table-column>
@@ -105,12 +137,24 @@
       <el-table-column
         prop="task_name"
         :label="$t('task.taskName')"
-        width="100"
       />
       <el-table-column
+        prop="task"
+        :label="$t('task.task_type')"
+        width="130"
+      >
+        <template slot-scope="scope">
+          <span v-if="scope.row.task === 'traffic_state_pred'"> {{ $t('task.traffic_state_pred') }} </span>
+          <span v-if="scope.row.task === 'traj_loc_pred'"> {{ $t('task.traj_loc_pred') }} </span>
+          <span v-if="scope.row.task === 'road_representation'"> {{ $t('task.road_representation') }} </span>
+          <span v-if="scope.row.task === 'eta'"> {{ $t('task.eta') }} </span>
+          <span v-if="scope.row.task === 'map_matching'"> {{ $t('task.map_matching') }} </span>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column
         prop="dataset"
         :label="$t('task.dataFile')"
-      />
+      /> -->
       <el-table-column
         prop="task_status"
         :label="$t('task.status')"
@@ -126,7 +170,6 @@
       <el-table-column
         prop="creator"
         :label="$t('task.creator')"
-        width="100"
       />
       <el-table-column
         prop="execute_time"
@@ -136,10 +179,10 @@
         prop="execute_end_time"
         :label="$t('task.executeEndTime')"
       />
-      <el-table-column
+      <!-- <el-table-column
         prop="create_time"
         :label="$t('common.createTime')"
-      />
+      /> -->
       <el-table-column
         :label="$t('common.operation')"
       >
@@ -184,7 +227,7 @@
             <el-link v-if="scope.row.task_status === 1" style="margin-left: 10px" disabled icon="el-icon-loading">
               {{ $t('task.executing') }}
             </el-link>
-            <el-link v-if="scope.row.task_status === 2" style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-view" @click="catEvaluate(scope.row.id)">
+            <el-link v-if=" scope.row.task_status === 2 && scope.row.task !== 'road_representation' " style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-view" @click="catEvaluate(scope.row.id)">
               {{ $t('task.catEvaluate') }}
             </el-link>
             <el-link v-if="scope.row.task_status !== 0" style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-document" @click="catLog(scope.row.id)">
@@ -275,72 +318,71 @@
           style="width: 100%"
           height="100%"
           border
-          fit
         >
           <el-table-column
             type="index"
             :index="stateIndexMethod"
             :label="$t('common.order')"
             fixed
-            width="100px"
+            width="100"
           />
-          <el-table-column
+          <af-table-column
             prop="MAE"
             :label="$t('task.MAE')"
           />
-          <el-table-column
+          <af-table-column
             prop="MAPE"
             :label="$t('task.MAPE')"
           />
-          <el-table-column
+          <af-table-column
             prop="MSE"
             :label="$t('task.MSE')"
           />
-          <el-table-column
+          <af-table-column
             prop="RMSE"
             :label="$t('task.RMSE')"
           />
-          <el-table-column
+          <af-table-column
             prop="masked_MAE"
             :label="$t('task.masked_MAE')"
           />
-          <el-table-column
+          <af-table-column
             prop="masked_MAPE"
             :label="$t('task.masked_MAPE')"
           />
-          <el-table-column
+          <af-table-column
             prop="masked_MSE"
             :label="$t('task.masked_MSE')"
           />
-          <el-table-column
+          <af-table-column
             prop="masked_RMSE"
             :label="$t('task.masked_RMSE')"
           />
-          <el-table-column
+          <af-table-column
             prop="R2"
             :label="$t('task.R2')"
           />
-          <el-table-column
+          <af-table-column
             prop="EVAR"
             :label="$t('task.EVAR')"
           />
-          <el-table-column
+          <af-table-column
             prop="Precision"
             :label="$t('task.Precision')"
           />
-          <el-table-column
+          <af-table-column
             prop="Recall"
             :label="$t('task.Recall')"
           />
-          <el-table-column
+          <af-table-column
             prop="F1-Score"
             :label="$t('task.F1Score')"
           />
-          <el-table-column
+          <af-table-column
             prop="MAP"
             :label="$t('task.MAP')"
           />
-          <el-table-column
+          <af-table-column
             prop="PCC"
             :label="$t('task.PCC')"
           />
@@ -363,15 +405,15 @@
             fixed
             width="100px"
           />
-          <el-table-column
+          <af-table-column
             prop="RMF"
             :label="$t('task.RMF')"
           />
-          <el-table-column
+          <af-table-column
             prop="AN"
             :label="$t('task.AN')"
           />
-          <el-table-column
+          <af-table-column
             prop="AL"
             :label="$t('task.AL')"
           />
@@ -394,7 +436,7 @@
             fixed
             width="100px"
           />
-          <el-table-column
+          <af-table-column
             prop="Recall"
             :label="$t('task.Recall')"
           />
@@ -444,6 +486,17 @@ export default {
         page: 1,
         size: 20
       },
+      taskParamList: [
+        { id: '1', label: this.$t('task.traffic_state_pred'), value: 'traffic_state_pred' },
+        { id: '2', label: this.$t('task.traj_loc_pred'), value: 'traj_loc_pred' },
+        { id: '3', label: this.$t('task.road_representation'), value: 'road_representation' },
+        { id: '4', label: this.$t('task.eta'), value: 'eta' },
+        { id: '5', label: this.$t('task.map_matching'), value: 'map_matching' }],
+      taskStatusList: [
+        { id: '1', label: this.$t('task.noStart'), value: '0' },
+        { id: '2', label: this.$t('task.executing'), value: '1' },
+        { id: '3', label: this.$t('task.completed'), value: '2' },
+        { id: '4', label: this.$t('task.executeError'), value: '-1' }],
       total: 0,
       defaultPage: 1,
       defaultSize: 10,
@@ -474,6 +527,60 @@ export default {
       this.executeDisable = !checkPermission(['taskExecute'])
       this.editDisable = !checkPermission(['taskEdit'])
       this.deleteDisable = !checkPermission(['taskDelete'])
+    },
+    // 模型指标对比
+    contrast() {
+      const tasks = this.$refs.taskTable.selection
+      if (tasks.length === 0) {
+        this.$message.warning(this.$t('task.selectTaskTip'))
+        return
+      }
+      // 路网表征学习，无模型评价指标
+      const isRoadRepresentation = tasks.every(item => item.task === 'road_representation')
+      if (isRoadRepresentation) {
+        this.$message.warning(this.$t('task.selectRoadRepresentation'))
+        return
+      }
+      // 所有任务必须得是已完成的任务
+      const isComplete = tasks.every(item => item.task_status === 2)
+      if (!isComplete) {
+        this.$message.warning(this.$t('task.selectCompleteTip'))
+        return
+      }
+      // 数组中所有条目的任务类型(task)必须相同
+      const defaultTask = tasks[0].task
+      const taskIsSame = tasks.every(item => item.task === defaultTask)
+      if (!taskIsSame) {
+        this.$message.warning(this.$t('task.selectSameTask'))
+        return
+      }
+      // 所有任务的模型必须不同
+      var isDifferentModel = true
+      const taskModels = tasks.map(item => item.model) // 模型list
+      const arr = []
+      for (let i = 0; i < taskModels.length; i++) {
+        if (arr.indexOf(taskModels[i]) === -1) {
+          arr.push(taskModels[i])
+        } else {
+          isDifferentModel = false
+        }
+      }
+      if (!isDifferentModel) {
+        this.$message.warning(this.$t('task.selectDifferentModelTask'))
+        return
+      }
+      // 取出id list
+      const taskIds = tasks.map(item => item.id)
+      const taskIdsStr = taskIds.join(',')
+      console.log(taskIds)
+      console.log(taskIdsStr)
+      this.$router.push({
+        name: 'evaluate',
+        params: {
+          taskIds: taskIdsStr,
+          taskType: defaultTask
+        }
+      })
     },
     // 获取任务列表
     getList() {
@@ -523,6 +630,7 @@ export default {
           })
         } else if (this.task.task === 'traj_loc_pred') {
           // 走轨迹下一跳预测接口
+          this.evaluateQueryParam.task = this.task.id
           getTrajEvaluateList(this.evaluateQueryParam).then(res => {
             this.evaluateData = res.data.results
           })

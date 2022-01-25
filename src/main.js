@@ -8,6 +8,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 // import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 import '@/styles/index.scss' // global css
+import Plugin from 'v-fit-columns' // 列宽自适应插件
+import AFTableColumn from 'af-table-column' // 列宽自适应插件2
 
 import App from './App'
 import store from './store'
@@ -37,6 +39,9 @@ import '@/permission' // permission control
 Vue.use(ElementUI, {
   i18n: (key, value) => i18n.t(key, value)
 })
+
+Vue.use(Plugin)
+Vue.use(AFTableColumn)
 
 Vue.config.productionTip = false
 
