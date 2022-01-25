@@ -75,7 +75,8 @@ export default {
     taskList: '任务列表',
     tasksAdd: '新建任务',
     tasksEdit: '编辑任务',
-    datasetView: '数据集展示'
+    datasetView: '数据集展示',
+    evaluate: '模型评价指标对比'
   },
   navbar: {
     dashboard: '首页',
@@ -386,6 +387,13 @@ export default {
     AN: 'AN值',
     AL: 'AL值',
     maxEpochTip: '最大训练轮数设置的越大，耗费时间越长',
-    clickUpload: '点击上传JSON文件'
+    clickUpload: '点击上传JSON文件',
+    task_type: '任务类型',
+    modelEvaluateContrast: '模型对比',
+    selectTaskTip: '请选择任务进行对比',
+    selectCompleteTip: '请选择已完成的任务',
+    selectSameTask: '请选择相同类型的任务',
+    selectDifferentModelTask: '请选择使用不同模型的任务',
+    selectRoadRepresentation: '该任务类型无评价指标'
   }
 }

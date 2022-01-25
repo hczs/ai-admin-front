@@ -75,7 +75,8 @@ export default {
     taskList: 'Task List',
     tasksAdd: 'New Task',
     tasksEdit: 'Edit Task',
-    datasetView: 'Show Dataset'
+    datasetView: 'Show Dataset',
+    evaluate: 'Comparison of model evaluation indexes'
   },
   navbar: {
     dashboard: 'Dashboard',
@@ -387,7 +388,14 @@ export default {
     AN: 'AN',
     AL: 'AL',
     maxEpochTip: 'The larger the maximum number of training rounds is, the longer the time will be spent',
-    clickUpload: 'Click upload JSON file'
+    clickUpload: 'Click upload JSON file',
+    task_type: 'Task type',
+    modelEvaluateContrast: 'Model Comparison',
+    selectTaskTip: 'Please select a task to compare',
+    selectCompleteTip: 'Please select completed tasks',
+    selectSameTask: 'Please select the same type of task',
+    selectDifferentModelTask: 'Please select a task that uses a different model',
+    selectRoadRepresentation: 'There is no evaluation index for this task type'
   }
 
 }
