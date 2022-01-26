@@ -282,6 +282,7 @@ export default {
   // 数据集相关
   dataset: {
     datasetDownload: '样例数据下载',
+    preprocessing: '数据集可视化检验中',
     processing: '数据集处理中',
     showFail: '该数据集无法展示',
     Remainshow: '该数据集尚未展示',
@@ -292,19 +293,20 @@ export default {
     fileUpload: '文件上传',
     pleaseInputFileName: '请输入文件名称',
     clickUpload: '点击这里上传文件',
-    uploadTips: '注意：只能上传ZIP文件，数据包应包含数据原子文件，包括：xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、config.json；对于不同的交通预测任务，可能用到不同的原子文件，同一个数据集不一定包含全部几种原子文件。',
+    uploadTips: '注意：只能上传ZIP文件，数据包应包含数据原子文件，包括：xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、xxx.gridod、config.json；对于不同的交通预测任务，可能用到不同的原子文件，同一个数据集不一定包含全部几种原子文件。',
     uploadSuccess: '文件上传成功！',
     background: '选择可视化底图',
     background_ing: '数据集可视化中',
     uploadError: '请上传ZIP格式的数据包！',
-    atomicError: '请检查数据包中的文件是否只包含：xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、config.json',
+    atomicError: '请检查数据包中的文件是否只包含：xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、xxx.gridod、config.json',
     google: '谷歌地图',
     google_s: '谷歌卫星地图',
     origin: '原始街道地图',
     amap: '高德地图',
     amap_s: '高德卫星地图',
     traffic: '交通地图',
-    transport: '道路路线-黑白'
+    transport: '道路路线-黑白',
+    choosemap: '选择可视化底图'
   },
   // 任务
   task: {
