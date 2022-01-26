@@ -282,6 +282,7 @@ export default {
   // 数据集相关
   dataset: {
     datasetDownload: '样例数据下载',
+    preprocessing: '数据集可视化检验中',
     processing: '数据集处理中',
     showFail: '该数据集无法展示',
     Remainshow: '该数据集尚未展示',
@@ -304,7 +305,8 @@ export default {
     amap: '高德地图',
     amap_s: '高德卫星地图',
     traffic: '交通地图',
-    transport: '道路路线-黑白'
+    transport: '道路路线-黑白',
+    choosemap: '选择可视化底图'
   },
   // 任务
   task: {

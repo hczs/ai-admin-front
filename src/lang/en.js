@@ -286,6 +286,7 @@ export default {
     fileName: 'File name',
     fileSize: 'File size',
     filePath: 'Storage path',
+    preprocessing: 'dataset visible check',
     processing: 'Processing',
     showFail: 'No View can be shown',
     Remainshow: 'remain to be shown',
@@ -305,7 +306,8 @@ export default {
     amap: 'amap-CHN',
     amap_s: 'amap-CHN-satellite',
     traffic: 'traffic map',
-    transport: 'street-line-black'
+    transport: 'street-line-black',
+    choosemap: 'choose background'
   },
   // 任务
   task: {
