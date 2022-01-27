@@ -26,14 +26,14 @@ export default {
       background: 'rgba(0, 0, 0, 0.7)'
     })
     // 获取参数
-    if (this.$route.params && this.$route.params.taskIds && this.$route.params.taskType) {
-      this.queryParam.task = this.$route.params.taskIds
-      if (this.$route.params.taskType === 'traffic_state_pred') {
+    if (this.$route.query && this.$route.query.taskIds && this.$route.query.taskType) {
+      this.queryParam.task = this.$route.query.taskIds
+      if (this.$route.query.taskType === 'traffic_state_pred') {
         console.log('交通状态预测')
         this.getStateEavluateLineData()
       } else {
         console.log('轨迹下一跳、到达时间估计、路网匹配')
-        this.queryParam.taskType = this.$route.params.taskType
+        this.queryParam.taskType = this.$route.query.taskType
         this.getOtherEavluateLineData()
       }
     } else {

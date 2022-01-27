@@ -387,6 +387,8 @@ export default {
     RMF: 'RMF',
     AN: 'AN',
     AL: 'AL',
+    MRR: 'MRR',
+    NDCG: 'NDCG',
     maxEpochTip: 'The larger the maximum number of training rounds is, the longer the time will be spent',
     clickUpload: 'Click upload JSON file',
     task_type: 'Task type',
