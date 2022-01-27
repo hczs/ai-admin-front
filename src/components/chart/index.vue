@@ -3,7 +3,10 @@
   <!-- <div class="app-container">
     <div :id="chartid" class="line-wrap" />
   </div> -->
-  <div :id="chartid" style="height: 500px; width: 60%; margin: 0 auto" />
+  <div>
+    <div :id="chartid" style="height: 500px; width: 60%; margin: 0 auto" />
+    <!-- <div style="float: right; display: inline">hah</div> -->
+  </div>
 </template>
 <script>
 import * as echarts from 'echarts'
@@ -23,12 +26,32 @@ export default {
         title: {
           show: true,
           text: ''
+          // 标题居中
+          // left: 'center'
         },
         tooltip: {
           trigger: 'axis'
         },
         legend: {
-          data: []
+          // type: 'scroll',
+          // orient: 'vertical',
+          // left: 'right',
+          // top: '20%',
+          // top: -10,
+          // bottom: 20,
+          data: [],
+          width: '60%',
+          // 最如果太长就...
+          formatter: function(value) {
+            if (value.length >= 11) {
+              return value.substr(0, 10) + '...'
+            } else {
+              return value
+            }
+          },
+          tooltip: {
+            show: true
+          }
         },
         calculable: true,
         xAxis: [
@@ -45,6 +68,21 @@ export default {
             axisLine: {
               show: true
             },
+            axisLabel: {
+              interval: 0,
+              // rotate: 40,
+              // 最如果太长就...
+              formatter: function(value) {
+                if (value.length >= 11) {
+                  return value.substr(0, 10) + '...'
+                } else {
+                  return value
+                }
+              },
+              color: '#333'
+            },
+            // 点击事件
+            // triggerEvent: true,
             data: []
           }
         ],
@@ -125,9 +163,26 @@ export default {
 
   methods: {
     drawLineChart() {
-      this.chartLine = echarts.init(document.getElementById(this.chartid))// 基于准备好的dom，初始化echarts实例
+      this.chartLine = echarts.init(document.getElementById(this.chartid), null, {
+        height: 500
+      })// 基于准备好的dom，初始化echarts实例
       // 使用刚指定的配置项和数据显示图表
       this.chartLine.setOption(this.option)
+      // TODO 点击删除达到可自定义
+      // this.chartLine.on('click', 'xAxis.category', (params) => {
+      //   console.log('params:', params)
+      //   console.log('componentType:', params.componentType)
+      //   console.log('name:', params.name)
+      //   console.log('value:', params.value)
+      //   console.log('value type:', typeof (params.value))
+      //   console.log('value - 1:', params.value - 1)
+      //   // 删除x轴此下标
+      //   this.option.xAxis[0].data.splice(params.value - 1, 1)
+      //   // 删除y轴对应值
+      //   console.log('删除后的x轴：', this.option.xAxis[0].data)
+      //   // 重新渲染
+      //   this.chartLine.setOption(this.option)
+      // })
     },
 
     changeChartOption() {

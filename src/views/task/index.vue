@@ -8,7 +8,7 @@
       </el-form-item>
 
       <el-form-item :label="$t('task.task_type')">
-        <el-select v-model="queryParam.task" style="float: left">
+        <el-select v-model="queryParam.task" style="float: left" clearable>
           <el-option
             v-for="item in taskParamList"
             :key="item.id"
@@ -19,7 +19,7 @@
       </el-form-item>
 
       <el-form-item :label="$t('task.status')">
-        <el-select v-model="queryParam.task_status" style="float: left">
+        <el-select v-model="queryParam.task_status" style="float: left" clearable>
           <el-option
             v-for="item in taskStatusList"
             :key="item.id"
@@ -319,70 +319,84 @@
           height="100%"
           border
         >
-          <el-table-column
+          <!-- <af-table-column
             type="index"
             :index="stateIndexMethod"
             :label="$t('common.order')"
             fixed
-            width="100"
-          />
+          /> -->
           <af-table-column
+            v-if="evaluateData[0].MAE !== null && evaluateData[0].MAE !== '' "
             prop="MAE"
             :label="$t('task.MAE')"
           />
           <af-table-column
+            v-if="evaluateData[0].MAPE !== null && evaluateData[0].MAPE !== '' "
             prop="MAPE"
             :label="$t('task.MAPE')"
           />
           <af-table-column
+            v-if="evaluateData[0].MSE !== null && evaluateData[0].MSE !== '' "
             prop="MSE"
             :label="$t('task.MSE')"
           />
           <af-table-column
+            v-if="evaluateData[0].RMSE !== null && evaluateData[0].RMSE !== '' "
             prop="RMSE"
             :label="$t('task.RMSE')"
           />
           <af-table-column
+            v-if="evaluateData[0].masked_MAE !== null && evaluateData[0].masked_MAE !== '' "
             prop="masked_MAE"
             :label="$t('task.masked_MAE')"
           />
           <af-table-column
+            v-if="evaluateData[0].masked_MAPE !== null && evaluateData[0].masked_MAPE !== '' "
             prop="masked_MAPE"
             :label="$t('task.masked_MAPE')"
           />
           <af-table-column
+            v-if="evaluateData[0].masked_MSE !== null && evaluateData[0].masked_MSE !== '' "
             prop="masked_MSE"
             :label="$t('task.masked_MSE')"
           />
           <af-table-column
+            v-if="evaluateData[0].masked_RMSE !== null && evaluateData[0].masked_RMSE !== '' "
             prop="masked_RMSE"
             :label="$t('task.masked_RMSE')"
           />
           <af-table-column
+            v-if="evaluateData[0].R2 !== null && evaluateData[0].R2 !== '' "
             prop="R2"
             :label="$t('task.R2')"
           />
           <af-table-column
+            v-if="evaluateData[0].EVAR !== null && evaluateData[0].EVAR !== '' "
             prop="EVAR"
             :label="$t('task.EVAR')"
           />
           <af-table-column
+            v-if="evaluateData[0].Precision !== null && evaluateData[0].Precision !== '' "
             prop="Precision"
             :label="$t('task.Precision')"
           />
           <af-table-column
+            v-if="evaluateData[0].Recall !== null && evaluateData[0].Recall !== '' "
             prop="Recall"
             :label="$t('task.Recall')"
           />
           <af-table-column
-            prop="F1-Score"
+            v-if="evaluateData[0].F1_Score !== null && evaluateData[0].F1_Score !== '' "
+            prop="F1_Score"
             :label="$t('task.F1Score')"
           />
           <af-table-column
+            v-if="evaluateData[0].MAP !== null && evaluateData[0].MAP !== '' "
             prop="MAP"
             :label="$t('task.MAP')"
           />
           <af-table-column
+            v-if="evaluateData[0].PCC !== null && evaluateData[0].PCC !== '' "
             prop="PCC"
             :label="$t('task.PCC')"
           />
@@ -398,22 +412,25 @@
           border
           fit
         >
-          <el-table-column
+          <!-- <el-table-column
             type="index"
             :index="stateIndexMethod"
             :label="$t('common.order')"
             fixed
             width="100px"
-          />
+          /> -->
           <af-table-column
+            v-if="evaluateData[0].RMF !== null"
             prop="RMF"
             :label="$t('task.RMF')"
           />
           <af-table-column
+            v-if="evaluateData[0].AN !== null"
             prop="AN"
             :label="$t('task.AN')"
           />
           <af-table-column
+            v-if="evaluateData[0].AL !== null"
             prop="AL"
             :label="$t('task.AL')"
           />
@@ -429,16 +446,42 @@
           border
           fit
         >
-          <el-table-column
+          <!-- <el-table-column
             type="index"
             :index="stateIndexMethod"
             :label="$t('common.order')"
             fixed
             width="100px"
-          />
+          /> -->
           <af-table-column
+            v-if="evaluateData[0].Recall !== null"
             prop="Recall"
             :label="$t('task.Recall')"
+          />
+          <af-table-column
+            v-if="evaluateData[0].Precision !== null"
+            prop="Precision"
+            :label="$t('task.Precision')"
+          />
+          <af-table-column
+            v-if="evaluateData[0].F1 !== null"
+            prop="F1"
+            :label="$t('task.F1Score')"
+          />
+          <af-table-column
+            v-if="evaluateData[0].MRR !== null"
+            prop="MRR"
+            :label="$t('task.MRR')"
+          />
+          <af-table-column
+            v-if="evaluateData[0].MAP !== null"
+            prop="MAP"
+            :label="$t('task.MAP')"
+          />
+          <af-table-column
+            v-if="evaluateData[0].NDCG !== null"
+            prop="NDCG"
+            :label="$t('task.NDCG')"
           />
         </el-table>
       </div>
@@ -511,7 +554,10 @@ export default {
       executeDisable: true,
       editDisable: true,
       deleteDisable: true,
-      evaluateData: [],
+      evaluateData: [{ 'MAE': '', 'MAPE': '', 'MSE': '', 'RMSE': '', 'masked_MAE': '', 'masked_MAPE': '',
+        'masked_MSE': '', 'masked_RMSE': '', 'R2': '', 'EVAR': '', 'Precision': '',
+        'Recall': '', 'F1-Score': '', 'MAP': '', 'PCC': '', 'RMF': '', 'AN': '', 'AL': '',
+        'F1': '', 'MRR': '', 'NDCG': '' }],
       executeRules: {
         executeTime: [{ type: 'date', required: true, trigger: 'blur', validator: validateExecuteTime }]
       }
@@ -554,33 +600,35 @@ export default {
         this.$message.warning(this.$t('task.selectSameTask'))
         return
       }
-      // 所有任务的模型必须不同
-      var isDifferentModel = true
-      const taskModels = tasks.map(item => item.model) // 模型list
-      const arr = []
-      for (let i = 0; i < taskModels.length; i++) {
-        if (arr.indexOf(taskModels[i]) === -1) {
-          arr.push(taskModels[i])
-        } else {
-          isDifferentModel = false
-        }
-      }
-      if (!isDifferentModel) {
-        this.$message.warning(this.$t('task.selectDifferentModelTask'))
-        return
-      }
+      // 所有任务的模型必须不同-需求修改，可以同模型对比
+      // var isDifferentModel = true
+      // const taskModels = tasks.map(item => item.model) // 模型list
+      // const arr = []
+      // for (let i = 0; i < taskModels.length; i++) {
+      //   if (arr.indexOf(taskModels[i]) === -1) {
+      //     arr.push(taskModels[i])
+      //   } else {
+      //     isDifferentModel = false
+      //   }
+      // }
+      // if (!isDifferentModel) {
+      //   this.$message.warning(this.$t('task.selectDifferentModelTask'))
+      //   return
+      // }
       // 取出id list
       const taskIds = tasks.map(item => item.id)
       const taskIdsStr = taskIds.join(',')
       console.log(taskIds)
       console.log(taskIdsStr)
-      this.$router.push({
-        name: 'evaluate',
-        params: {
+      // 新窗口打开
+      const routeData = this.$router.resolve({
+        path: '/evaluate/index',
+        query: {
           taskIds: taskIdsStr,
           taskType: defaultTask
         }
       })
+      window.open(routeData.href, '_blank')
     },
     // 获取任务列表
     getList() {
@@ -696,7 +744,7 @@ export default {
 </script>
 <style>
 .el-picker-panel__footer .el-button--text.el-picker-panel__link-btn {
-  display: none;
+  display: '';
 }
 /* dialog进度条 */
 /* 使顶部进行吸顶 */
