@@ -286,6 +286,7 @@ export default {
     fileName: 'File name',
     fileSize: 'File size',
     filePath: 'Storage path',
+    preprocessing: 'dataset visible check',
     processing: 'Processing',
     showFail: 'No View can be shown',
     Remainshow: 'remain to be shown',
@@ -293,19 +294,20 @@ export default {
     fileUpload: 'File upload',
     pleaseInputFileName: 'Please enter a file name',
     clickUpload: 'Click here to upload the file',
-    uploadTips: 'Note: only zip files can be uploaded, The data package shall contain data atomic files, including: xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、config.json; For different traffic prediction tasks, different atomic files may be used, and a dataset may not contain all kinds of atomic files.',
+    uploadTips: 'Note: only zip files can be uploaded, The data package shall contain data atomic files, including: xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、xxx.gridod、config.json; For different traffic prediction tasks, different atomic files may be used, and a dataset may not contain all kinds of atomic files.',
     uploadSuccess: 'File upload succeeded!',
     background: 'choose background',
     background_ing: 'Dataset-visible Processing',
     uploadError: 'Please upload the data package in ZIP format!',
-    atomicError: 'Please check whether the files in the package contain only: xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、config.json',
+    atomicError: 'Please check whether the files in the package contain only: xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、xxx.gridod、config.json',
     google: 'google map',
     origin: 'pure street',
     google_s: 'google map satellite',
     amap: 'amap-CHN',
     amap_s: 'amap-CHN-satellite',
     traffic: 'traffic map',
-    transport: 'street-line-black'
+    transport: 'street-line-black',
+    choosemap: 'choose background'
   },
   // 任务
   task: {

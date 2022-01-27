@@ -101,17 +101,25 @@
                 {{ $t('common.view') }}
               </router-link>
             </el-link>
-            <el-link v-if="scope.row.dataset_status === -1" disabled style="margin-left: 10px">{{ $t('dataset.showFail') }}</el-link>
+            <el-link v-if="scope.row.dataset_status === 5" style="margin-left: 10px" icon="el-icon-view">
+              <router-link :to="'/dataset/show_dataset/'+scope.row.file_name">
+                {{ $t('common.view') }}
+              </router-link>
+            </el-link>
+            <el-link v-if="scope.row.dataset_status === -1" disabled style="margin-left: 10px; color: red">{{ $t('dataset.showFail') }}</el-link>
             <el-link v-if="scope.row.dataset_status === 0" disabled style="margin-left: 10px" icon="el-icon-loading">{{ $t('dataset.processing') }}</el-link>
-            <el-link v-if="scope.row.dataset_status === 3" disabled style="margin-left: 10px">{{ $t('dataset.Remainshow') }}</el-link>
+            <el-link v-if="scope.row.dataset_status === 3" disabled style="margin-left: 10px; color: green">{{ $t('dataset.Remainshow') }}</el-link>
+            <el-link v-if="scope.row.dataset_status === 4" disabled style="margin-left: 10px">{{ $t('dataset.preprocessing') }}</el-link>
             <div style="margin-left: 10px">
               <el-link v-if="scope.row.dataset_status == -1" disabled style="margin-right: 10px" />
               <el-link v-if="scope.row.dataset_status == 0" disabled style="margin-right: 10px" />
-              <el-link v-if="scope.row.dataset_status == 1" style="margin-right: 10px" icon="el-icon-circle-plus-outline" @click="openSekectMap(scope.row.id)">{{ $t('common.getview') }}
+              <el-link v-if="scope.row.dataset_status == 4" disabled style="margin-right: 10px" />
+              <el-link v-if="scope.row.dataset_status == 5" disabled style="margin-right: 10px" />
+              <el-link v-if="scope.row.dataset_status == 1" style="margin-right: 10px" icon="el-icon-circle-plus-outline" @click="openSekectMap(scope.row.id)">{{ $t('dataset.choosemap') }}
               </el-link>
-              <el-link v-if="scope.row.dataset_status == 2" style="margin-right: 10px" icon="el-icon-circle-plus-outline" @click="openSekectMap(scope.row.id)">{{ $t('common.getview') }}
+              <el-link v-if="scope.row.dataset_status == 2" style="margin-right: 10px" icon="el-icon-circle-plus-outline" @click="openSekectMap(scope.row.id)">{{ $t('dataset.choosemap') }}
               </el-link>
-              <el-link v-if="scope.row.dataset_status == 3" style="margin-right: 10px" icon="el-icon-circle-plus-outline" @click="openSekectMap(scope.row.id)">{{ $t('common.getview') }}
+              <el-link v-if="scope.row.dataset_status == 3" style="margin-right: 10px" icon="el-icon-circle-plus-outline" @click="openSekectMap(scope.row.id)">{{ $t('dataset.choosemap') }}
               </el-link>
             </div>
           </el-button-group>
@@ -198,7 +206,7 @@ export default {
       },
       tableData: [],
       listLoading: true,
-      background: '',
+      background: '1',
       queryParam: queryParam,
       total: 0,
       defaultPage: 1,
