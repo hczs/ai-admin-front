@@ -92,8 +92,14 @@
             <el-form-item :label="$t('task.dataset')">
               <span>{{ props.row.dataset }}</span>
             </el-form-item>
-            <el-form-item v-if="props.row.config_file !== null" :label="$t('task.config_file')">
-              <span>{{ props.row.config_file }}</span>
+            <el-form-item v-if="props.row.config_file !== null" :label="$t('task.config_file1')">
+              <!-- <span>{{ props.row.config_file }}</span> -->
+              <el-link type="primary" :underline="false" :href="BASE_API + '/business/task/' + props.row.id + '/download_task_config/'">
+                {{ $t('task.clickDownload') }}
+              </el-link>
+              <el-link style="margin-left: 10px" type="primary" :underline="false" @click="catConfig(props.row.id)">
+                {{ $t('task.clickCatConfig') }}
+              </el-link>
             </el-form-item>
             <!-- <el-form-item :label="$t('task.saved_model')">
               <span>{{ props.row.saved_model }}</span>
@@ -292,7 +298,8 @@
       width="80%"
       class="dialog-div"
     >
-      <div style="white-space: pre-line; margin: 20px" v-html="logData" />
+      <!-- <div style="white-space: pre-line; margin: 20px" v-html="logData" /> -->
+      <pre style="white-space: pre-line; margin: 20px; background-color: black; color: white; font-family: Consolas; font-size: 16px;  padding: 10px">{{ logData }}</pre>
       <span slot="footer" class="dialog-footer">
         <el-button @click="logDialogVisible = false">{{ $t('common.cancel') }}</el-button>
         <a style="margin-left: 10px" :href="BASE_API + '/business/task/' + task.id + '/download_log/'">
@@ -308,8 +315,10 @@
       :visible.sync="evaluateDialogVisible"
       width="80%"
       class="dialog-div"
+      :destroy-on-close="evaluateDestroyOnClose"
+      @closed="closeEvaluateDialog()"
     >
-      <div style="height: 100%">
+      <div style="height: 80%">
         <!-- 交通状态预测、到达时间估计表格 -->
         <el-table
           v-if="task.task === 'eta' || task.task === 'traffic_state_pred'"
@@ -484,6 +493,21 @@
             :label="$t('task.NDCG')"
           />
         </el-table>
+
+        <!-- 指标分页组件 -->
+        <div>
+          <el-pagination
+            :hide-on-single-page="true"
+            :current-page="evaluateQueryParam.page"
+            :page-sizes="[10, 20, 50, 100, 200]"
+            :page-size="evaluateQueryParam.size"
+            style="padding: 30px 0; text-align: center;"
+            layout="total, prev, pager, next"
+            :total="evaluateQueryParam.total"
+            @size-change="handleEvaluateSizeChange"
+            @current-change="handleEvaluateCurrentChange"
+          />
+        </div>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="evaluateDialogVisible = false">{{ $t('common.cancel') }}</el-button>
@@ -493,13 +517,36 @@
           </el-button></a>
       </span>
     </el-dialog>
+
+    <!-- 配置文件查看弹出框 -->
+    <el-dialog
+      :title="$t('task.configview')"
+      :visible.sync="configDialogVisible"
+      width="80%"
+      class="dialog-div"
+    >
+      <!-- <div style="white-space: pre-line; margin: 20px" v-html="configData" /> -->
+      <pre style="margin: 20px; background-color: black; color: white; font-family: Consolas; font-size: 16px; padding: 10px">{{ configData }}</pre>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="configDialogVisible = false">{{ $t('common.cancel') }}</el-button>
+        <!-- <a style="margin-left: 10px" :href="BASE_API + '/business/task/' + task.id + '/download_log/'">
+          <el-button type="primary" icon="el-icon-download">
+            {{ $t('task.downloadLog') }}
+          </el-button></a> -->
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { checkPermission } from '@/utils/permission'
 import { getTaskList, getTaskById, executeTaskById,
   deleteTaskById, getExecuteLogById, getStateEvaluateList,
-  getMapMatchingEvaluateList, getTrajEvaluateList } from '@/api/task'
+  getMapMatchingEvaluateList, getTrajEvaluateList, getConfigDataById } from '@/api/task'
+
+const DEFAULT_EVALUATE_DATA = [{ 'MAE': '', 'MAPE': '', 'MSE': '', 'RMSE': '', 'masked_MAE': '', 'masked_MAPE': '',
+  'masked_MSE': '', 'masked_RMSE': '', 'R2': '', 'EVAR': '', 'Precision': '',
+  'Recall': '', 'F1-Score': '', 'MAP': '', 'PCC': '', 'RMF': '', 'AN': '', 'AL': '',
+  'F1': '', 'MRR': '', 'NDCG': '' }]
 
 export default {
 
@@ -527,7 +574,8 @@ export default {
       },
       evaluateQueryParam: {
         page: 1,
-        size: 20
+        size: 8,
+        total: 0
       },
       taskParamList: [
         { id: '1', label: this.$t('task.traffic_state_pred'), value: 'traffic_state_pred' },
@@ -560,7 +608,11 @@ export default {
         'F1': '', 'MRR': '', 'NDCG': '' }],
       executeRules: {
         executeTime: [{ type: 'date', required: true, trigger: 'blur', validator: validateExecuteTime }]
-      }
+      },
+      // 指标dialog关闭时是否清空元素
+      evaluateDestroyOnClose: true,
+      configDialogVisible: false,
+      configData: ''
     }
   },
   created() {
@@ -657,6 +709,14 @@ export default {
         this.logData = res.data
       })
     },
+    // 查看配置文件信息
+    catConfig(id) {
+      this.task.id = id
+      this.configDialogVisible = true
+      getConfigDataById(id).then(res => {
+        this.configData = res.data
+      })
+    },
     // 查看评价指标
     catEvaluate(id) {
       this.evaluateDialogVisible = true
@@ -669,18 +729,21 @@ export default {
           this.evaluateQueryParam.task = this.task.id
           getStateEvaluateList(this.evaluateQueryParam).then(res => {
             this.evaluateData = res.data.results
+            this.evaluateQueryParam.total = res.data.count
           })
         } else if (this.task.task === 'map_matching') {
           // 走路网匹配接口
           this.evaluateQueryParam.task = this.task.id
           getMapMatchingEvaluateList(this.evaluateQueryParam).then(res => {
             this.evaluateData = res.data.results
+            this.evaluateQueryParam.total = res.data.count
           })
         } else if (this.task.task === 'traj_loc_pred') {
           // 走轨迹下一跳预测接口
           this.evaluateQueryParam.task = this.task.id
           getTrajEvaluateList(this.evaluateQueryParam).then(res => {
             this.evaluateData = res.data.results
+            this.evaluateQueryParam.total = res.data.count
           })
         } else {
           // 路网表征学习，无评价指标
@@ -728,9 +791,27 @@ export default {
       this.defaultSize = size
       this.getList(this.queryParam)
     },
+    // 指标分页大小改变
+    handleEvaluateSizeChange(size) {
+      this.evaluateQueryParam.size = size
+      this.catEvaluate(this.task.id)
+    },
     handleCurrentChange(page) {
       this.queryParam.page = page
       this.getList(this.queryParam)
+    },
+    // 指标页码改变
+    handleEvaluateCurrentChange(page) {
+      this.evaluateQueryParam.page = page
+      this.catEvaluate(this.task.id)
+    },
+    // 指标dialog关闭回调
+    closeEvaluateDialog() {
+      // 清空数据
+      this.evaluateQueryParam.page = 1
+      this.evaluateQueryParam.size = 8
+      this.evaluateQueryParam.total = 0
+      this.evaluateData = DEFAULT_EVALUATE_DATA
     },
     indexMethod(index) {
       return (this.queryParam.page - 1) * this.queryParam.size + index + 1
@@ -757,7 +838,7 @@ export default {
 /* 表单大小设置 */
 .dialog-div .el-dialog {
   margin: 0 auto !important;
-  height: 80%;
+  height: 90%;
   overflow: hidden;
 }
 
