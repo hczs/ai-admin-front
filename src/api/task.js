@@ -77,6 +77,13 @@ export function getExecuteLogById(taskId) {
   })
 }
 
+export function getConfigDataById(taskId) {
+  return request({
+    url: `/business/task/${taskId}/get_config/`,
+    method: 'get'
+  })
+}
+
 // 交通状态预测、到达时间估计，根据任务id获取相应指标数据
 export function getStateEvaluateList(queryParam) {
   return request({

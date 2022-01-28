@@ -316,6 +316,7 @@ export default {
     model: 'model',
     dataset: 'dataset',
     config_file: 'config_file',
+    config_file1: 'config_file',
     saved_model: 'saved_model',
     train: 'train',
     batch_size: 'batch_size',
@@ -399,7 +400,10 @@ export default {
     selectCompleteTip: 'Please select completed tasks',
     selectSameTask: 'Please select the same type of task',
     selectDifferentModelTask: 'Please select a task that uses a different model',
-    selectRoadRepresentation: 'There is no evaluation index for this task type'
+    selectRoadRepresentation: 'There is no evaluation index for this task type',
+    clickDownload: 'Click here to download',
+    clickCatConfig: 'Click here to view online',
+    configview: 'Configuration Information'
   }
 
 }
