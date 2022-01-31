@@ -1,10 +1,10 @@
 <template>
-  <div class="app-container" style="width:100%;height:100%;">
+  <div class="app-container" style="width:100%;height:90%;">
     <!--返回按钮-->
     <!-- <div style="margin-bottom: 10px">
       <el-button type="primary" @click="back">返回</el-button>
     </div> -->
-    <iframe id="iframeBox" :src="reportUrl" frameborder="1" width="100%" height="auto" onload="this.height=700" />
+    <iframe id="iframeBox" :src="reportUrl" frameborder="1" width="100%" height="auto" onload="this.height=550" />
   </div>
 </template>
 <script>
