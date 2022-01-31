@@ -315,6 +315,7 @@ export default {
     model: '要执行的模型名',
     dataset: '要执行的数据集',
     config_file: '自定义的配置文件名',
+    config_file1: '自定义的配置文件',
     saved_model: '是否保存训练好的模型',
     train: '如果模型已经预训练过了，是否要重新训练模型',
     batch_size: '训练集和验证集的批次大小',
@@ -398,6 +399,9 @@ export default {
     selectCompleteTip: '请选择已完成的任务',
     selectSameTask: '请选择相同类型的任务',
     selectDifferentModelTask: '请选择使用不同模型的任务',
-    selectRoadRepresentation: '该任务类型无评价指标'
+    selectRoadRepresentation: '该任务类型无评价指标',
+    clickDownload: '点击下载',
+    clickCatConfig: '在线查看',
+    configview: '配置文件信息'
   }
 }
