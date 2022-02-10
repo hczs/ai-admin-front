@@ -404,6 +404,25 @@ export default {
     clickDownload: 'Click here to download',
     clickCatConfig: 'Click here to view online',
     configview: 'Configuration Information'
+  },
+
+  // 新手引导 - 通用
+  intro: {
+    next: 'Next',
+    prev: 'Back',
+    done: 'Done',
+    showIntro: 'Click here to view the wizard again',
+    viewIntro: 'View the wizard'
+  },
+
+  // 新建任务引导
+  addTaskIntro: {
+    step01: 'Here is the new task interface, where you can create new training tasks',
+    step02: 'Task name is required. Please fill in a task name that is easy to understand',
+    step03: 'Here, the task name, model name and data set have strict correspondence. Please select according to the table correspondence in the link above',
+    step04: 'Just click this link',
+    step05: 'The above form only provides common task parameter settings. You can set more task parameters for training as needed. You need to write a config.json file to upload.',
+    step06: 'Click Confirm and the task will be created!'
   }
 
 }
