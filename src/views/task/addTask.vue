@@ -1,50 +1,53 @@
 <template>
-  <div class="app-container" style="text-align: center; width: 100%;">
-    <div style="width: 70%; margin-left: 5%">
-      <el-form ref="elForm" :rules="rules" :model="task" label-width="auto" label-position="left" status-icon>
-        <el-form-item :label="$t('task.taskName')" prop="task_name">
-          <el-input
-            v-model="task.task_name"
-            autocomplete="off"
-            clearable
-            show-word-limit
-            maxlength="50"
-          />
-        </el-form-item>
-        <el-form-item :label="$t('task.taskDescription')">
-          <el-input
-            v-model="task.task_description"
-            type="textarea"
-            maxlength="100"
-            autosize
-            :rows="2"
-            show-word-limit
-            clearable
-          />
-        </el-form-item>
-        <el-form-item :label="$t('task.max_epoch')" prop="max_epoch" style="text-align: left">
-          <el-popover
-            placement="top-start"
-            width="200"
-            trigger="hover"
-            :content="$t('task.maxEpochTip')"
-          >
-            <el-input-number slot="reference" v-model.number="task.max_epoch" controls-position="right" />
-          </el-popover>
+  <div class="app-container" style="text-align: center; width: 100%; height: 100%">
+    <div style="width: 99%; margin-left: 13px; height: 90%" :data-intro="$t('addTaskIntro.step01')" data-step="1">
+      <div style="width: 70%; margin-left: 5%">
+        <el-form ref="elForm" :rules="rules" :model="task" label-width="auto" label-position="left" status-icon>
+          <div :data-intro="$t('addTaskIntro.step02')" data-step="4">
+            <el-form-item :label="$t('task.taskName')" prop="task_name">
+              <el-input
+                v-model="task.task_name"
+                autocomplete="off"
+                clearable
+                show-word-limit
+                maxlength="50"
+              />
+            </el-form-item>
+          </div>
+          <el-form-item :label="$t('task.taskDescription')">
+            <el-input
+              v-model="task.task_description"
+              type="textarea"
+              maxlength="100"
+              autosize
+              :rows="2"
+              show-word-limit
+              clearable
+            />
+          </el-form-item>
+          <el-form-item :label="$t('task.max_epoch')" prop="max_epoch" style="text-align: left">
+            <el-popover
+              placement="top-start"
+              width="200"
+              trigger="hover"
+              :content="$t('task.maxEpochTip')"
+            >
+              <el-input-number slot="reference" v-model.number="task.max_epoch" controls-position="right" />
+            </el-popover>
 
-        </el-form-item>
-        <el-form-item :label="$t('task.gpu')" style="text-align: left">
+          </el-form-item>
+          <el-form-item :label="$t('task.gpu')" style="text-align: left">
 
-          <el-radio-group v-model="task.gpu">
-            <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
-            <el-radio :label="false">{{ $t('common.no') }}</el-radio>
-          </el-radio-group>
+            <el-radio-group v-model="task.gpu">
+              <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
+              <el-radio :label="false">{{ $t('common.no') }}</el-radio>
+            </el-radio-group>
 
-        </el-form-item>
-        <el-form-item v-if="task.gpu" :label="$t('task.gpu_id')" prop="gpu_id" style="text-align: left">
-          <el-input-number v-model.number="task.gpu_id" controls-position="right" />
-        </el-form-item>
-        <!-- <el-form-item :label="$t('task.dataFile')" prop="data_file">
+          </el-form-item>
+          <el-form-item v-if="task.gpu" :label="$t('task.gpu_id')" prop="gpu_id" style="text-align: left">
+            <el-input-number v-model.number="task.gpu_id" controls-position="right" />
+          </el-form-item>
+          <!-- <el-form-item :label="$t('task.dataFile')" prop="data_file">
           <el-select v-model="task.data_file" style="float: left"  >
             <el-option
               v-for="file in fileList"
@@ -54,44 +57,49 @@
             />
           </el-select>
         </el-form-item> -->
-        <!-- 以下为任务执行参数配置 -->
-        <el-divider content-position="center">
-          <!-- {{ $t('task.taskParamTip') }} -->
-          <el-link target="_blank" type="primary" href="https://github.com/LibCity/Bigscity-LibCity-Docs-zh_CN/blob/master/source/user_guide/data/dataset_for_task.md">
-            {{ $t('task.clickViewCorresponding') }}
-          </el-link>
-        </el-divider>
-        <el-form-item :label="$t('task.task')" prop="task">
-          <el-select v-model="task.task" style="float: left" :placeholder="$t('common.pleasechoose')">
-            <el-option
-              v-for="item in taskParamList"
-              :key="item.id"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('task.model')" prop="model">
-          <el-select v-model="task.model" default-first-option allow-create filterable style="float: left" :placeholder="$t('common.pleasechoose')">
-            <el-option
-              v-for="model in modelList"
-              :key="model"
-              :label="model"
-              :value="model"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('task.dataset')" prop="dataset">
-          <el-select v-model="task.dataset" filterable style="float: left" :placeholder="$t('common.pleasechoose')">
-            <el-option
-              v-for="file in fileList"
-              :key="file.id"
-              :label="file.file_name"
-              :value="file.file_name"
-            />
-          </el-select>
-        </el-form-item>
-        <!-- <el-form-item :label="$t('task.saved_model')" style="text-align: left">
+          <!-- 以下为任务执行参数配置 -->
+
+          <el-divider content-position="center">
+            <!-- {{ $t('task.taskParamTip') }} -->
+            <el-link target="_blank" type="primary" href="https://github.com/LibCity/Bigscity-LibCity-Docs-zh_CN/blob/master/source/user_guide/data/dataset_for_task.md">
+              <span :data-intro="$t('addTaskIntro.step04')" data-step="3">
+                {{ $t('task.clickViewCorresponding') }}
+              </span>
+            </el-link>
+          </el-divider>
+          <div :data-intro="$t('addTaskIntro.step03')" data-step="2">
+            <el-form-item :label="$t('task.task')" prop="task">
+              <el-select v-model="task.task" style="float: left" :placeholder="$t('common.pleasechoose')">
+                <el-option
+                  v-for="item in taskParamList"
+                  :key="item.id"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('task.model')" prop="model">
+              <el-select v-model="task.model" default-first-option allow-create filterable style="float: left" :placeholder="$t('common.pleasechoose')">
+                <el-option
+                  v-for="model in modelList"
+                  :key="model"
+                  :label="model"
+                  :value="model"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('task.dataset')" prop="dataset">
+              <el-select v-model="task.dataset" filterable style="float: left" :placeholder="$t('common.pleasechoose')">
+                <el-option
+                  v-for="file in fileList"
+                  :key="file.id"
+                  :label="file.file_name"
+                  :value="file.file_name"
+                />
+              </el-select>
+            </el-form-item>
+          </div>
+          <!-- <el-form-item :label="$t('task.saved_model')" style="text-align: left">
           <el-radio-group v-model="task.saved_model">
             <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
             <el-radio :label="false">{{ $t('common.no') }}</el-radio>
@@ -103,7 +111,7 @@
             <el-radio :label="false">{{ $t('common.no') }}</el-radio>
           </el-radio-group>
         </el-form-item> -->
-        <!-- <el-form-item :label="$t('task.batch_size')" prop="batch_size" style="text-align: left">
+          <!-- <el-form-item :label="$t('task.batch_size')" prop="batch_size" style="text-align: left">
           <el-input-number v-model.number="task.batch_size" controls-position="right" />
         </el-form-item>
         <el-form-item :label="$t('task.train_rate')" prop="train_rate" style="text-align: left">
@@ -115,44 +123,44 @@
         <el-form-item :label="$t('task.learning_rate')" prop="learning_rate" style="text-align: left">
           <el-input-number v-model.number="task.learning_rate" controls-position="right" />
         </el-form-item> -->
-        <!-- 如果需要配置更多参数，可以上传配置文件 -->
-        <el-divider content-position="center">{{ $t('task.taskMoreParamTip') }}</el-divider>
-        <el-form-item :label="$t('task.config_file')">
-          <!-- <el-button-group> -->
-          <el-upload
-            ref="upload"
-            style="text-align: left"
-            class="upload-demo"
-            :action="BASE_API + '/business/task/upload/'"
-            name="config"
-            :limit="fileLimit"
-            :on-success="handleFileUploadSuccess"
-            :before-upload="handleBeforeUpload"
-            :on-exceed="handleOnExceed"
-            accept="application/json"
-          >
-            <el-button slot="trigger" size="small" type="primary"> {{ $t('task.clickUpload') }}</el-button>
-            <!-- <div slot="tip" class="el-upload__tip">{{ $t('task.uploadTips') }}
+          <!-- 如果需要配置更多参数，可以上传配置文件 -->
+          <el-divider content-position="center">{{ $t('task.taskMoreParamTip') }}</el-divider>
+          <el-form-item :label="$t('task.config_file')" :data-intro="$t('addTaskIntro.step05')" data-step="5">
+            <!-- <el-button-group> -->
+            <el-upload
+              ref="upload"
+              style="text-align: left"
+              class="upload-demo"
+              :action="BASE_API + '/business/task/upload/'"
+              name="config"
+              :limit="fileLimit"
+              :on-success="handleFileUploadSuccess"
+              :before-upload="handleBeforeUpload"
+              :on-exceed="handleOnExceed"
+              accept="application/json"
+            >
+              <el-button slot="trigger" size="small" type="primary"> {{ $t('task.clickUpload') }}</el-button>
+              <!-- <div slot="tip" class="el-upload__tip">{{ $t('task.uploadTips') }}
               <a :href="BASE_API + '/business/task/download_config/'" style="margin-left: 10px;">
                 <el-button type="info" size="mini" icon="el-icon-download">{{ $t('task.downloadExample') }}
                 </el-button>
               </a>
             </div> -->
-            <a :href="BASE_API + '/business/task/download_config/'" style="margin-left: 10px;">
-              <el-button type="info" size="mini" icon="el-icon-download">
-                {{ $t('task.downloadExample') }}
-              </el-button>
-            </a>
+              <a :href="BASE_API + '/business/task/download_config/'" style="margin-left: 10px;">
+                <el-button type="info" size="mini" icon="el-icon-download">
+                  {{ $t('task.downloadExample') }}
+                </el-button>
+              </a>
 
-          </el-upload>
+            </el-upload>
 
           <!-- </el-button-group> -->
-        </el-form-item>
-      </el-form>
-      <el-button @click="resetForm()">{{ $t('common.clear') }}</el-button>
-      <el-button type="primary" @click="submit()">{{ $t('common.confirm') }}</el-button>
+          </el-form-item>
+        </el-form>
+        <el-button @click="resetForm()">{{ $t('common.clear') }}</el-button>
+        <el-button :data-intro="$t('addTaskIntro.step06')" data-step="6" type="primary" @click="submit()">{{ $t('common.confirm') }}</el-button>
+      </div>
     </div>
-
   </div>
 </template>
 <script>
@@ -218,6 +226,16 @@ export default {
       console.log(newVal, oldVal)
     }
   },
+  mounted() {
+    // // 新手引导
+    // this.$intro.start() // start the guide
+    // this.$intro.showHints() // show hints
+    if (localStorage.getItem('addTasknew') === null || localStorage.getItem('addTasknew') !== '1') {
+      this.$intro.start()
+      localStorage.setItem('addTasknew', 1)
+    }
+  },
+
   created() {
     if (this.$route.params && this.$route.params.id) {
       // 从路径获取id值

@@ -5,6 +5,13 @@
     <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
+
+      <el-tooltip class="item" effect="dark" :content="$t('intro.viewIntro')" placement="bottom">
+        <span class="right-menu-item hover-effect" :data-intro="$t('intro.showIntro')" data-step="999" @click="showIntro()">
+          <i class="el-icon-question" />
+        </span>
+      </el-tooltip>
+
       <template>
         <lang-select class="right-menu-item hover-effect" />
       </template>
@@ -61,6 +68,9 @@ export default {
     ])
   },
   methods: {
+    showIntro() {
+      this.$intro.start()
+    },
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },

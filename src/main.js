@@ -10,6 +10,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/index.scss' // global css
 import Plugin from 'v-fit-columns' // 列宽自适应插件
 import AFTableColumn from 'af-table-column' // 列宽自适应插件2
+import intro from 'intro.js' // 新手引导js库
+import 'intro.js/introjs.css' // 新手引导css样式
 
 import App from './App'
 import store from './store'
@@ -42,6 +44,12 @@ Vue.use(ElementUI, {
 
 Vue.use(Plugin)
 Vue.use(AFTableColumn)
+// 新手引导 所有option统一设置
+Vue.prototype.$intro = intro().setOptions({
+  nextLabel: i18n.t('intro.next'),
+  prevLabel: i18n.t('intro.prev'),
+  doneLabel: i18n.t('intro.done')
+})
 
 Vue.config.productionTip = false
 

@@ -11,7 +11,11 @@
     <div class="div2">
       <el-checkbox-group v-model="selectList">
         <div v-for="item in option.xAxis[0].data" :key="item">
-          <el-checkbox :label="item" />
+          <el-tooltip :content="item" placement="top" open-delay="300">
+            <el-checkbox :label="item">
+              {{ cutWord(item) }}
+            </el-checkbox>
+          </el-tooltip>
         </div>
       </el-checkbox-group>
     </div>
@@ -134,6 +138,8 @@ export default {
                 // 还原
                 this.chartLine.clear()
                 this.chartLine.setOption(this.option)
+                // 右侧复选框还原
+                this.selectList = this.data.xdata
                 // 传值
                 this.$emit('init')
                 console.log('click')
@@ -203,11 +209,11 @@ export default {
 
       if (this.isOneToOne) {
         // 一对一的情况
-        currentList.forEach((x, index) => {
-          console.log('x: ', x)
-          // 查字典赋值
-          this.dictList.forEach((dictValue, index) => {
+        // 根据字典顺序赋值，顺序不会乱
+        this.dictList.forEach((dictValue, index) => {
+          currentList.forEach((x, index) => {
             if (dictValue.x === x) {
+              console.log('x: ', x)
               this.currentOption.xAxis[0].data.push(x)
               this.currentOption.series[0].data.push(dictValue.value)
               this.currentOption.series[0].type = charType
@@ -338,8 +344,16 @@ export default {
       } catch (e) {
         console.log(e)
       }
-    }
+    },
 
+    // 文字过长处理方法
+    cutWord(value) {
+      if (value.length >= 21) {
+        return value.substr(0, 20) + '...'
+      } else {
+        return value
+      }
+    }
   }
 }
 </script>
