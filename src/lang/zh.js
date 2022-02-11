@@ -345,6 +345,8 @@ export default {
     status: '任务状态',
     creator: '任务创建者',
     numberError: '请输入数字类型的值',
+    maxEpochNumberError: '请输入整数',
+    maxEpochError: '请输入大于0的数',
     noStart: '未开始',
     execute: '执行',
     executing: '进行中',

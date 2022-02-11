@@ -198,7 +198,7 @@
             <!-- <el-button style="width: 120px" :disabled="editDisable" type="primary" size="small" icon="el-icon-edit">
                 {{ $t('common.edit') }}
               </el-button> -->
-            <el-link style="margin-left: 10px" :disabled="editDisable || ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )" icon="el-icon-edit">
+            <el-link v-intro-if="scope.$index === 0" data-intro="test" data-step="1" style="margin-left: 10px" :disabled="editDisable || ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )" icon="el-icon-edit">
               <span v-if="editDisable || ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )">
                 {{ $t('common.edit') }}
               </span>
