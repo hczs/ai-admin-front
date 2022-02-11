@@ -1,6 +1,6 @@
 <template>
-  <div class="app-container">
-    <div style="width: 99%; margin-left: 13px; height: 80%" :data-intro="$t('addDataIntro.step01')" data-step="1">
+  <div class="app-container" :data-intro="$t('addDataIntro.step01')" data-step="1">
+    <div style="width: 99%; margin-left: 13px; height: 80%">
       <!-- 顶部查询表单 -->
       <div style="height: 80%" :data-intro="$t('addDataIntro.step02')" data-step="2">
         <el-form :inline="true" class="demo-form-inline">
@@ -119,7 +119,7 @@
                     <el-link v-if="scope.row.dataset_status === 3" disabled style="margin-left: 10px; color: green">{{ $t('dataset.Remainshow') }}</el-link>
                     <el-link v-if="scope.row.dataset_status === 4" disabled style="margin-left: 10px">{{ $t('dataset.preprocessing') }}</el-link>
                   </div>
-                  <div v-intro-if="scope.row.dataset_status == 2 || scope.row.dataset_status == 1 || scope.row.dataset_status == 3" :data-intro="$t('addDataIntro.step06')" data-step="7" style="margin-left: 10px">
+                  <div v-intro-if="scope.row.dataset_status == 2 || scope.row.dataset_status == 1 || scope.row.dataset_status == 3" :data-intro="$t('addDataIntro.step07')" data-step="7" style="margin-left: 10px">
                     <el-link v-if="scope.row.dataset_status == -1" disabled style="margin-right: 10px" />
                     <el-link v-if="scope.row.dataset_status == 0" disabled style="margin-right: 10px" />
                     <el-link v-if="scope.row.dataset_status == 4" disabled style="margin-right: 10px" />
@@ -236,10 +236,12 @@ export default {
     // // 新手引导
     // this.$intro.start() // start the guide
     // this.$intro.showHints() // show hints
-    if (localStorage.getItem('addDatasetnew') === null || localStorage.getItem('addDatasetnew') !== '1') {
-      this.$intro.start()
-      localStorage.setItem('addDatasetnew', 1)
-    }
+    this.$nextTick(() => {
+      if (localStorage.getItem('addDatasetnew') === null || localStorage.getItem('addDatasetnew') !== '1') {
+        this.$intro.start()
+        localStorage.setItem('addDatasetnew', 1)
+      }
+    })
   },
 
   created() {
