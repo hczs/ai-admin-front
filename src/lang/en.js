@@ -346,6 +346,8 @@ export default {
     status: 'Task Status',
     creator: 'creator',
     numberError: 'Please enter a value of numeric type',
+    maxEpochNumberError: 'please enter an integer',
+    maxEpochError: 'Please enter a number greater than 0',
     noStart: 'Not started',
     execute: 'Execute',
     executing: 'Executing',

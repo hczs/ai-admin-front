@@ -182,6 +182,18 @@ export default {
         })
       }
     }
+    const validateMaxEpoch = (rule, value, callback) => {
+      // 必须是大于0的整数
+      if (typeof (value) !== 'number') {
+        callback(new Error(this.$t('task.numberError')))
+      } else if (value % 1 !== 0) {
+        callback(new Error(this.$t('task.maxEpochNumberError')))
+      } else if (value < 0) {
+        callback(new Error(this.$t('task.maxEpochError')))
+      } else {
+        callback()
+      }
+    }
     return {
       BASE_API: window.global_url.Base_url,
       task: {
@@ -210,7 +222,7 @@ export default {
         train_rate: [{ type: 'number', message: this.$t('task.numberError') }],
         eval_rate: [{ type: 'number', message: this.$t('task.numberError') }],
         learning_rate: [{ type: 'number', message: this.$t('task.numberError') }],
-        max_epoch: [{ type: 'number', message: this.$t('task.numberError') }],
+        max_epoch: [{ validator: validateMaxEpoch }],
         gpu_id: [{ type: 'number', message: this.$t('task.numberError') }]
       }
     }
@@ -230,9 +242,9 @@ export default {
     // // 新手引导
     // this.$intro.start() // start the guide
     // this.$intro.showHints() // show hints
-    if (localStorage.getItem('addTasknew') === null || localStorage.getItem('addTasknew') !== '1') {
+    if (localStorage.getItem('addTaskNew') === null || localStorage.getItem('addTaskNew') !== '1') {
       this.$intro.start()
-      localStorage.setItem('addTasknew', 1)
+      localStorage.setItem('addTaskNew', 1)
     }
   },
 
@@ -317,7 +329,13 @@ export default {
       this.$refs['elForm'].clearValidate()
       this.$refs['upload'].clearFiles()
       this.$refs['elForm'].resetFields()
-      this.task = {}
+      this.task = {
+        task_name: '',
+        max_epoch: 1,
+        task: 'traffic_state_pred',
+        model: 'GRU',
+        gpu: false
+      }
     },
 
     // 文件上传相关

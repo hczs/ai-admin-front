@@ -48,7 +48,18 @@ Vue.use(AFTableColumn)
 Vue.prototype.$intro = intro().setOptions({
   nextLabel: i18n.t('intro.next'),
   prevLabel: i18n.t('intro.prev'),
-  doneLabel: i18n.t('intro.done')
+  doneLabel: i18n.t('intro.done'),
+  showStepNumbers: true
+})
+
+// 封装一个v-intro-if指令 用于判断在某些特定条件下显示引导内容
+Vue.directive('intro-if', {
+  bind: function(el, binding, vnode) {
+    if (binding.value === false) {
+      delete el.dataset.intro
+      delete el.dataset.hint
+    }
+  }
 })
 
 Vue.config.productionTip = false
