@@ -41,83 +41,85 @@
         </div>
       </div>
       <div style="width: 100%; height: 60%;margin-top: 40px" :data-intro="$t('addDataIntro.step04')" data-step="4">
-        <div style="width: 100%; height: 60%;margin-top: 40px" :data-intro="$t('addDataIntro.step05')" data-step="5">
-          <el-table
-            v-loading="listLoading"
-            :data="tableData"
-            fit
-            border
+        <el-table
+          v-loading="listLoading"
+          :data="tableData"
+          fit
+          border
+        >
+          <el-table-column
+            type="index"
+            :index="indexMethod"
+            :label="$t('common.order')"
+            width="120"
+          />
+          <el-table-column
+            prop="file_name"
+            :label="$t('dataset.fileName')"
+          />
+          <el-table-column
+            prop="file_size"
+            :label="$t('dataset.fileSize')"
+          />
+          <!-- <el-table-column
+            prop="file_path"
+            :label="$t('dataset.filePath')"
+          />
+          <el-table-column
+            prop="extract_path"
+            :label="$t('dataset.extractPath')"
+          /> -->
+          <el-table-column
+            prop="create_time"
+            :label="$t('common.createTime')"
+          />
+          <el-table-column
+            prop="update_time"
+            :label="$t('common.updateTime')"
+          />
+          <el-table-column
+            :label="$t('common.operation')"
           >
-            <el-table-column
-              type="index"
-              :index="indexMethod"
-              :label="$t('common.order')"
-              width="120"
-            />
-            <el-table-column
-              prop="file_name"
-              :label="$t('dataset.fileName')"
-            />
-            <el-table-column
-              prop="file_size"
-              :label="$t('dataset.fileSize')"
-            />
-            <!-- <el-table-column
-              prop="file_path"
-              :label="$t('dataset.filePath')"
-            />
-            <el-table-column
-              prop="extract_path"
-              :label="$t('dataset.extractPath')"
-            /> -->
-            <el-table-column
-              prop="create_time"
-              :label="$t('common.createTime')"
-            />
-            <el-table-column
-              prop="update_time"
-              :label="$t('common.updateTime')"
-            />
-            <el-table-column
-              :label="$t('common.operation')"
-            >
-              <template slot-scope="scope">
-                <el-button-group>
-                  <el-popconfirm
-                    :confirm-button-text="$t('common.confirm')"
-                    :cancel-button-text="$t('common.cancel')"
-                    confirm-button-type="danger"
-                    cancel-button-type="info"
-                    icon="el-icon-info"
-                    icon-color="red"
-                    :title="$t('common.deleteConfirm')"
-                    @onConfirm="deleteFile(scope.row.id)"
-                  >
-                    <el-link v-if="!deleteDisable" slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
-                    <!-- <el-button slot="reference" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
-                      {{ $t('common.delete') }}
-                    </el-button> -->
-                  </el-popconfirm>
-                  <el-link v-if="scope.row.dataset_status === 1" style="margin-left: 10px" icon="el-icon-view">
-                    <router-link :to="'/dataset/show_dataset/'+scope.row.file_name">
-                      {{ $t('common.view') }}
-                    </router-link>
-                  </el-link>
-                  <el-link v-if="scope.row.dataset_status === 2" style="margin-left: 10px" icon="el-icon-view">
-                    <router-link :to="'/dataset/show_dataset/'+scope.row.file_name">
-                      {{ $t('common.view') }}
-                    </router-link>
-                  </el-link>
-                  <el-link v-if="scope.row.dataset_status === 5" style="margin-left: 10px" icon="el-icon-view">
-                    <router-link :to="'/dataset/show_dataset/'+scope.row.file_name">
-                      {{ $t('common.view') }}
-                    </router-link>
-                  </el-link>
-                  <el-link v-if="scope.row.dataset_status === -1" disabled style="margin-left: 10px; color: red">{{ $t('dataset.showFail') }}</el-link>
-                  <el-link v-if="scope.row.dataset_status === 0" disabled style="margin-left: 10px" icon="el-icon-loading">{{ $t('dataset.processing') }}</el-link>
-                  <el-link v-if="scope.row.dataset_status === 3" disabled style="margin-left: 10px; color: green">{{ $t('dataset.Remainshow') }}</el-link>
-                  <el-link v-if="scope.row.dataset_status === 4" disabled style="margin-left: 10px">{{ $t('dataset.preprocessing') }}</el-link>
-                  <div style="margin-left: 10px">
+            <template slot-scope="scope">
+              <el-button-group>
+                <el-popconfirm
+                  :confirm-button-text="$t('common.confirm')"
+                  :cancel-button-text="$t('common.cancel')"
+                  confirm-button-type="danger"
+                  cancel-button-type="info"
+                  icon="el-icon-info"
+                  icon-color="red"
+                  :title="$t('common.deleteConfirm')"
+                  @onConfirm="deleteFile(scope.row.id)"
+                >
+                  <el-link v-if="!deleteDisable" slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
+                  <!-- <el-button slot="reference" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
+                    {{ $t('common.delete') }}
+                  </el-button> -->
+                </el-popconfirm>
+                <div v-intro-if="scope.$index === 0" :data-intro="$t('addDataIntro.step05')" data-step="5">
+                  <div v-intro-if="scope.$index === 0" :data-intro="$t('addDataIntro.step06')" data-step="6">
+                    <el-link v-if="scope.row.dataset_status === 1" style="margin-left: 10px" icon="el-icon-view">
+                      <router-link :to="'/dataset/show_dataset/'+scope.row.file_name">
+                        {{ $t('common.view') }}
+                      </router-link>
+                    </el-link>
+                    <el-link v-if="scope.row.dataset_status === 2" style="margin-left: 10px" icon="el-icon-view">
+                      <router-link :to="'/dataset/show_dataset/'+scope.row.file_name">
+                        {{ $t('common.view') }}
+                      </router-link>
+                    </el-link>
+                    <el-link v-if="scope.row.dataset_status === 5" style="margin-left: 10px" icon="el-icon-view">
+                      <router-link :to="'/dataset/show_dataset/'+scope.row.file_name">
+                        {{ $t('common.view') }}
+                      </router-link>
+                    </el-link>
+                    <el-link v-if="scope.row.dataset_status === -1" disabled style="margin-left: 10px; color: red">{{ $t('dataset.showFail') }}</el-link>
+                    <el-link v-if="scope.row.dataset_status === 0" disabled style="margin-left: 10px" icon="el-icon-loading">{{ $t('dataset.processing') }}</el-link>
+                    <el-link v-if="scope.row.dataset_status === 3" disabled style="margin-left: 10px; color: green">{{ $t('dataset.Remainshow') }}</el-link>
+                    <el-link v-if="scope.row.dataset_status === 4" disabled style="margin-left: 10px">{{ $t('dataset.preprocessing') }}</el-link>
+                  </div>
+                  <div v-intro-if="scope.row.dataset_status == 2 || scope.row.dataset_status == 1 || scope.row.dataset_status == 3" :data-intro="$t('addDataIntro.step06')" data-step="7" style="margin-left: 10px">
                     <el-link v-if="scope.row.dataset_status == -1" disabled style="margin-right: 10px" />
                     <el-link v-if="scope.row.dataset_status == 0" disabled style="margin-right: 10px" />
                     <el-link v-if="scope.row.dataset_status == 4" disabled style="margin-right: 10px" />
@@ -129,61 +131,61 @@
                     <el-link v-if="scope.row.dataset_status == 3" style="margin-right: 10px" icon="el-icon-circle-plus-outline" @click="openSekectMap(scope.row.id)">{{ $t('dataset.choosemap') }}
                     </el-link>
                   </div>
-                </el-button-group>
+                </div>
+              </el-button-group>
 
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
-      <!-- 分页组件 -->
-      <div>
-        <el-pagination
-          :hide-on-single-page="false"
-          :current-page="queryParam.page"
-          :page-sizes="[10, 20, 50, 100, 200]"
-          :page-size="queryParam.size"
-          style="padding: 30px 0; text-align: center;"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total"
-          background
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
-      </div>
-      <!-- 添加/编辑 对话框 -->
-      <el-dialog :title="$t('dataset.fileUpload')" :visible.sync="dialogFormVisible">
-        <el-upload
-          ref="elupload"
-          class="upload-demo"
-          :action="BASE_API + '/business/file/'"
-          name="dataset"
-          multiple
-          :on-success="handleFileUploadSuccess"
-          :before-upload="handleBeforeUpload"
-          accept="application/x-zip-compressed"
-        >
-          <el-button size="small" type="primary"> {{ $t('dataset.clickUpload') }}</el-button>
-          <div slot="tip" class="el-upload__tip">{{ $t('dataset.uploadTips') }}</div>
-        </el-upload>
-      </el-dialog>
-      <!--  -->
-      <el-dialog :title="$t('common.getview')" :visible.sync="showFormVisible">
-        <el-form ref="elForm1" :rules="rules" :model="dataset" label-width="auto" label-position="left">
-          <el-form-item :label="$t('dataset.background')" prop="background">
-            <el-select v-model="background" :placeholder="$t('common.pleasechoose')">
-              <el-option
-                v-for="item in backgroundParamList"
-                :key="item.id"
-                :label="item.label"
-                :value="item.id"
-              />
-            </el-select>
-          </el-form-item>
-        </el-form>
-        <el-button type="primary" icon="el-icon-view" @click="getBackground()">{{ $t('common.getview') }}</el-button>
-      </el-dialog>
     </div>
+    <!-- 分页组件 -->
+    <div>
+      <el-pagination
+        :hide-on-single-page="false"
+        :current-page="queryParam.page"
+        :page-sizes="[10, 20, 50, 100, 200]"
+        :page-size="queryParam.size"
+        style="padding: 30px 0; text-align: center;"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
+    <!-- 添加/编辑 对话框 -->
+    <el-dialog :title="$t('dataset.fileUpload')" :visible.sync="dialogFormVisible">
+      <el-upload
+        ref="elupload"
+        class="upload-demo"
+        :action="BASE_API + '/business/file/'"
+        name="dataset"
+        multiple
+        :on-success="handleFileUploadSuccess"
+        :before-upload="handleBeforeUpload"
+        accept="application/x-zip-compressed"
+      >
+        <el-button size="small" type="primary"> {{ $t('dataset.clickUpload') }}</el-button>
+        <div slot="tip" class="el-upload__tip">{{ $t('dataset.uploadTips') }}</div>
+      </el-upload>
+    </el-dialog>
+    <!--  -->
+    <el-dialog :title="$t('common.getview')" :visible.sync="showFormVisible">
+      <el-form ref="elForm1" :rules="rules" :model="dataset" label-width="auto" label-position="left">
+        <el-form-item :label="$t('dataset.background')" prop="background">
+          <el-select v-model="background" :placeholder="$t('common.pleasechoose')">
+            <el-option
+              v-for="item in backgroundParamList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <el-button type="primary" icon="el-icon-view" @click="getBackground()">{{ $t('common.getview') }}</el-button>
+    </el-dialog>
   </div>
 </template>
 <script>

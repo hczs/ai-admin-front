@@ -430,7 +430,9 @@ export default {
     step01: 'Here is the data set management interface, where you can upload and display data sets',
     step02: 'Query historical datasets based on criteria',
     step03: 'Upload your dataset here. You can also choose to download and view the sample dataset',
-    step04: 'The data set you uploaded appears here. After the system detects that your dataset can be displayed, you can select the map you want to display through the operation button on the right',
-    step05: 'If your dataset cannot be converted into a map, we will try to display its contents in the form of charts; If your data cannot be displayed, a red letter prompt will be given in the operation column'
+    step04: 'The data set you uploaded appears here. After the system detects that your dataset can be displayed, you can operate datasets through buttons on the right',
+    step05: 'You can display the data set here, including several statuses of dataset visible check,Processing,No View can be shown,view and remain to be shown',
+    step07: 'You can select a base map here',
+    step06: 'If your dataset cannot be converted into a map, we will try to display its contents in the form of charts; If your data cannot be displayed, a red letter prompt will be given in the operation column'
   }
 }
