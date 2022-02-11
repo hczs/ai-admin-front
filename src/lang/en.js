@@ -423,6 +423,12 @@ export default {
     step04: 'Just click this link',
     step05: 'The above form only provides common task parameter settings. You can set more task parameters for training as needed. You need to write a config.json file to upload.',
     step06: 'Click Confirm and the task will be created!'
+  },
+  addDataIntro: {
+    step01: 'Here is the data set management interface, where you can upload and display data sets',
+    step02: 'Query historical datasets based on criteria',
+    step03: 'Upload your dataset here. You can also choose to download and view the sample dataset',
+    step04: 'The data set you uploaded appears here. After the system detects that your dataset can be displayed, you can select the map you want to display through the operation button on the right',
+    step05: 'If your dataset cannot be converted into a map, we will try to display its contents in the form of charts; If your data cannot be displayed, a red letter prompt will be given in the operation column'
   }
-
 }
