@@ -249,7 +249,8 @@ export default {
     deletionFailed: 'Deletion failed',
     submit: 'Submit',
     pleasechoose: 'please choose',
-    getview: 'show dataset'
+    getview: 'show dataset',
+    selectLanguage: 'Choose a language'
   },
   // 角色相关
   role: {

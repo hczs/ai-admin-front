@@ -242,10 +242,12 @@ export default {
     // // 新手引导
     // this.$intro.start() // start the guide
     // this.$intro.showHints() // show hints
-    if (localStorage.getItem('addTaskNew') === null || localStorage.getItem('addTaskNew') !== '1') {
-      this.$intro.start()
-      localStorage.setItem('addTaskNew', 1)
-    }
+    this.$nextTick(() => {
+      if (localStorage.getItem('addTaskNew') === null || localStorage.getItem('addTaskNew') !== '1') {
+        this.$intro.start()
+        localStorage.setItem('addTaskNew', 1)
+      }
+    })
   },
 
   created() {

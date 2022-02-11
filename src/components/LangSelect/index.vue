@@ -1,23 +1,25 @@
 <template>
-  <el-dropdown trigger="click" class="international" @command="handleSetLanguage">
-    <div>
-      <svg-icon class-name="international-icon" icon-class="language" />
-    </div>
-    <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item :disabled="language==='zh'" command="zh">
-        中文
-      </el-dropdown-item>
-      <el-dropdown-item :disabled="language==='en'" command="en">
-        English
-      </el-dropdown-item>
+  <el-tooltip class="item" effect="dark" :content="$t('common.selectLanguage')" placement="bottom" open-delay="500">
+    <el-dropdown trigger="click" class="international" @command="handleSetLanguage">
+      <div>
+        <svg-icon class-name="international-icon" icon-class="language" />
+      </div>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item :disabled="language==='zh'" command="zh">
+          中文
+        </el-dropdown-item>
+        <el-dropdown-item :disabled="language==='en'" command="en">
+          English
+        </el-dropdown-item>
       <!-- <el-dropdown-item :disabled="language==='es'" command="es">
         Español
       </el-dropdown-item>
       <el-dropdown-item :disabled="language==='ja'" command="ja">
         日本語
       </el-dropdown-item> -->
-    </el-dropdown-menu>
-  </el-dropdown>
+      </el-dropdown-menu>
+    </el-dropdown>
+  </el-tooltip>
 </template>
 
 <script>

@@ -248,7 +248,8 @@ export default {
     deletionFailed: '删除失败',
     submit: '提交',
     pleasechoose: '请选择',
-    getview: '展示数据集'
+    getview: '展示数据集',
+    selectLanguage: '选择语言'
   },
   // 角色相关
   role: {
