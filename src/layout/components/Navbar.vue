@@ -7,7 +7,7 @@
     <div class="right-menu">
 
       <el-tooltip class="item" effect="dark" :content="$t('intro.viewIntro')" placement="bottom">
-        <span class="right-menu-item hover-effect" :data-intro="$t('intro.showIntro')" data-step="999" @click="showIntro()">
+        <span class="right-menu-item hover-effect" :data-intro="$t('intro.showIntro')" @click="showIntro()">
           <i class="el-icon-question" />
         </span>
       </el-tooltip>
