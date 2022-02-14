@@ -69,7 +69,37 @@ export default {
   },
   methods: {
     showIntro() {
-      this.$intro.start()
+      // console.log('this:', this)
+      // console.log('this.$route.path', this.$route.path)
+      // const path = this.$route.path
+      // if (path === '/taskList/index') {
+      //   console.log('task启动需要预设步骤')
+      //   const rowList = Array.from(this.$refs.taskTable.$el.getElementsByClassName('el-table__row'))
+      //   this.$intro.setOptions({
+      //     steps: [{
+      //       title: 'Welcome',
+      //       intro: 'Hello World! 👋'
+      //     },
+      //     {
+      //       element: rowList[0].cells[0],
+      //       intro: 'This step focuses on an image'
+      //     },
+      //     {
+      //       title: 'Farewell!',
+      //       element: rowList[0].cells[1],
+      //       intro: 'And this is our final step!'
+      //     }]
+      //   })
+      // }
+      // 特定页面展示向导内容
+      const allowPaths = ['/taskList/index', '/taskAdd/addTask', '/dataset/index', '/accounts/index', '/roles/index']
+      const path = this.$route.path
+      if (allowPaths.includes(path)) {
+        this.$intro.start()
+      } else {
+        // 提示本页面暂无新手引导内容
+        this.$message(this.$t('intro.noIntro'))
+      }
     },
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')

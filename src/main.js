@@ -44,15 +44,19 @@ Vue.use(ElementUI, {
 
 Vue.use(Plugin)
 Vue.use(AFTableColumn)
+
 // 新手引导 所有option统一设置
 Vue.prototype.$intro = intro().setOptions({
   nextLabel: i18n.t('intro.next'),
   prevLabel: i18n.t('intro.prev'),
   doneLabel: i18n.t('intro.done'),
   // 展示步骤数字 例如：1 of 6
-  showStepNumbers: true,
+  // showStepNumbers: true,
   // 禁用点击覆盖层时退出介绍
   exitOnOverlayClick: false
+}).onexit(function() {
+  // 退出时清空自定义的options步骤，就不会影响其他组件的引导步骤了
+  delete Vue.prototype.$intro._options.steps
 })
 
 // 封装一个v-intro-if指令 用于判断在某些特定条件下显示引导内容

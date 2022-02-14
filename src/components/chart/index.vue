@@ -11,11 +11,14 @@
     <div class="div2">
       <el-checkbox-group v-model="selectList">
         <div v-for="item in option.xAxis[0].data" :key="item">
-          <el-tooltip :content="item" placement="top" open-delay="300">
+          <el-tooltip v-if="item.length >= 21" :content="String(item)" placement="top" :open-delay="tooltipDelay">
             <el-checkbox :label="item">
               {{ cutWord(item) }}
             </el-checkbox>
           </el-tooltip>
+          <el-checkbox v-else :label="item">
+            {{ cutWord(item) }}
+          </el-checkbox>
         </div>
       </el-checkbox-group>
     </div>
@@ -41,6 +44,7 @@ export default {
       dictList: [],
       currentOption: {},
       isOneToOne: false,
+      tooltipDelay: 300,
       option: {
         title: {
           show: true,

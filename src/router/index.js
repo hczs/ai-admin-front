@@ -230,18 +230,19 @@ export const asyncRoutes = [
     ]
   },
 
-  {
-    path: '/permissions',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/permission/index'),
-        name: 'permissions manage',
-        meta: { title: 'permissionManage', icon: 'permission', permissions: ['admin', 'permissionQuery'] }
-      }
-    ]
-  },
+  // 没必要展示权限查看页面
+  // {
+  //   path: '/permissions',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/permission/index'),
+  //       name: 'permissions manage',
+  //       meta: { title: 'permissionManage', icon: 'permission', permissions: ['admin', 'permissionQuery'] }
+  //     }
+  //   ]
+  // },
 
   // {
   //   path: '/resources',

@@ -415,7 +415,8 @@ export default {
     prev: 'Back',
     done: 'Done',
     showIntro: 'Click here to view the wizard again',
-    viewIntro: 'View the wizard'
+    viewIntro: 'View the wizard',
+    noIntro: 'There is no beginner guide content on this page'
   },
 
   // 新建任务引导
@@ -427,6 +428,8 @@ export default {
     step05: 'The above form only provides common task parameter settings. You can set more task parameters for training as needed. You need to write a config.json file to upload.',
     step06: 'Click Confirm and the task will be created!'
   },
+
+  // 数据集引导
   addDataIntro: {
     step01: 'Here is the data set management interface, where you can upload and display data sets',
     step02: 'Query historical datasets based on criteria',
@@ -435,5 +438,29 @@ export default {
     step05: 'You can display the data set here, including several statuses of dataset visible check,Processing,No View can be shown,view and remain to be shown',
     step07: 'You can select a base map here',
     step06: 'If your dataset cannot be converted into a map, we will try to display its contents in the form of charts; If your data cannot be displayed, a red letter prompt will be given in the operation column'
+  },
+
+  // 任务列表引导
+  taskIndexIntroL: {
+    step01: 'Here is the task list page, on this page you can perform tasks, view task execution logs, view task execution results, etc.',
+    step02: 'You can set conditions here to query existing tasks',
+    step03: 'You can check the checkbox in front of the task to compare the selected tasks',
+    step04: 'In the operation column: you can edit, delete and execute tasks, and for tasks that have been executed, you can view the evaluation metrics of the model; for tasks that have been executed, you can view the task execution log'
+  },
+
+  // 账号管理引导
+  accountManageIntro: {
+    step01: 'Here is the account management page, where you can manage all the accounts of the platform',
+    step02: 'You can set conditions here to filter accounts',
+    step03: 'Click here to add an account, the system will set a default password for the new account, please modify it in time',
+    step04: 'In the action column, you can edit, delete accounts, and reset passwords'
+  },
+
+  // 权限管理引导
+  roleManageIntro: {
+    step01: 'Here is the role management page, where you can maintain role related information',
+    step02: 'You can set conditions to filter roles here',
+    step03: 'Click here, you can add a new role and assign permissions to it',
+    step04: 'In the Action column you can edit and delete roles'
   }
 }

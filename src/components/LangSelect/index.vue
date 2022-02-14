@@ -1,5 +1,5 @@
 <template>
-  <el-tooltip class="item" effect="dark" :content="$t('common.selectLanguage')" placement="bottom" open-delay="500">
+  <el-tooltip class="item" effect="dark" :content="$t('common.selectLanguage')" placement="bottom" :open-delay="delay">
     <el-dropdown trigger="click" class="international" @command="handleSetLanguage">
       <div>
         <svg-icon class-name="international-icon" icon-class="language" />
@@ -26,6 +26,12 @@
 import i18n from '@/lang'
 
 export default {
+
+  data() {
+    return {
+      delay: 500
+    }
+  },
   computed: {
     language() {
       return this.$store.getters.language
