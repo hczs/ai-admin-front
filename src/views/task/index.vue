@@ -1,7 +1,7 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" :data-intro="$t('taskIndexIntroL.step01')" data-step="1">
     <!-- 顶部查询表单 -->
-    <el-form :inline="true" class="demo-form-inline">
+    <el-form :inline="true" class="demo-form-inline" :data-intro="$t('taskIndexIntroL.step02')" data-step="2">
 
       <el-form-item :label="$t('task.taskName')">
         <el-input v-model="queryParam.task_name" />
@@ -51,7 +51,9 @@
       <el-button type="primary" icon="el-icon-search" @click="getQueryList()">{{ $t('common.search') }}</el-button>
       <el-button type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
     </el-form>
-    <el-button type="primary" style="float: right" @click="contrast()">{{ $t('task.modelEvaluateContrast') }}</el-button>
+    <el-button :data-intro="$t('taskIndexIntroL.step03')" data-step="3" type="primary" style="float: right" @click="contrast()">
+      {{ $t('task.modelEvaluateContrast') }}
+    </el-button>
     <!-- 数据表格 -->
     <el-table
       ref="taskTable"
@@ -193,12 +195,12 @@
         :label="$t('common.operation')"
       >
         <template slot-scope="scope">
-          <el-button-group style="width: 120px">
+          <el-button-group v-intro-if="scope.$index === 0" style="width: 120px" :data-intro="$t('taskIndexIntroL.step04')" data-step="4">
 
             <!-- <el-button style="width: 120px" :disabled="editDisable" type="primary" size="small" icon="el-icon-edit">
                 {{ $t('common.edit') }}
               </el-button> -->
-            <el-link v-intro-if="scope.$index === 0" data-intro="test" data-step="1" style="margin-left: 10px" :disabled="editDisable || ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )" icon="el-icon-edit">
+            <el-link style="margin-left: 10px" :disabled="editDisable || ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )" icon="el-icon-edit">
               <span v-if="editDisable || ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )">
                 {{ $t('common.edit') }}
               </span>
@@ -619,12 +621,53 @@ export default {
     this.checkButtonPermission()
     this.getList()
   },
+  mounted() {
+    this.$nextTick(() => {
+      setTimeout(() => {
+        // const rowList = Array.from(this.$refs.taskTable.$el.getElementsByClassName('el-table__row'))
+        // console.log('rowList:', rowList)
+        // console.log('cells0:', rowList[0].cells[0].classList)
+        // this.$intro.setOptions({
+        //   steps: [{
+        //     title: 'Welcome',
+        //     intro: 'Hello World! 👋'
+        //   },
+        //   {
+        //     element: rowList[0].cells[0],
+        //     intro: 'This step focuses on an image'
+        //   },
+        //   {
+        //     title: 'Farewell!',
+        //     element: rowList[0].cells[1],
+        //     intro: 'And this is our final step!'
+        //   }]
+        // })
+        if (localStorage.getItem('taskIndexNew') === null || localStorage.getItem('taskIndexNew') !== '1') {
+          this.$intro.start()
+          localStorage.setItem('taskIndexNew', 1)
+        }
+      }, 300)
+    })
+  },
   methods: {
     checkPermission,
     checkButtonPermission() {
       this.executeDisable = !checkPermission(['taskExecute'])
       this.editDisable = !checkPermission(['taskEdit'])
       this.deleteDisable = !checkPermission(['taskDelete'])
+    },
+    // 深拷贝
+    deepCopy(obj) {
+      if (typeof obj === 'function') {
+        throw new TypeError('请传入正确的数据类型格式')
+      }
+      try {
+        const data = JSON.stringify(obj)
+        const newData = JSON.parse(data)
+        return newData
+      } catch (e) {
+        console.log(e)
+      }
     },
     // 模型指标对比
     contrast() {

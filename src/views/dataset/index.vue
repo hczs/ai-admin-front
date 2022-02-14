@@ -237,10 +237,12 @@ export default {
     // this.$intro.start() // start the guide
     // this.$intro.showHints() // show hints
     this.$nextTick(() => {
-      if (localStorage.getItem('addDatasetnew') === null || localStorage.getItem('addDatasetnew') !== '1') {
-        this.$intro.start()
-        localStorage.setItem('addDatasetnew', 1)
-      }
+      setTimeout(() => {
+        if (localStorage.getItem('addDatasetnew') === null || localStorage.getItem('addDatasetnew') !== '1') {
+          this.$intro.start()
+          localStorage.setItem('addDatasetnew', 1)
+        }
+      }, 300)
     })
   },
 

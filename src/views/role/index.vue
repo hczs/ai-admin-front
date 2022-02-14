@@ -1,7 +1,7 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" :data-intro="$t('roleManageIntro.step01')" data-step="1">
     <!-- 顶部查询表单 -->
-    <el-form :inline="true" class="demo-form-inline">
+    <el-form :inline="true" class="demo-form-inline" :data-intro="$t('roleManageIntro.step02')" data-step="2">
 
       <el-form-item :label="$t('role.name')">
         <el-input v-model="queryParam.name" />
@@ -34,7 +34,7 @@
       <el-button type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
     </el-form>
 
-    <el-button style="float: right" :disabled="addDisable" type="primary" size="medium" icon="el-icon-circle-plus-outline" @click="add()">
+    <el-button :data-intro="$t('roleManageIntro.step03')" data-step="3" style="float: right" :disabled="addDisable" type="primary" size="medium" icon="el-icon-circle-plus-outline" @click="add()">
       {{ $t('common.add') }}
     </el-button>
     <!-- 数据表格 -->
@@ -70,7 +70,7 @@
         :label="$t('common.operation')"
       >
         <template slot-scope="scope">
-          <el-button-group>
+          <el-button-group v-intro-if="scope.$index === 0" :data-intro="$t('roleManageIntro.step04')" data-step="4">
             <el-link :disabled="editDisable" icon="el-icon-edit" @click="edit(scope.row.id)">{{ $t('common.edit') }}</el-link>
             <!-- <el-button :disabled="editDisable" type="primary" size="small" icon="el-icon-edit" @click="edit(scope.row.id)">
               {{ $t('common.edit') }}
@@ -198,6 +198,17 @@ export default {
     this.getList(this.queryParam)
     this.getPermissionTree()
     this.checkButtonPermission()
+  },
+
+  mounted() {
+    this.$nextTick(() => {
+      setTimeout(() => {
+        if (localStorage.getItem('roleIndexNew') === null || localStorage.getItem('roleIndexNew') !== '1') {
+          this.$intro.start()
+          localStorage.setItem('roleIndexNew', 1)
+        }
+      }, 300)
+    })
   },
 
   methods: {

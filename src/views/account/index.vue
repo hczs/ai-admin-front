@@ -1,8 +1,8 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" :data-intro="$t('accountManageIntro.step01')" data-step="1">
 
     <!-- 顶部查询表单 -->
-    <el-form :inline="true" class="demo-form-inline">
+    <el-form :inline="true" class="demo-form-inline" :data-intro="$t('accountManageIntro.step02')" data-step="2">
 
       <el-form-item :label="$t('account.accountNumber')">
         <el-input v-model="queryParam.account_number" :placeholder="$t('account.pleaseInputAccount')" />
@@ -44,7 +44,7 @@
       <el-button type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
     </el-form>
 
-    <el-button style="float: right" :disabled="addDisable" type="primary" size="medium" icon="el-icon-circle-plus-outline" @click="add()">
+    <el-button :data-intro="$t('accountManageIntro.step03')" data-step="3" style="float: right" :disabled="addDisable" type="primary" size="medium" icon="el-icon-circle-plus-outline" @click="add()">
       {{ $t('common.add') }}
     </el-button>
     <!-- 数据表格 -->
@@ -88,7 +88,7 @@
         :label="$t('common.operation')"
       >
         <template slot-scope="scope">
-          <el-button-group>
+          <el-button-group v-intro-if="scope.$index === 0" :data-intro="$t('accountManageIntro.step04')" data-step="4">
             <el-link :disabled="editDisable" style="margin-left: 10px" icon="el-icon-edit" @click="edit(scope.row.id)">{{ $t('common.edit') }}</el-link>
             <!-- <el-button :disabled="editDisable" type="primary" size="small" icon="el-icon-edit" @click="edit(scope.row.id)">
               {{ $t('common.edit') }}
@@ -252,6 +252,17 @@ export default {
     this.getList(this.queryParam)
     this.getRoleList()
     this.checkButtonPermission()
+  },
+
+  mounted() {
+    this.$nextTick(() => {
+      setTimeout(() => {
+        if (localStorage.getItem('accountIndexNew') === null || localStorage.getItem('accountIndexNew') !== '1') {
+          this.$intro.start()
+          localStorage.setItem('accountIndexNew', 1)
+        }
+      }, 300)
+    })
   },
 
   methods: {
