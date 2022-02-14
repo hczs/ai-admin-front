@@ -13,6 +13,8 @@ import AFTableColumn from 'af-table-column' // 列宽自适应插件2
 import intro from 'intro.js' // 新手引导js库
 import 'intro.js/introjs.css' // 新手引导css样式
 
+import axios from 'axios'
+
 import App from './App'
 import store from './store'
 import router from './router'
@@ -71,8 +73,11 @@ Vue.directive('intro-if', {
 
 Vue.config.productionTip = false
 
+Vue.prototype.$axios = axios
+
 new Vue({
   el: '#app',
+  axios,
   router,
   store,
   i18n,
