@@ -461,5 +461,33 @@ export default {
     step02: '您可以在这里设置条件筛选角色',
     step03: '点击这里，您可以新添加一个角色，并为其分配权限',
     step04: '在操作列，您可以编辑和删除角色'
+  },
+
+  // 首页教程相关
+  dashboard: {
+    title: '平台使用指南', // 大标题
+    introduction: '简介',
+    // 简介内容
+    introContent: '<span>本平台为<code>LibCity</code>库提供了可视化的操作界面，您可以在平台上传数据集选定模型训练任务，可以查看任务执行日志和模型评价指标相关信息；同时，平台也提供了完善的权限管理功能。</span>',
+    feature: '特性',
+    featureContent: [
+      '<span>数据集可视化查看：可以对用户上传的数据集进行解析并进行GIS可视化，可自由选择地图底图，平台提供谷歌地图、谷歌卫星地图、高德地图、高德卫星地图、原始街道地图等多种底图</span>',
+      '<span>定点执行任务：可以指定任务的执行时间，在选定的时刻系统会自动执行任务</span>',
+      '<span>模型评价指标可视化对比功能：可以做到同类任务下的多模型多指标对比</span>',
+      '<span>国际化：平台支持中英文两种语言</span>',
+      '<span>权限：账号权限可控制在按钮级别</span>'
+    ],
+    steps: '使用步骤',
+    step01: '步骤一：上传数据集',
+    // TODO
+    step01Content: "<span><p><span>平台支持的数据集文件：可以通过</span><a href='https://pan.baidu.com/s/1qEfcXBO-QwZfiT0G3IYMpQ' style='color: blue'><span>百度网盘</span></a><span>（提取码：1231）或</span><a href='https://drive.google.com/drive/folders/1g5v2Gq1tkOq8XO0HDCZ9nOTtRpB6-gPe?usp=sharing' style='color: blue'><span>Google Drive</span></a><span>下载数据集文件。</span></p>您可以点击左侧数据集管理菜单，进入数据集管理页面，点击文件上传，选定数据集文件点击确定即可上传数据集。</span>",
+    step02: '步骤二：创建训练任务',
+    step02Content: '<span>您可以点击左侧导航中的新建任务，填写相关参数，点击确定完成任务创建工作。</span>',
+    step03: '步骤三：执行任务',
+    step03Content: '<span>点击左侧的任务列表，在操作列中找到执行按钮，点击执行，可以选择执行时间执行任务。</span>',
+    step04: '步骤四：查看运行日志',
+    step04Content: '<span>点击左侧的任务列表，在操作列中找到查看运行日志按钮，可在线查看任务运行日志信息。</span>',
+    step05: '步骤五：查看评价指标',
+    step05Content: '<span>任务执行完毕后，在操作列中找到查看评价指标按钮，可在线查看评价指标信息。</span>'
   }
 }
