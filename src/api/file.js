@@ -9,6 +9,14 @@ export function getFileList(queryParam) {
   })
 }
 
+// 查询所有
+export function getFileListAll() {
+  return request({
+    url: '/business/file/get_all/',
+    method: 'get'
+  })
+}
+
 // 删除
 export function deleteFileById(fileId) {
   return request({

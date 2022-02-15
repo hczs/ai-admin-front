@@ -164,7 +164,7 @@
   </div>
 </template>
 <script>
-import { getFileList } from '@/api/file'
+import { getFileListAll } from '@/api/file'
 import { addTask, taskExists, getTaskById, updateTaskById } from '@/api/task'
 export default {
   data() {
@@ -283,8 +283,8 @@ export default {
     },
     // 获取数据集list
     getList() {
-      getFileList().then(res => {
-        this.fileList = res.data.results
+      getFileListAll().then(res => {
+        this.fileList = res.data
       })
     },
     // 回显任务数据
