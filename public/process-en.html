@@ -1,150 +1,9 @@
-<template>
-  <!-- <div style="width: 100%; height: 100%">
-    <div class="dashboard-text">{{ $t('test.name') }}: {{ name }}</div>
-    <div class="dashboard-text">{{ $t('test.roles') }}: <span v-for="role in roles" :key="role">{{ role }}&nbsp;&nbsp;</span></div>
-  </div> -->
-  <!-- html页面引入版本 -->
-  <!-- <div>
-    <h1>{{ $t('dashboard.title') }}</h1>
-    <h2 v-for="item in $t('dashboard.featureContent')" :key="item">
-      {{ item }}
-    </h2>
-    <div v-html="html" />
-  </div> -->
-  <!-- 手动编辑 -->
-  <div id="write" class="app-container">
-    <h2 style="margin-top: 10px">{{ $t('dashboard.title') }}</h2>
-    <!-- <h2>{{ $t('dashboard.introduction') }}</h2> -->
-    <el-card class="container" style="margin-top: 20px" :header="$t('dashboard.introduction')" shadow="always">
-      <span slot="header" class="card-title">{{ $t('dashboard.introduction') }}</span>
-      <!-- <p class="card-p" /></p> -->
-      <span class="card-p" v-html="$t('dashboard.introContent')" />
-    </el-card>
-    <!-- <h2>{{ $t('dashboard.feature') }}</h2> -->
-    <el-card class="container" style="margin-top: 20px" :header="$t('dashboard.feature')" shadow="always">
-      <span slot="header" class="card-title">{{ $t('dashboard.feature') }}</span>
-      <p class="card-p">
-        <ol>
-          <li v-for="item in $t('dashboard.featureContent')" :key="item" style="margin-bottom: 10px">
-            <div v-html="item" />
-          </li>
-        </ol>
-      </p>
-    </el-card>
-    <el-card class="container" style="margin-top: 20px" :header="$t('dashboard.steps')" shadow="always">
-      <span slot="header" class="card-title">{{ $t('dashboard.steps') }}</span>
-      <el-steps direction="vertical" :active="5" style="height: 500px;">
-        <!-- 可以slot方式 -->
-        <!-- <el-step status="process" :title="$t('dashboard.step01')" :description="$t('dashboard.step01Content')">
-          <i slot="icon" class="el-icon-upload" style="font-size: 40px" />
-          <span slot="description" style="font-size: 22px">{{ $t('dashboard.step01Content') }}</span>
-        </el-step> -->
-        <el-step status="process" icon="el-icon-upload">
-          <span slot="title"> {{ $t('dashboard.step01') }} </span>
-          <span slot="description" class="step-p" v-html="$t('dashboard.step01Content')" />
-        </el-step>
-        <el-step status="process" icon="el-icon-circle-plus-outline">
-          <span slot="title"> {{ $t('dashboard.step02') }} </span>
-          <span slot="description" class="step-p" v-html="$t('dashboard.step02Content')" />
-        </el-step>
-        <el-step status="process" icon="el-icon-video-play">
-          <span slot="title"> {{ $t('dashboard.step03') }} </span>
-          <span slot="description" class="step-p" v-html="$t('dashboard.step03Content')" />
-        </el-step>
-        <el-step status="process" icon="el-icon-document">
-          <span slot="title"> {{ $t('dashboard.step04') }} </span>
-          <span slot="description" class="step-p" v-html="$t('dashboard.step04Content')" />
-        </el-step>
-        <el-step status="process" icon="el-icon-view">
-          <span slot="title"> {{ $t('dashboard.step05') }} </span>
-          <span slot="description" class="step-p" v-html="$t('dashboard.step05Content')" />
-        </el-step>
-        <!-- <el-step status="process" :title="$t('dashboard.step02')" :description="$t('dashboard.step02Content')" icon="el-icon-circle-plus-outline" />
-        <el-step status="process" :title="$t('dashboard.step03')" :description="$t('dashboard.step03Content')" icon="el-icon-video-play" />
-        <el-step status="process" :title="$t('dashboard.step04')" :description="$t('dashboard.step04Content')" icon="el-icon-document" />
-        <el-step status="process" :title="$t('dashboard.step05')" :description="$t('dashboard.step05Content')" icon="el-icon-view" /> -->
-      </el-steps>
-    </el-card>
-  </div>
-</template>
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
 
-<script>
-import { mapGetters } from 'vuex'
-import Cookies from 'js-cookie'
-
-export default {
-  name: 'Dashboard',
-
-  data() {
-    return {
-      html: ''
-    }
-  },
-
-  computed: {
-    ...mapGetters([
-      'name',
-      'permissions',
-      'roles'
-    ])
-  },
-
-  created() {
-    // this.getHtml()
-  },
-
-  methods: {
-    getHtml() {
-      const language = Cookies.get('language')
-      if (language === 'zh') {
-        this.$axios.get('./process.html').then(res => {
-          this.html = res.data
-        })
-      } else {
-        this.$axios.get('./process-en.html').then(res => {
-          this.html = res.data
-        })
-      }
-    }
-  }
-}
-</script>
-
-<style scoped>
-.container {
-  font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-}
-.step-p {
-  margin: 0;
-  font-style: normal;
-  font-variant: normal;
-  font-size: 15px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", "Helvetica Neue", Helvetica, Tahoma, Arial,"PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-}
-/* 卡片标题样式 */
-.card-title {
-  margin: 0;
-  font-style: normal;
-  font-variant: normal;
-  font-size: 20px;
-  font-weight: 530;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", "Helvetica Neue", Helvetica, Tahoma, Arial,"PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-}
-/* 卡片段落样式 */
-.card-p {
-  font-style: normal;
-  font-variant: normal;
-  font-size: 16px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", "Helvetica Neue", Helvetica, Tahoma, Arial,"PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  color:#000;
-}
-
-/* li */
-li {
-  list-style-type: disc;
-}
-
-html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; --title-bar-height:20px; }
+<style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; --title-bar-height:20px; }
 .mac-os-11 { --title-bar-height:28px; }
 html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
 body { margin: 0px; padding: 0px; height: auto; inset: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; tab-size: 4; }
@@ -341,6 +200,7 @@ mark .md-meta { color: rgb(0, 0, 0); }
 .typora-export-show-outline .outline-item-active > .outline-item .outline-label { font-weight: 700; }
 .md-inline-math-container mjx-container { zoom: 0.95; }
 
+
 html {
 	font-size: 19px;
 }
@@ -401,8 +261,8 @@ h3 {
 	margin-top: 3em;
 }
 
-h1,
-h2,
+h1, 
+h2, 
 h3{
 	text-align: center;
 }
@@ -522,7 +382,7 @@ table tbody+tbody {
 	content: '\221A';
 	display: inline-block;
 	width: 1.33333333rem;
-  height: 1.6rem;
+  	height: 1.6rem;
 	vertical-align: middle;
 	text-align: center;
 	color: #ddd;
@@ -546,7 +406,7 @@ table tbody+tbody {
 	background: #f8f8f8;
 	border: 0px;
 	color: #999;
-
+	
 	width: 100vw;
 	max-width: calc(100% + 60px);
 	margin-left: -30px;
@@ -587,7 +447,7 @@ table tbody+tbody {
 
 .outline-expander:hover:before,
 .outline-item-open>.outline-item>.outline-expander:before {
-  content: "\f0d7";
+  	content: "\f0d7";
 }
 
 /** source code mode */
@@ -601,7 +461,7 @@ table tbody+tbody {
     box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
 }
 
-.cm-s-typora-default .cm-header,
+.cm-s-typora-default .cm-header, 
 .cm-s-typora-default .cm-property,
 .CodeMirror.cm-s-typora-default div.CodeMirror-cursor {
 	color: #428bca;
@@ -611,8 +471,8 @@ table tbody+tbody {
 	color: #777777;
 }
 
-.typora-node .file-list-item-parent-loc,
-.typora-node .file-list-item-time,
+.typora-node .file-list-item-parent-loc, 
+.typora-node .file-list-item-time, 
 .typora-node .file-list-item-summary {
 	font-family: arial, sans-serif;
 }
@@ -634,4 +494,10 @@ table tbody+tbody {
 	border-color: #e5e5e5;
 }
 
-</style>
+
+</style><title>首页教程-英文</title>
+</head>
+<body class='typora-export os-windows'><div class='typora-export-content'>
+<div id='write'  class=''><h2 id='platform-user-guide'><span>Platform User Guide</span></h2><h4 id='introduction'><span>Introduction</span></h4><p><span>This platform provides a visual interface for the </span><code>LibCity</code><span> library. You can upload datasets on the platform to select model training tasks, and you can view task execution logs and model evaluation indicators related information; at the same time, the platform also provides a complete authority management function .</span></p><h4 id='feature'><span>Feature</span></h4><ul><li><span>Dataset visualization: You can parse and visualize the data set uploaded by the user, and you can freely choose the map base map. The platform provides Google Maps, Google Satellite Maps, AutoNavi Maps, AutoNavi Satellite Maps, Original Street Maps, etc. Various basemaps</span></li><li><span>Fixed-point execution of tasks: You can specify the execution time of the task, and the system will automatically execute the task at the selected moment</span></li><li><span>Model evaluation index visualization comparison function: It can achieve multi-model and multi-index comparison under similar tasks</span></li><li><span>Internationalization: The platform supports both Chinese and English languages</span></li><li><span>Permissions: Account permissions can be controlled at the button level</span></li></ul><h4 id='steps-for-usage'><span>Steps for usage</span></h4><h5 id='step-1-upload-the-dataset'><span>Step 1: Upload the dataset</span></h5><p><span>Dataset files supported by the platform: You can use </span><a href='https://pan.baidu.com/s/1qEfcXBO-QwZfiT0G3IYMpQ'><span>Baidu network disk</span></a><span> (extraction code: 1231) or </span><a href='https://drive.google .com/drive/folders/1g5v2Gq1tkOq8XO0HDCZ9nOTtRpB6-gPe?usp=sharing'><span>Google Drive</span></a><span> to download the dataset file.</span></p><p><span>You can click the dataset management menu on the left to enter the dataset management page, click File Upload, select the dataset file and click OK to upload the dataset.</span></p><h5 id='step-2-create-a-training-task'><span>Step 2: Create a training task</span></h5><p><span>You can click New Task in the left navigation, fill in the relevant parameters, and click OK to complete the task creation.</span></p><h5 id='step-3-execute-the-task'><span>Step 3: Execute the task</span></h5><p><span>Click the task list on the left, find the </span><strong><span>Execute</span></strong><span> button in the </span><strong><span>Action column</span></strong><span>, and click Execute to select the execution time to execute the task.</span></p><h5 id='step-4-view-the-running-log'><span>Step 4: View the running log</span></h5><p><span>Click the task list on the left, and find the </span><strong><span>View running log</span></strong><span> button in the </span><strong><span>operation column</span></strong><span> to view the task running log information online.</span></p><h5 id='step-5-check-the-evaluation-indicators'><span>Step 5: Check the evaluation indicators</span></h5><p><span>After the task is executed, find the </span><strong><span>View Evaluation Indicators</span></strong><span> button in the </span><strong><span>operation column</span></strong><span> to view the evaluation indicator information online.</span></p></div></div>
+</body>
+</html>

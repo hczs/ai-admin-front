@@ -1,150 +1,9 @@
-<template>
-  <!-- <div style="width: 100%; height: 100%">
-    <div class="dashboard-text">{{ $t('test.name') }}: {{ name }}</div>
-    <div class="dashboard-text">{{ $t('test.roles') }}: <span v-for="role in roles" :key="role">{{ role }}&nbsp;&nbsp;</span></div>
-  </div> -->
-  <!-- html页面引入版本 -->
-  <!-- <div>
-    <h1>{{ $t('dashboard.title') }}</h1>
-    <h2 v-for="item in $t('dashboard.featureContent')" :key="item">
-      {{ item }}
-    </h2>
-    <div v-html="html" />
-  </div> -->
-  <!-- 手动编辑 -->
-  <div id="write" class="app-container">
-    <h2 style="margin-top: 10px">{{ $t('dashboard.title') }}</h2>
-    <!-- <h2>{{ $t('dashboard.introduction') }}</h2> -->
-    <el-card class="container" style="margin-top: 20px" :header="$t('dashboard.introduction')" shadow="always">
-      <span slot="header" class="card-title">{{ $t('dashboard.introduction') }}</span>
-      <!-- <p class="card-p" /></p> -->
-      <span class="card-p" v-html="$t('dashboard.introContent')" />
-    </el-card>
-    <!-- <h2>{{ $t('dashboard.feature') }}</h2> -->
-    <el-card class="container" style="margin-top: 20px" :header="$t('dashboard.feature')" shadow="always">
-      <span slot="header" class="card-title">{{ $t('dashboard.feature') }}</span>
-      <p class="card-p">
-        <ol>
-          <li v-for="item in $t('dashboard.featureContent')" :key="item" style="margin-bottom: 10px">
-            <div v-html="item" />
-          </li>
-        </ol>
-      </p>
-    </el-card>
-    <el-card class="container" style="margin-top: 20px" :header="$t('dashboard.steps')" shadow="always">
-      <span slot="header" class="card-title">{{ $t('dashboard.steps') }}</span>
-      <el-steps direction="vertical" :active="5" style="height: 500px;">
-        <!-- 可以slot方式 -->
-        <!-- <el-step status="process" :title="$t('dashboard.step01')" :description="$t('dashboard.step01Content')">
-          <i slot="icon" class="el-icon-upload" style="font-size: 40px" />
-          <span slot="description" style="font-size: 22px">{{ $t('dashboard.step01Content') }}</span>
-        </el-step> -->
-        <el-step status="process" icon="el-icon-upload">
-          <span slot="title"> {{ $t('dashboard.step01') }} </span>
-          <span slot="description" class="step-p" v-html="$t('dashboard.step01Content')" />
-        </el-step>
-        <el-step status="process" icon="el-icon-circle-plus-outline">
-          <span slot="title"> {{ $t('dashboard.step02') }} </span>
-          <span slot="description" class="step-p" v-html="$t('dashboard.step02Content')" />
-        </el-step>
-        <el-step status="process" icon="el-icon-video-play">
-          <span slot="title"> {{ $t('dashboard.step03') }} </span>
-          <span slot="description" class="step-p" v-html="$t('dashboard.step03Content')" />
-        </el-step>
-        <el-step status="process" icon="el-icon-document">
-          <span slot="title"> {{ $t('dashboard.step04') }} </span>
-          <span slot="description" class="step-p" v-html="$t('dashboard.step04Content')" />
-        </el-step>
-        <el-step status="process" icon="el-icon-view">
-          <span slot="title"> {{ $t('dashboard.step05') }} </span>
-          <span slot="description" class="step-p" v-html="$t('dashboard.step05Content')" />
-        </el-step>
-        <!-- <el-step status="process" :title="$t('dashboard.step02')" :description="$t('dashboard.step02Content')" icon="el-icon-circle-plus-outline" />
-        <el-step status="process" :title="$t('dashboard.step03')" :description="$t('dashboard.step03Content')" icon="el-icon-video-play" />
-        <el-step status="process" :title="$t('dashboard.step04')" :description="$t('dashboard.step04Content')" icon="el-icon-document" />
-        <el-step status="process" :title="$t('dashboard.step05')" :description="$t('dashboard.step05Content')" icon="el-icon-view" /> -->
-      </el-steps>
-    </el-card>
-  </div>
-</template>
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
 
-<script>
-import { mapGetters } from 'vuex'
-import Cookies from 'js-cookie'
-
-export default {
-  name: 'Dashboard',
-
-  data() {
-    return {
-      html: ''
-    }
-  },
-
-  computed: {
-    ...mapGetters([
-      'name',
-      'permissions',
-      'roles'
-    ])
-  },
-
-  created() {
-    // this.getHtml()
-  },
-
-  methods: {
-    getHtml() {
-      const language = Cookies.get('language')
-      if (language === 'zh') {
-        this.$axios.get('./process.html').then(res => {
-          this.html = res.data
-        })
-      } else {
-        this.$axios.get('./process-en.html').then(res => {
-          this.html = res.data
-        })
-      }
-    }
-  }
-}
-</script>
-
-<style scoped>
-.container {
-  font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-}
-.step-p {
-  margin: 0;
-  font-style: normal;
-  font-variant: normal;
-  font-size: 15px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", "Helvetica Neue", Helvetica, Tahoma, Arial,"PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-}
-/* 卡片标题样式 */
-.card-title {
-  margin: 0;
-  font-style: normal;
-  font-variant: normal;
-  font-size: 20px;
-  font-weight: 530;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", "Helvetica Neue", Helvetica, Tahoma, Arial,"PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-}
-/* 卡片段落样式 */
-.card-p {
-  font-style: normal;
-  font-variant: normal;
-  font-size: 16px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", "Helvetica Neue", Helvetica, Tahoma, Arial,"PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  color:#000;
-}
-
-/* li */
-li {
-  list-style-type: disc;
-}
-
-html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; --title-bar-height:20px; }
+<style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; --title-bar-height:20px; }
 .mac-os-11 { --title-bar-height:28px; }
 html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
 body { margin: 0px; padding: 0px; height: auto; inset: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; tab-size: 4; }
@@ -341,6 +200,7 @@ mark .md-meta { color: rgb(0, 0, 0); }
 .typora-export-show-outline .outline-item-active > .outline-item .outline-label { font-weight: 700; }
 .md-inline-math-container mjx-container { zoom: 0.95; }
 
+
 html {
 	font-size: 19px;
 }
@@ -401,8 +261,8 @@ h3 {
 	margin-top: 3em;
 }
 
-h1,
-h2,
+h1, 
+h2, 
 h3{
 	text-align: center;
 }
@@ -522,7 +382,7 @@ table tbody+tbody {
 	content: '\221A';
 	display: inline-block;
 	width: 1.33333333rem;
-  height: 1.6rem;
+  	height: 1.6rem;
 	vertical-align: middle;
 	text-align: center;
 	color: #ddd;
@@ -546,7 +406,7 @@ table tbody+tbody {
 	background: #f8f8f8;
 	border: 0px;
 	color: #999;
-
+	
 	width: 100vw;
 	max-width: calc(100% + 60px);
 	margin-left: -30px;
@@ -587,7 +447,7 @@ table tbody+tbody {
 
 .outline-expander:hover:before,
 .outline-item-open>.outline-item>.outline-expander:before {
-  content: "\f0d7";
+  	content: "\f0d7";
 }
 
 /** source code mode */
@@ -601,7 +461,7 @@ table tbody+tbody {
     box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
 }
 
-.cm-s-typora-default .cm-header,
+.cm-s-typora-default .cm-header, 
 .cm-s-typora-default .cm-property,
 .CodeMirror.cm-s-typora-default div.CodeMirror-cursor {
 	color: #428bca;
@@ -611,8 +471,8 @@ table tbody+tbody {
 	color: #777777;
 }
 
-.typora-node .file-list-item-parent-loc,
-.typora-node .file-list-item-time,
+.typora-node .file-list-item-parent-loc, 
+.typora-node .file-list-item-time, 
 .typora-node .file-list-item-summary {
 	font-family: arial, sans-serif;
 }
@@ -634,4 +494,10 @@ table tbody+tbody {
 	border-color: #e5e5e5;
 }
 
-</style>
+
+</style><title>执行步骤</title>
+</head>
+<body class='typora-export os-windows'><div class='typora-export-content'>
+<div id='write'  class=''><h2 id='平台使用指南'><span>平台使用指南</span></h2><h4 id='简介'><span>简介</span></h4><p><span>本平台为</span><code>LibCity</code><span>库提供了可视化的操作界面，您可以在平台上传数据集选定模型训练任务，可以查看任务执行日志和模型评价指标相关信息；同时，平台也提供了完善的权限管理功能。</span></p><h4 id='特性'><span>特性</span></h4><ul><li><span>数据集可视化查看：可以对用户上传的数据集进行解析并进行</span><code>GIS</code><span>可视化，可自由选择地图底图，平台提供谷歌地图、谷歌卫星地图、高德地图、高德卫星地图、原始街道地图等多种底图</span></li><li><span>定点执行任务：可以指定任务的执行时间，在选定的时刻系统会自动执行任务</span></li><li><span>模型评价指标可视化对比功能：可以做到同类任务下的多模型多指标对比</span></li><li><span>国际化：平台支持中英文两种语言</span></li><li><span>权限：账号权限可控制在按钮级别</span></li></ul><h4 id='使用步骤'><span>使用步骤</span></h4><h5 id='步骤一上传数据集'><span>步骤一：上传数据集</span></h5><p><span>平台支持的数据集文件：可以通过</span><a href='https://pan.baidu.com/s/1qEfcXBO-QwZfiT0G3IYMpQ'><span>百度网盘</span></a><span>（提取码：1231）或</span><a href='https://drive.google.com/drive/folders/1g5v2Gq1tkOq8XO0HDCZ9nOTtRpB6-gPe?usp=sharing'><span>Google Drive</span></a><span>下载数据集文件。</span></p><p><span>您可以点击左侧数据集管理菜单，进入数据集管理页面，点击文件上传，选定数据集文件点击确定即可上传数据集。</span></p><h5 id='步骤二创建训练任务'><span>步骤二：创建训练任务</span></h5><p><span>您可以点击左侧导航中的新建任务，填写相关参数，点击确定完成任务创建工作。</span></p><h5 id='步骤三执行任务'><span>步骤三：执行任务</span></h5><p><span>点击左侧的任务列表，在</span><strong><span>操作列</span></strong><span>中找到</span><strong><span>执行</span></strong><span>按钮，点击执行，可以选择执行时间执行任务。</span></p><h5 id='步骤四查看运行日志'><span>步骤四：查看运行日志</span></h5><p><span>点击左侧的任务列表，在</span><strong><span>操作列</span></strong><span>中找到</span><strong><span>查看运行日志</span></strong><span>按钮，可在线查看任务运行日志信息。</span></p><h5 id='步骤五查看评价指标'><span>步骤五：查看评价指标</span></h5><p><span>任务执行完毕后，在</span><strong><span>操作列</span></strong><span>中找到</span><strong><span>查看评价指标</span></strong><span>按钮，可在线查看评价指标信息。</span></p></div></div>
+</body>
+</html>

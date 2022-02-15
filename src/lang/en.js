@@ -462,5 +462,33 @@ export default {
     step02: 'You can set conditions to filter roles here',
     step03: 'Click here, you can add a new role and assign permissions to it',
     step04: 'In the Action column you can edit and delete roles'
+  },
+
+  // 首页教程相关
+  dashboard: {
+    title: 'Platform User Guide', // 大标题
+    introduction: 'Introduction',
+    // 简介内容
+    introContent: '<span>This platform provides a visual interface for the <code>LibCity</code> library. You can upload datasets on the platform to select model training tasks, and you can view task execution logs and model evaluation indicators related information; at the same time, the platform also provides a complete authority management function .</span>',
+    feature: 'Feature',
+    featureContent: [
+      '<span>Dataset visualization: You can parse and visualize the data set uploaded by the user, and you can freely choose the map base map. The platform provides Google Maps, Google Satellite Maps, AutoNavi Maps, AutoNavi Satellite Maps, Original Street Maps, etc. Various basemaps</span>',
+      '<span>Fixed-point execution of tasks: You can specify the execution time of the task, and the system will automatically execute the task at the selected moment</span>',
+      '<span>Model evaluation index visualization comparison function: It can achieve multi-model and multi-index comparison under similar tasks</span>',
+      '<span>Internationalization: The platform supports both Chinese and English languages</span>',
+      '<span>Permissions: Account permissions can be controlled at the button level</span>'
+    ],
+    steps: 'Steps for usage',
+    step01: 'Step 1: Upload the dataset',
+    // TODO
+    step01Content: "<span><p><span>Dataset files supported by the platform: can be accessed through</span><a href='https://pan.baidu.com/s/1qEfcXBO-QwZfiT0G3IYMpQ' style='color: blue'><span > Baidu network disk</span></a><span> (extraction code: 1231) or </span><a href='https://drive.google.com/drive/folders/1g5v2Gq1tkOq8XO0HDCZ9nOTtRpB6-gPe?usp =sharing' style='color: blue'><span>Google Drive </span></a><span>Download the dataset file. </span></p>You can click the dataset management menu on the left to enter the dataset management page, click File Upload, select the dataset file and click OK to upload the dataset.</span>",
+    step02: 'Step 2: Create a training task',
+    step02Content: '<span>You can click New Task in the left navigation, fill in the relevant parameters, and click OK to complete the task creation.',
+    step03: 'Step 3: Execute the task',
+    step03Content: '<span>Click the task list on the left, find the Execute button in the Action column, and click Execute to select the execution time to execute the task.</span>',
+    step04: 'Step 4: View the running log',
+    step04Content: '<span>Click the task list on the left, and find the View running log button in the operation column to view the task running log information online.</span>',
+    step05: 'Step 5: Check the evaluation indicators',
+    step05Content: '<span>After the task is executed, find the View Evaluation Indicators button in the operation column to view the evaluation indicator information online.</span>'
   }
 }
