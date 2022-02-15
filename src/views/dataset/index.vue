@@ -114,10 +114,14 @@
                         {{ $t('common.view') }}
                       </router-link>
                     </el-link>
-                    <el-link v-if="scope.row.dataset_status === -1" disabled style="margin-left: 10px; color: red">{{ $t('dataset.showFail') }}</el-link>
+                    <el-link v-if="scope.row.dataset_status === -1" icon="el-icon-error" disabled style="margin-left: 10px; color: red">{{ $t('dataset.showFail') }}</el-link>
                     <el-link v-if="scope.row.dataset_status === 0" disabled style="margin-left: 10px" icon="el-icon-loading">{{ $t('dataset.processing') }}</el-link>
-                    <el-link v-if="scope.row.dataset_status === 3" disabled style="margin-left: 10px; color: green">{{ $t('dataset.Remainshow') }}</el-link>
-                    <el-link v-if="scope.row.dataset_status === 4" disabled style="margin-left: 10px">{{ $t('dataset.preprocessing') }}</el-link>
+                    <el-link v-if="scope.row.dataset_status === 3" icon="el-icon-info" disabled style="margin-left: 10px; color: green">
+                      {{ $t('dataset.Remainshow') }}
+                    </el-link>
+                    <el-link v-if="scope.row.dataset_status === 4" icon="el-icon-loading" disabled style="margin-left: 10px">
+                      {{ $t('dataset.preprocessing') }}
+                    </el-link>
                   </div>
                   <div v-intro-if="scope.row.dataset_status == 2 || scope.row.dataset_status == 1 || scope.row.dataset_status == 3" :data-intro="$t('addDataIntro.step07')" data-step="7" style="margin-left: 10px">
                     <el-link v-if="scope.row.dataset_status == -1" disabled style="margin-right: 10px" />

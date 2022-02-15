@@ -480,7 +480,7 @@ export default {
     steps: '使用步骤',
     step01: '步骤一：上传数据集',
     // TODO
-    step01Content: "<span><p><span>平台支持的数据集文件：可以通过</span><a href='https://pan.baidu.com/s/1qEfcXBO-QwZfiT0G3IYMpQ' style='color: blue'><span>百度网盘</span></a><span>（提取码：1231）或</span><a href='https://drive.google.com/drive/folders/1g5v2Gq1tkOq8XO0HDCZ9nOTtRpB6-gPe?usp=sharing' style='color: blue'><span>Google Drive</span></a><span>下载数据集文件。</span></p>您可以点击左侧数据集管理菜单，进入数据集管理页面，点击文件上传，选定数据集文件点击确定即可上传数据集。</span>",
+    step01Content: "<span><p><span>平台支持的数据集文件：可以通过</span><a target='_blank' href='https://pan.baidu.com/s/1qEfcXBO-QwZfiT0G3IYMpQ' style='color: blue'><span>百度网盘</span></a><span>（提取码：1231）或</span><a target='_blank' href='https://drive.google.com/drive/folders/1g5v2Gq1tkOq8XO0HDCZ9nOTtRpB6-gPe?usp=sharing' style='color: blue'><span>Google Drive</span></a><span>下载数据集文件。</span></p>您可以点击左侧数据集管理菜单，进入数据集管理页面，点击文件上传，选定数据集文件点击确定即可上传数据集。</span>",
     step02: '步骤二：创建训练任务',
     step02Content: '<span>您可以点击左侧导航中的新建任务，填写相关参数，点击确定完成任务创建工作。</span>',
     step03: '步骤三：执行任务',

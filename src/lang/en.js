@@ -481,7 +481,7 @@ export default {
     steps: 'Steps for usage',
     step01: 'Step 1: Upload the dataset',
     // TODO
-    step01Content: "<span><p><span>Dataset files supported by the platform: can be accessed through</span><a href='https://pan.baidu.com/s/1qEfcXBO-QwZfiT0G3IYMpQ' style='color: blue'><span > Baidu network disk</span></a><span> (extraction code: 1231) or </span><a href='https://drive.google.com/drive/folders/1g5v2Gq1tkOq8XO0HDCZ9nOTtRpB6-gPe?usp =sharing' style='color: blue'><span>Google Drive </span></a><span>Download the dataset file. </span></p>You can click the dataset management menu on the left to enter the dataset management page, click File Upload, select the dataset file and click OK to upload the dataset.</span>",
+    step01Content: "<span><p><span>Dataset files supported by the platform: can be accessed through</span><a target='_blank' href='https://pan.baidu.com/s/1qEfcXBO-QwZfiT0G3IYMpQ' style='color: blue'><span > Baidu network disk</span></a><span> (extraction code: 1231) or </span><a target='_blank' href='https://drive.google.com/drive/folders/1g5v2Gq1tkOq8XO0HDCZ9nOTtRpB6-gPe?usp =sharing' style='color: blue'><span>Google Drive </span></a><span>Download the dataset file. </span></p>You can click the dataset management menu on the left to enter the dataset management page, click File Upload, select the dataset file and click OK to upload the dataset.</span>",
     step02: 'Step 2: Create a training task',
     step02Content: '<span>You can click New Task in the left navigation, fill in the relevant parameters, and click OK to complete the task creation.',
     step03: 'Step 3: Execute the task',
