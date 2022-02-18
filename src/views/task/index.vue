@@ -235,8 +235,11 @@
             <el-link v-if="scope.row.task_status === 1" style="margin-left: 10px" disabled icon="el-icon-loading">
               {{ $t('task.executing') }}
             </el-link>
-            <el-link v-if=" scope.row.task_status === 2 && scope.row.task !== 'road_representation' " style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-view" @click="catEvaluate(scope.row.id)">
+            <el-link v-if=" scope.row.task_status === 2 && scope.row.task !== 'road_representation' " style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-notebook-2" @click="catEvaluate(scope.row.id)">
               {{ $t('task.catEvaluate') }}
+            </el-link>
+            <el-link v-if=" scope.row.task_status === 2 && scope.row.task !== 'traj_loc_pred' " style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-view" @click="showResult(scope.row.id, scope.row.dataset)">
+              {{ $t('task.showResult') }}
             </el-link>
             <el-link v-if="scope.row.task_status !== 0" style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-document" @click="catLog(scope.row.id)">
               {{ $t('task.catLog') }}
@@ -655,6 +658,20 @@ export default {
       this.executeDisable = !checkPermission(['taskExecute'])
       this.editDisable = !checkPermission(['taskEdit'])
       this.deleteDisable = !checkPermission(['taskDelete'])
+    },
+    // 查看任务结果文件
+    showResult(taskId, dataset) {
+      console.log('taskId:', taskId)
+      console.log('dataset:', dataset)
+      // 新窗口打开
+      const routeData = this.$router.resolve({
+        path: '/task/result',
+        query: {
+          taskId: taskId,
+          dataset: dataset
+        }
+      })
+      window.open(routeData.href, '_blank')
     },
     // 深拷贝
     deepCopy(obj) {

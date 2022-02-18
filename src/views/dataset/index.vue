@@ -282,7 +282,7 @@ export default {
           message: this.$t('dataset.background_ing'),
           type: 'success'
         })
-        this.resetData()
+        this.getList(this.queryParam)
       })
     },
     getQueryList() {
@@ -298,7 +298,7 @@ export default {
           message: this.$t('common.deleteSucceeded'),
           type: 'success'
         })
-        this.resetData()
+        this.getList(this.queryParam)
       }).catch(() => {
         this.listLoading = false
         this.$message.error(this.$t('common.deletionFailed'))
