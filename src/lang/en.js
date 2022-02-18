@@ -76,7 +76,8 @@ export default {
     tasksAdd: 'New Task',
     tasksEdit: 'Edit Task',
     datasetView: 'Show Dataset',
-    evaluate: 'Comparison of model evaluation indexes'
+    evaluate: 'Comparison of model evaluation indexes',
+    taskResult: 'Task result display'
   },
   navbar: {
     dashboard: 'Dashboard',
@@ -406,7 +407,8 @@ export default {
     selectRoadRepresentation: 'There is no evaluation index for this task type',
     clickDownload: 'Click here to download',
     clickCatConfig: 'Click here to view online',
-    configview: 'Configuration Information'
+    configview: 'Configuration Information',
+    showResult: 'Show task results'
   },
 
   // 新手引导 - 通用

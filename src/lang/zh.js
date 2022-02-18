@@ -76,7 +76,8 @@ export default {
     tasksAdd: '新建任务',
     tasksEdit: '编辑任务',
     datasetView: '数据集展示',
-    evaluate: '模型评价指标对比'
+    evaluate: '模型评价指标对比',
+    taskResult: '任务结果展示'
   },
   navbar: {
     dashboard: '首页',
@@ -405,7 +406,8 @@ export default {
     selectRoadRepresentation: '该任务类型无评价指标',
     clickDownload: '点击下载',
     clickCatConfig: '在线查看',
-    configview: '配置文件信息'
+    configview: '配置文件信息',
+    showResult: '展示任务结果'
   },
 
   // 新手引导 - 通用

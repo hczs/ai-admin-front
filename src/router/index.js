@@ -83,6 +83,21 @@ export const constantRoutes = [
         hidden: true
       }
     ]
+  },
+
+  {
+    path: '/task',
+    component: Layout,
+    children: [
+      {
+        path: 'result',
+        params: { taskId: '', dataset: '' },
+        component: () => import('@/views/task/result'),
+        name: 'taskResult',
+        meta: { title: 'taskResult', icon: 'task1' },
+        hidden: true
+      }
+    ]
   }
 
   // {
