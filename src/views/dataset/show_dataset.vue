@@ -1,10 +1,14 @@
 <template>
-  <div class="app-container" style="width:100%;height:90%;">
-    <!--返回按钮-->
-    <!-- <div style="margin-bottom: 10px">
-      <el-button type="primary" @click="back">返回</el-button>
-    </div> -->
-    <iframe id="iframeBox" :src="reportUrl" frameborder="1" width="100%" height="auto" onload="this.height=550" />
+  <div style="height: auto">
+    <iframe
+      id="iframeBox"
+      :src="reportUrl"
+      frameborder="0"
+      width="100%"
+      height="auto"
+      scrolling="auto"
+      onload="this.height=1000"
+    />
   </div>
 </template>
 <script>
@@ -15,6 +19,17 @@ export default {
       reportUrl: '',
       BASE_API: window.global_url.Base_url
     }
+  },
+  // eslint-disable-next-line space-before-blocks
+  mounted(){
+    /**
+     * iframe-宽高自适应显示
+     */
+    const oIframe = document.getElementById('iframeBox')
+    const deviceWidth = document.documentElement.clientWidth
+    const deviceHeight = document.documentElement.clientHeight
+    oIframe.style.width = (Number(deviceWidth) - 220) + 'px' // 数字是页面布局宽度差值
+    oIframe.style.height = (Number(deviceHeight) - 60) + 'px' // 数字是页面布局高度差
   },
   created() {
     if (this.$route.params && this.$route.params.file_name) {
