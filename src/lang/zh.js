@@ -308,7 +308,9 @@ export default {
     amap_s: '高德卫星地图',
     traffic: '交通地图',
     transport: '道路路线-黑白',
-    choosemap: '选择可视化底图'
+    choosemap: '选择可视化底图',
+    gisSuccessfully: '可视化完成！',
+    gisViewSuccessfully: '可视化完成！请点击数据集管理中的展示按钮查看数据集！'
   },
   // 任务
   task: {
@@ -470,7 +472,7 @@ export default {
     title: '平台使用指南', // 大标题
     introduction: '简介',
     // 简介内容
-    introContent: '<span>本平台为<code>LibCity</code>库提供了可视化的操作界面，您可以在平台上传数据集选定模型训练任务，可以查看任务执行日志和模型评价指标相关信息；同时，平台也提供了完善的权限管理功能。</span>',
+    introContent: '<span>本平台为LibCity库提供了可视化的操作界面，您可以在平台上传数据集选定模型训练任务，可以查看任务执行日志和模型评价指标相关信息；同时，平台也提供了完善的权限管理功能。</span>',
     feature: '特性',
     featureContent: [
       '<span>数据集可视化查看：可以对用户上传的数据集进行解析并进行GIS可视化，可自由选择地图底图，平台提供谷歌地图、谷歌卫星地图、高德地图、高德卫星地图、原始街道地图等多种底图</span>',

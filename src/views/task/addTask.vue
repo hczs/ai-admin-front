@@ -69,7 +69,12 @@
           </el-divider>
           <div :data-intro="$t('addTaskIntro.step03')" data-step="2">
             <el-form-item :label="$t('task.task')" prop="task">
-              <el-select v-model="task.task" style="float: left" :placeholder="$t('common.pleasechoose')">
+              <el-select
+                v-model="task.task"
+                style="float: left"
+                :placeholder="$t('common.pleasechoose')"
+                @change="onTaskChange"
+              >
                 <el-option
                   v-for="item in taskParamList"
                   :key="item.id"
@@ -206,7 +211,24 @@ export default {
       fileLimit: 1,
       formLabelWidth: '10%',
       fileList: [],
-      modelList: ['CRANN', 'DeepTTE', 'IVMM', 'GeoSAN', 'AutoEncoder', 'MultiSTGCnet', 'DKFN', 'FNN', 'GWNET', 'MSTGCN', 'STTN', ' STNN', 'RNN', 'MSTGCNCommon', ' AutoEncoder', 'CONVGCNCommon', 'STGCN', 'GSNet', 'FPMC', 'HMMM', 'GTS', 'STMGAT', 'DMVSTNet', 'ASTGCN', 'ToGCN', 'DSAN', 'ATST-LSTM', 'ChebConv', 'MultiSTGCnetCommon', 'CCRNN', 'TGCN', 'STDN', 'ST-RNN', 'ATDM', 'SERM', 'DCRNN', 'DeepMove', 'LINE', ' GMAN', 'CARA', 'CSTN', ' ASTGCN', 'ACFM', 'MTGNN', 'STMatching', 'STAGGCN', 'TTPNet', 'HGCN', 'ACFMCommon', ' ATST-LSTM', 'STResNet', 'STResNetCommon', 'STNN', 'CONVGCN', ' ASTGCNCommon', 'GEML', 'STG2Seq', 'STAN', 'HST-LSTM', 'GMAN', ' STAGGCN', 'LSTPM', 'STSGCN', 'ResLSTM', 'AGCRN', 'Seq2Seq', 'DGCN', 'ASTGCNCommon', 'TGCLSTM'],
+      taskModelDict: {
+        'traffic_state_pred': [
+          'GRU', 'ACFM', 'STResNet', 'DSAN', 'ACFMCommon', 'STResNetCommon', 'RNN', 'FNN', 'AutoEncoder',
+          'Seq2Seq', 'AGCRN', 'ASTGCNCommon', 'MSTGCNCommon', 'STSGCN', 'CONVGCNCommon', 'ToGCN', 'MultiSTGCnetCommon',
+          'STNN', 'ASTGCN', 'MSTGCN', 'CONVGCN', 'DGCN', 'ResLSTM', 'MultiSTGCnet', 'CRANN', 'STDN', 'DCRNN',
+          'STGCN', 'GWNET', 'MTGNN', 'STMGAT', 'TGCN', 'ATDM', 'HGCN', 'DKFN', 'STTN', 'GTS', 'GMAN', 'STAGGCN',
+          'TGCLSTM', 'DMVSTNet', 'CCRNN', 'STG2Seq', 'GEML', 'CSTN', 'GSNet'],
+        'traj_loc_pred': [
+          'FPMC', 'RNN', 'ST-RNN', 'ATST-LSTM', 'DeepMove', 'HST-LSTM', 'LSTPM', 'STAN',
+          'GeoSAN', 'SERM', 'CARA'],
+        'eta': [
+          'DeepTTE', 'TTPNet'
+        ],
+        'map_matching': ['STMatching', 'IVMM', 'HMMM'],
+        'road_representation': ['ChebConv', 'LINE']
+      },
+      modelList: ['CRANN', 'DeepTTE', 'IVMM', 'GeoSAN', 'AutoEncoder', 'MultiSTGCnet', 'DKFN', 'FNN', 'GWNET', 'MSTGCN', 'STTN', ' STNN', 'RNN', 'MSTGCNCommon', 'CONVGCNCommon', 'STGCN', 'GSNet', 'FPMC', 'HMMM', 'GTS', 'STMGAT', 'DMVSTNet', 'ASTGCN', 'ToGCN', 'DSAN', 'ATST-LSTM', 'ChebConv', 'MultiSTGCnetCommon', 'CCRNN', 'TGCN', 'STDN', 'ST-RNN', 'ATDM', 'SERM', 'DCRNN', 'DeepMove', 'LINE', ' GMAN', 'CARA', 'CSTN', ' ASTGCN', 'ACFM', 'MTGNN', 'STMatching', 'STAGGCN', 'TTPNet', 'HGCN', 'ACFMCommon', ' ATST-LSTM', 'STResNet', 'STResNetCommon', 'STNN', 'CONVGCN', ' ASTGCNCommon', 'GEML', 'STG2Seq', 'STAN', 'HST-LSTM', 'GMAN', ' STAGGCN', 'LSTPM', 'STSGCN', 'ResLSTM', 'AGCRN', 'Seq2Seq', 'DGCN', 'ASTGCNCommon', 'TGCLSTM'],
+      // modelList: this.taskModelDict['traffic_state_pred'],
       taskParamList: [
         { id: '1', label: this.$t('task.traffic_state_pred'), value: 'traffic_state_pred' },
         { id: '2', label: this.$t('task.traj_loc_pred'), value: 'traj_loc_pred' },
@@ -261,6 +283,8 @@ export default {
     }
     // 获取数据集文件列表
     this.getList()
+    // 初始化任务和模型选择器
+    this.initSelect()
   },
   updated() {
     // 在updated里面更新数组会触发死循环
@@ -272,6 +296,16 @@ export default {
     //   { id: '5', label: this.$t('task.map_matching'), value: 'map_matching' }]
   },
   methods: {
+    initSelect() {
+      this.modelList = this.taskModelDict[this.task.task]
+      this.task.model = this.modelList[0]
+    },
+    onTaskChange(curValue) {
+      console.log('change:', curValue)
+      console.log('model:', this.taskModelDict[curValue])
+      this.modelList = this.taskModelDict[curValue]
+      this.task.model = this.modelList[0]
+    },
     // 解决el-input-number将null值处理为0的bug
     numberToEmpty(data) {
       for (var index in data) {

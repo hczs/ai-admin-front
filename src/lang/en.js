@@ -309,7 +309,9 @@ export default {
     amap_s: 'amap-CHN-satellite',
     traffic: 'traffic map',
     transport: 'street-line-black',
-    choosemap: 'choose background'
+    choosemap: 'choose background',
+    gisSuccessfully: 'Visualization complete!',
+    gisViewSuccessfully: ' Visualization complete! Please click the display button in dataset management to view the dataset!'
   },
   // 任务
   task: {
@@ -471,7 +473,7 @@ export default {
     title: 'Platform User Guide', // 大标题
     introduction: 'Introduction',
     // 简介内容
-    introContent: '<span>This platform provides a visual interface for the <code>LibCity</code> library. You can upload datasets on the platform to select model training tasks, and you can view task execution logs and model evaluation indicators related information; at the same time, the platform also provides a complete authority management function .</span>',
+    introContent: '<span>This platform provides a visual interface for the LibCity library. You can upload datasets on the platform to select model training tasks, and you can view task execution logs and model evaluation indicators related information; at the same time, the platform also provides a complete authority management function .</span>',
     feature: 'Feature',
     featureContent: [
       '<span>Dataset visualization: You can parse and visualize the data set uploaded by the user, and you can freely choose the map base map. The platform provides Google Maps, Google Satellite Maps, AutoNavi Maps, AutoNavi Satellite Maps, Original Street Maps, etc. Various basemaps</span>',
