@@ -50,3 +50,11 @@ export function executeTaskById(taskId, execute_time) {
     params: { execute_time: execute_time }
   })
 }
+
+// 获取数据集状态
+export function getFileStatus(fileId) {
+  return request({
+    url: `/business/file/${fileId}/get_file_status/`,
+    method: 'get'
+  })
+}

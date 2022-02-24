@@ -26,9 +26,9 @@ export default {
      * iframe-宽高自适应显示
      */
     const oIframe = document.getElementById('iframeBox')
-    const deviceWidth = document.documentElement.clientWidth
+    // const deviceWidth = document.documentElement.clientWidth
     const deviceHeight = document.documentElement.clientHeight
-    oIframe.style.width = (Number(deviceWidth) - 220) + 'px' // 数字是页面布局宽度差值
+    // oIframe.style.width = (Number(deviceWidth) - 220) + 'px' // 数字是页面布局宽度差值
     oIframe.style.height = (Number(deviceHeight) - 60) + 'px' // 数字是页面布局高度差
   },
   created() {

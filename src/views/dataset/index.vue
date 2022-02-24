@@ -195,6 +195,7 @@
 <script>
 import { getFileList, deleteFileById, generate_background_byID } from '@/api/file'
 import { checkPermission } from '@/utils/permission'
+import i18n from '@/lang'
 
 // 查询参数
 const queryParam = {
@@ -206,7 +207,7 @@ const queryParam = {
 export default {
   data() {
     return {
-      BASE_API: process.env.VUE_APP_BASE_API,
+      BASE_API: window.global_url.Base_url,
       dataset: {
       },
       backgroundParamList: [
@@ -274,15 +275,42 @@ export default {
       this.file.id = id
       this.showFormVisible = true
     },
+    // 更换底图
     getBackground() {
       generate_background_byID(this.file.id, this.background).then(res => {
+        const fileId = this.file.id
         this.showFormVisible = false
         // 重新获取页面数据
         this.$message({
           message: this.$t('dataset.background_ing'),
           type: 'success'
         })
+        // 开启长轮询
+        this.longPolling(fileId)
         this.getList(this.queryParam)
+      })
+    },
+    // 长轮询获取状态
+    longPolling(fileId) {
+      this.$axios.get(this.BASE_API + `/business/file/${fileId}/get_file_status/`).then(res => {
+        console.log('请求一次getFileStatus')
+        console.log(res)
+        if (res.status === 200) {
+          console.log('状态更新')
+          // 弹窗提醒
+          this.$notify({
+            title: i18n.t('dataset.gisSuccessfully'),
+            message: res.data.data.file_name + i18n.t('dataset.gisViewSuccessfully'),
+            type: 'success',
+            duration: 10000
+          })
+          // 刷新list
+          this.getList(this.queryParam)
+          return
+        } else {
+          // 重新轮询
+          this.longPolling(fileId)
+        }
       })
     },
     getQueryList() {
