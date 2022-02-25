@@ -128,3 +128,12 @@ export function getOtherLineData(queryParam) {
     params: queryParam
   })
 }
+
+// 评价指标mode 交通状态预测
+export function getStateMode(taskId) {
+  return request({
+    url: '/business/evaluate/get_evaluate_mode/',
+    method: 'get',
+    params: { task: taskId }
+  })
+}

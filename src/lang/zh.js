@@ -310,10 +310,13 @@ export default {
     transport: '道路路线-黑白',
     choosemap: '选择可视化底图',
     gisSuccessfully: '可视化完成！',
-    gisViewSuccessfully: '可视化完成！请点击数据集管理中的展示按钮查看数据集！'
+    gisViewSuccessfully: '可视化完成！请点击数据集管理中的展示按钮查看数据集！',
+    trajTip: '由于轨迹数据过多，这里仅展示部分轨迹数据信息'
   },
   // 任务
   task: {
+    // 评价指标mode提示信息
+    stateModeTip: '本次评价指标评估模式为：',
     // 任务执行参数
     task: '要执行的任务名',
     model: '要执行的模型名',

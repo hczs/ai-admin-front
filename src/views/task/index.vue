@@ -327,16 +327,25 @@
         <!-- 交通状态预测、到达时间估计表格 -->
         <el-table
           v-if="task.task === 'eta' || task.task === 'traffic_state_pred'"
+          ref="etaStateTable"
           v-loading="evaluateListLoading"
           :data="evaluateData"
           style="width: 100%"
           height="100%"
           border
         >
-          <!-- <af-table-column
+          <af-table-column
             type="index"
             :index="stateIndexMethod"
             :label="$t('common.order')"
+            width="80"
+            height="auto"
+            fixed
+          />
+          <!-- <af-table-column
+            v-if="evaluateData[0].MAE !== null && evaluateData[0].MAE !== '' "
+            prop="MAE"
+            :label="$t('task.MAE')"
             fixed
           /> -->
           <af-table-column
@@ -546,7 +555,8 @@
 import { checkPermission } from '@/utils/permission'
 import { getTaskList, getTaskById, executeTaskById,
   deleteTaskById, getExecuteLogById, getStateEvaluateList,
-  getMapMatchingEvaluateList, getTrajEvaluateList, getConfigDataById } from '@/api/task'
+  getMapMatchingEvaluateList, getTrajEvaluateList, getConfigDataById,
+  getStateMode } from '@/api/task'
 
 const DEFAULT_EVALUATE_DATA = [{ 'MAE': '', 'MAPE': '', 'MSE': '', 'RMSE': '', 'masked_MAE': '', 'masked_MAPE': '',
   'masked_MSE': '', 'masked_RMSE': '', 'R2': '', 'EVAR': '', 'Precision': '',
@@ -620,6 +630,11 @@ export default {
       configData: ''
     }
   },
+  watch: {
+    evaluateData(val) {
+      this.doLayout()
+    }
+  },
   created() {
     this.checkButtonPermission()
     this.getList()
@@ -654,6 +669,20 @@ export default {
   },
   methods: {
     checkPermission,
+    // 获取评价指标mode
+    getTaskEvalueteMode(taskId) {
+      getStateMode(taskId).then(res => {
+        console.log(res)
+      })
+    },
+    // 解决elementui表格fixed错位bug
+    doLayout() {
+      this.$nextTick(() => {
+        if (this.$refs.etaStateTable) {
+          this.$refs.etaStateTable.doLayout()
+        }
+      })
+    },
     checkButtonPermission() {
       this.executeDisable = !checkPermission(['taskExecute'])
       this.editDisable = !checkPermission(['taskEdit'])
@@ -791,6 +820,17 @@ export default {
             this.evaluateData = res.data.results
             this.evaluateQueryParam.total = res.data.count
           })
+          // 获取评价指标mode
+          if (this.task.task === 'traffic_state_pred') {
+            getStateMode(this.task.id).then(res => {
+              console.log(res)
+              // 弹窗提醒
+              this.$notify.info({
+                message: this.$t('task.stateModeTip') + res.data.mode,
+                duration: 10000
+              })
+            })
+          }
         } else if (this.task.task === 'map_matching') {
           // 走路网匹配接口
           this.evaluateQueryParam.task = this.task.id

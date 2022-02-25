@@ -12,6 +12,7 @@
   </div>
 </template>
 <script>
+import i18n from '@/lang'
 export default {
 
   data() {
@@ -46,6 +47,7 @@ export default {
       // 调用回显
       this.reportUrl = reportUrl + '.html'
       loading.close()
+      this.trajectoriesTip()
     } else {
       this.reportUrl = 'homepage.html'
     }
@@ -53,6 +55,21 @@ export default {
   methods: {
     back() {
       this.$router.go(-1)// 返回上一层
+    },
+
+    // 轨迹类型的数据集添加弹窗提示
+    trajectoriesTip() {
+      const trajectories = ['Gowalla', 'BrightKite', 'Fousquare', 'Instagram', 'Chengdu_Taxi_Sample1', 'Beijing_Taxi_Sample', 'Seattle']
+      trajectories.forEach((item) => {
+        if (this.reportUrl.toUpperCase().indexOf(item.toUpperCase()) !== -1) {
+          // 弹窗提醒
+          this.$notify.info({
+            // title: i18n.t('dataset.gisSuccessfully'),
+            message: i18n.t('dataset.trajTip'),
+            duration: 10000
+          })
+        }
+      })
     }
   }
 }
