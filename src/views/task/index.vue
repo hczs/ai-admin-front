@@ -235,7 +235,7 @@
             <el-link v-if="scope.row.task_status === 1" style="margin-left: 10px" disabled icon="el-icon-loading">
               {{ $t('task.executing') }}
             </el-link>
-            <el-link v-if=" scope.row.task_status === 2 && scope.row.task !== 'road_representation' " style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-notebook-2" @click="catEvaluate(scope.row.id)">
+            <el-link v-if=" scope.row.task_status === 2 && scope.row.task !== 'road_representation' " style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-notebook-2" @click="openEvaluateDialog(scope.row.id)">
               {{ $t('task.catEvaluate') }}
             </el-link>
             <el-link v-if=" scope.row.task_status === 2 && scope.row.task !== 'traj_loc_pred' " style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-view" @click="showResult(scope.row.id, scope.row.dataset)">
@@ -592,6 +592,7 @@ export default {
         size: 8,
         total: 0
       },
+      evaluateDialogFirstOpen: false,
       taskParamList: [
         { id: '1', label: this.$t('task.traffic_state_pred'), value: 'traffic_state_pred' },
         { id: '2', label: this.$t('task.traj_loc_pred'), value: 'traj_loc_pred' },
@@ -806,9 +807,13 @@ export default {
         this.configData = res.data
       })
     },
+    openEvaluateDialog(taskId) {
+      this.evaluateDialogVisible = true
+      this.evaluateDialogFirstOpen = true
+      this.catEvaluate(taskId)
+    },
     // 查看评价指标
     catEvaluate(id) {
-      this.evaluateDialogVisible = true
       this.evaluateListLoading = true
       // 获取当前任务相关数据
       getTaskById(id).then(res => {
@@ -821,14 +826,14 @@ export default {
             this.evaluateQueryParam.total = res.data.count
           })
           // 获取评价指标mode
-          if (this.task.task === 'traffic_state_pred') {
+          if (this.task.task === 'traffic_state_pred' && this.evaluateDialogFirstOpen) {
             getStateMode(this.task.id).then(res => {
-              console.log(res)
               // 弹窗提醒
               this.$notify.info({
                 message: this.$t('task.stateModeTip') + res.data.mode,
                 duration: 10000
               })
+              this.evaluateDialogFirstOpen = false
             })
           }
         } else if (this.task.task === 'map_matching') {
@@ -912,6 +917,7 @@ export default {
       this.evaluateQueryParam.size = 8
       this.evaluateQueryParam.total = 0
       this.evaluateData = DEFAULT_EVALUATE_DATA
+      this.evaluateDialogFirstOpen = false
     },
     indexMethod(index) {
       return (this.queryParam.page - 1) * this.queryParam.size + index + 1
