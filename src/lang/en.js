@@ -311,10 +311,13 @@ export default {
     transport: 'street-line-black',
     choosemap: 'choose background',
     gisSuccessfully: 'Visualization complete!',
-    gisViewSuccessfully: ' Visualization complete! Please click the display button in dataset management to view the dataset!'
+    gisViewSuccessfully: ' Visualization complete! Please click the display button in dataset management to view the dataset!',
+    trajTip: 'Due to too much trajectory data, only part of the trajectory data information is displayed here.'
   },
   // 任务
   task: {
+    // 评价指标mode提示信息
+    stateModeTip: 'The evaluation model of this evaluation index is as follows:',
     // 任务执行参数
     task: 'task',
     model: 'model',

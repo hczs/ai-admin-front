@@ -12,6 +12,7 @@
   </div>
 </template>
 <script>
+import i18n from '@/lang'
 export default {
   data() {
     return {
@@ -42,8 +43,28 @@ export default {
       // 调用回显
       this.reportUrl = this.$route.query.dataset + '_' + this.$route.query.taskId + '_result.html'
       loading.close()
+      this.trajectoriesTip()
     } else {
       this.reportUrl = 'homepage.html'
+    }
+  },
+
+  methods: {
+    trajectoriesTip() {
+      const trajectories = ['Gowalla', 'BrightKite', 'Fousquare', 'Instagram', 'Chengdu_Taxi_Sample1', 'Beijing_Taxi_Sample', 'Seattle']
+      trajectories.forEach((item) => {
+        if (this.reportUrl.toUpperCase().indexOf(item.toUpperCase()) !== -1) {
+          console.log('包含')
+          console.log('this.reportUrl.toUpperCase(): ', this.reportUrl.toUpperCase())
+          console.log('item.toUpperCase(): ', item.toUpperCase())
+          // 弹窗提醒
+          this.$notify.info({
+            // title: i18n.t('dataset.gisSuccessfully'),
+            message: i18n.t('dataset.trajTip'),
+            duration: 10000
+          })
+        }
+      })
     }
   }
 }
