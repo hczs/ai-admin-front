@@ -72,12 +72,12 @@ export default {
     templateManage: 'Template Management',
     updatePassword: 'Change Password',
     datasetManage: 'Dataset Management',
-    taskList: 'Task List',
-    tasksAdd: 'New Task',
+    taskList: 'Experiment list',
+    tasksAdd: 'New experiment',
     tasksEdit: 'Edit Task',
     datasetView: 'Show Dataset',
     evaluate: 'Comparison of model evaluation indexes',
-    taskResult: 'Task result display'
+    taskResult: 'Show the experimental results'
   },
   navbar: {
     dashboard: 'Dashboard',
@@ -339,18 +339,18 @@ export default {
     road_representation: 'Road Network Representation Learning',
     eta: 'Estimated Time of Arrival',
     map_matching: 'Map Matching',
-    taskName: 'Task Name',
-    taskDescription: 'Task Description',
+    taskName: 'Experiment name',
+    taskDescription: 'Experimental Description',
     dataFile: 'Dataset File',
     uploadTips: 'Please upload JSON file',
     downloadExample: 'download sample configuration',
     uploadError: 'Please upload the data package in JSON format!',
     taskCreateSuccess: 'Task created successfully!',
-    taskNameError: 'Please enter task name',
-    taskNameExistsError: 'Duplicate task name',
+    taskNameError: 'Please enter experiment name',
+    taskNameExistsError: 'Duplicate experiment name',
     taskCreateError: 'Task creation failed',
     OnExceedError: 'At most one file can be uploaded. Please clear the previous file before uploading',
-    status: 'Task Status',
+    status: 'Experimental status',
     creator: 'creator',
     numberError: 'Please enter a value of numeric type',
     maxEpochNumberError: 'please enter an integer',
@@ -403,17 +403,19 @@ export default {
     NDCG: 'NDCG',
     maxEpochTip: 'The larger the maximum number of training rounds is, the longer the time will be spent',
     clickUpload: 'Click upload JSON file',
-    task_type: 'Task type',
+    task_type: 'Experiment Type',
     modelEvaluateContrast: 'Model Comparison',
-    selectTaskTip: 'Please select a task to compare',
-    selectCompleteTip: 'Please select completed tasks',
-    selectSameTask: 'Please select the same type of task',
-    selectDifferentModelTask: 'Please select a task that uses a different model',
-    selectRoadRepresentation: 'There is no evaluation index for this task type',
+    selectTaskTip: 'Please select a experiment to compare',
+    selectCompleteTip: 'Please select completed experiments',
+    selectSameTask: 'Please select the same type of experiment',
+    selectDifferentModelTask: 'Please select a experiment that uses a different model',
+    selectRoadRepresentation: 'There is no evaluation index for this experiment type',
     clickDownload: 'Click here to download',
     clickCatConfig: 'Click here to view online',
     configview: 'Configuration Information',
-    showResult: 'Show task results'
+    showResult: 'Show task results',
+    selectSameDataset: 'Please select an experiment using the same dataset',
+    otherParamTip: 'The following are non mandatory parameters'
   },
 
   // 新手引导 - 通用
@@ -428,8 +430,8 @@ export default {
 
   // 新建任务引导
   addTaskIntro: {
-    step01: 'Here is the new task interface, where you can create new training tasks',
-    step02: 'Task name is required. Please fill in a task name that is easy to understand',
+    step01: 'Here is the new experiment interface, where you can create new training tasks',
+    step02: 'experiment name is required. Please fill in a experiment name that is easy to understand',
     step03: 'Here, the task name, model name and data set have strict correspondence. Please select according to the table correspondence in the link above',
     step04: 'Just click this link',
     step05: 'The above form only provides common task parameter settings. You can set more task parameters for training as needed. You need to write a config.json file to upload.',
@@ -447,9 +449,9 @@ export default {
     step06: 'If your dataset cannot be converted into a map, we will try to display its contents in the form of charts; If your data cannot be displayed, a red letter prompt will be given in the operation column'
   },
 
-  // 任务列表引导
+  // 实验列表引导
   taskIndexIntroL: {
-    step01: 'Here is the task list page, on this page you can perform tasks, view task execution logs, view task execution results, etc.',
+    step01: 'Here is the experiment list page, on this page you can perform tasks, view task execution logs, view task execution results, etc.',
     step02: 'You can set conditions here to query existing tasks',
     step03: 'You can check the checkbox in front of the task to compare the selected tasks',
     step04: 'In the operation column: you can edit, delete and execute tasks, and for tasks that have been executed, you can view the evaluation metrics of the model; for tasks that have been executed, you can view the task execution log'
@@ -476,11 +478,11 @@ export default {
     title: 'Platform User Guide', // 大标题
     introduction: 'Introduction',
     // 简介内容
-    introContent: '<span>This platform provides a visual interface for the LibCity library. You can upload datasets on the platform to select model training tasks, and you can view task execution logs and model evaluation indicators related information; at the same time, the platform also provides a complete authority management function .</span>',
+    introContent: '<span>This platform provides a visual interface for the LibCity library. You can upload datasets on the platform to select model execute experiments, and you can view experiment execution logs and model evaluation indicators related information; at the same time, the platform also provides a complete authority management function .</span>',
     feature: 'Feature',
     featureContent: [
       '<span>Dataset visualization: You can parse and visualize the data set uploaded by the user, and you can freely choose the map base map. The platform provides Google Maps, Google Satellite Maps, AutoNavi Maps, AutoNavi Satellite Maps, Original Street Maps, etc. Various basemaps</span>',
-      '<span>Fixed-point execution of tasks: You can specify the execution time of the task, and the system will automatically execute the task at the selected moment</span>',
+      '<span>Fixed-point execution of experiments: You can specify the execution time of the experiment, and the system will automatically execute the experiment at the selected moment</span>',
       '<span>Model evaluation index visualization comparison function: It can achieve multi-model and multi-index comparison under similar tasks</span>',
       '<span>Internationalization: The platform supports both Chinese and English languages</span>',
       '<span>Permissions: Account permissions can be controlled at the button level</span>'
@@ -489,13 +491,13 @@ export default {
     step01: 'Step 1: Upload the dataset',
     // TODO
     step01Content: "<span><p><span>Dataset files supported by the platform: can be accessed through</span><a target='_blank' href='https://pan.baidu.com/s/1qEfcXBO-QwZfiT0G3IYMpQ' style='color: blue'><span > Baidu network disk</span></a><span> (extraction code: 1231) or </span><a target='_blank' href='https://drive.google.com/drive/folders/1g5v2Gq1tkOq8XO0HDCZ9nOTtRpB6-gPe?usp =sharing' style='color: blue'><span>Google Drive </span></a><span>Download the dataset file. </span></p>You can click the dataset management menu on the left to enter the dataset management page, click File Upload, select the dataset file and click OK to upload the dataset.</span>",
-    step02: 'Step 2: Create a training task',
-    step02Content: '<span>You can click New Task in the left navigation, fill in the relevant parameters, and click OK to complete the task creation.',
-    step03: 'Step 3: Execute the task',
-    step03Content: '<span>Click the task list on the left, find the Execute button in the Action column, and click Execute to select the execution time to execute the task.</span>',
+    step02: 'Step 2: Create a experiment',
+    step02Content: '<span>You can click new experiment in the left navigation, fill in the relevant parameters, and click OK to complete the experiment creation.',
+    step03: 'Step 3: Execute the experiment',
+    step03Content: '<span>Click the experiment list on the left, find the Execute button in the Action column, and click Execute to select the execution time to execute the experiment.</span>',
     step04: 'Step 4: View the running log',
-    step04Content: '<span>Click the task list on the left, and find the View running log button in the operation column to view the task running log information online.</span>',
+    step04Content: '<span>Click the experiment list on the left, and find the View running log button in the operation column to view the experiment running log information online.</span>',
     step05: 'Step 5: Check the evaluation indicators',
-    step05Content: '<span>After the task is executed, find the View Evaluation Indicators button in the operation column to view the evaluation indicator information online.</span>'
+    step05Content: '<span>After the experiment is executed, find the View Evaluation Indicators button in the operation column to view the evaluation indicator information online.</span>'
   }
 }

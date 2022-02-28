@@ -1,8 +1,17 @@
 <template>
   <div class="app-container" style="text-align: center; width: 100%; height: 100%">
-    <div style="width: 99%; margin-left: 13px; height: 90%" :data-intro="$t('addTaskIntro.step01')" data-step="1">
+    <div
+      style="width: 99%; margin-left: 13px; height: 90%"
+      :data-intro="$t('addTaskIntro.step01')"
+      data-step="1"
+    >
       <div style="width: 70%; margin-left: 5%">
-        <el-form ref="elForm" :rules="rules" :model="task" label-width="auto" label-position="left" status-icon>
+        <el-form
+          ref="elForm"
+          :rules="rules"
+          :model="task"
+          label-position="left"
+        >
           <div :data-intro="$t('addTaskIntro.step02')" data-step="4">
             <el-form-item :label="$t('task.taskName')" prop="task_name">
               <el-input
@@ -14,38 +23,15 @@
               />
             </el-form-item>
           </div>
-          <el-form-item :label="$t('task.taskDescription')">
+          <el-form-item label-position="right" :label="$t('task.taskDescription')">
             <el-input
               v-model="task.task_description"
               type="textarea"
               maxlength="100"
-              autosize
-              :rows="2"
+              rows="3"
               show-word-limit
               clearable
             />
-          </el-form-item>
-          <el-form-item :label="$t('task.max_epoch')" prop="max_epoch" style="text-align: left">
-            <el-popover
-              placement="top-start"
-              width="200"
-              trigger="hover"
-              :content="$t('task.maxEpochTip')"
-            >
-              <el-input-number slot="reference" v-model.number="task.max_epoch" controls-position="right" />
-            </el-popover>
-
-          </el-form-item>
-          <el-form-item :label="$t('task.gpu')" style="text-align: left">
-
-            <el-radio-group v-model="task.gpu">
-              <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
-              <el-radio :label="false">{{ $t('common.no') }}</el-radio>
-            </el-radio-group>
-
-          </el-form-item>
-          <el-form-item v-if="task.gpu" :label="$t('task.gpu_id')" prop="gpu_id" style="text-align: left">
-            <el-input-number v-model.number="task.gpu_id" controls-position="right" />
           </el-form-item>
           <!-- <el-form-item :label="$t('task.dataFile')" prop="data_file">
           <el-select v-model="task.data_file" style="float: left"  >
@@ -104,30 +90,58 @@
               </el-select>
             </el-form-item>
           </div>
-          <!-- <el-form-item :label="$t('task.saved_model')" style="text-align: left">
-          <el-radio-group v-model="task.saved_model">
-            <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
-            <el-radio :label="false">{{ $t('common.no') }}</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item :label="$t('task.train')" style="text-align: left">
-          <el-radio-group v-model="task.train">
-            <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
-            <el-radio :label="false">{{ $t('common.no') }}</el-radio>
-          </el-radio-group>
-        </el-form-item> -->
-          <!-- <el-form-item :label="$t('task.batch_size')" prop="batch_size" style="text-align: left">
-          <el-input-number v-model.number="task.batch_size" controls-position="right" />
-        </el-form-item>
-        <el-form-item :label="$t('task.train_rate')" prop="train_rate" style="text-align: left">
-          <el-input-number v-model.number="task.train_rate" controls-position="right" />
-        </el-form-item>
-        <el-form-item :label="$t('task.eval_rate')" prop="eval_rate" style="text-align: left">
-          <el-input-number v-model.number="task.eval_rate" controls-position="right" />
-        </el-form-item>
-        <el-form-item :label="$t('task.learning_rate')" prop="learning_rate" style="text-align: left">
-          <el-input-number v-model.number="task.learning_rate" controls-position="right" />
-        </el-form-item> -->
+
+          <!-- 以下非必填参数 -->
+          <el-divider content-position="center">
+            {{ $t('task.otherParamTip') }}
+          </el-divider>
+          <el-form-item :label="$t('task.max_epoch')" prop="max_epoch" style="text-align: left">
+            <el-popover
+              placement="top-start"
+              width="200"
+              trigger="hover"
+              :content="$t('task.maxEpochTip')"
+            >
+              <el-input-number slot="reference" v-model.number="task.max_epoch" controls-position="right" />
+            </el-popover>
+
+          </el-form-item>
+          <el-form-item :label="$t('task.gpu')" style="text-align: left">
+
+            <el-radio-group v-model="task.gpu">
+              <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
+              <el-radio :label="false">{{ $t('common.no') }}</el-radio>
+            </el-radio-group>
+
+          </el-form-item>
+          <el-form-item v-if="task.gpu" :label="$t('task.gpu_id')" prop="gpu_id" style="text-align: left">
+            <el-input-number v-model.number="task.gpu_id" controls-position="right" />
+          </el-form-item>
+
+          <el-form-item :label="$t('task.saved_model')" style="text-align: left">
+            <el-radio-group v-model="task.saved_model">
+              <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
+              <el-radio :label="false">{{ $t('common.no') }}</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item :label="$t('task.train')" style="text-align: left">
+            <el-radio-group v-model="task.train">
+              <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
+              <el-radio :label="false">{{ $t('common.no') }}</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item :label="$t('task.batch_size')" prop="batch_size" style="text-align: left">
+            <el-input-number v-model.number="task.batch_size" controls-position="right" />
+          </el-form-item>
+          <el-form-item :label="$t('task.train_rate')" prop="train_rate" style="text-align: left">
+            <el-input-number v-model.number="task.train_rate" controls-position="right" />
+          </el-form-item>
+          <el-form-item :label="$t('task.eval_rate')" prop="eval_rate" style="text-align: left">
+            <el-input-number v-model.number="task.eval_rate" controls-position="right" />
+          </el-form-item>
+          <el-form-item :label="$t('task.learning_rate')" prop="learning_rate" style="text-align: left">
+            <el-input-number v-model.number="task.learning_rate" controls-position="right" />
+          </el-form-item>
           <!-- 如果需要配置更多参数，可以上传配置文件 -->
           <el-divider content-position="center">{{ $t('task.taskMoreParamTip') }}</el-divider>
           <el-form-item :label="$t('task.config_file')" :data-intro="$t('addTaskIntro.step05')" data-step="5">
@@ -395,9 +409,15 @@ export default {
   }
 }
 </script>
-<style>
-/* .upload-demo{
-		display: inline;
-	} */
+<style lang="scss" scoped>
+.requiredBox {
 
+  ::v-deep .el-form-item__label {
+
+    transform: translateX(-10px);
+  }
+}
+// .el-form-item__label-wrap {
+//   margin-left: 0px !important;
+// }
 </style>

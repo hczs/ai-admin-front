@@ -58,11 +58,11 @@
     <el-table
       ref="taskTable"
       v-loading="listLoading"
-      fit
       :data="tableData"
       border
     >
       <el-table-column
+        fixed="left"
         type="selection"
         width="55"
       />
@@ -136,17 +136,27 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column
+      <af-table-column
         type="index"
         :index="indexMethod"
         :label="$t('common.order')"
-        width="120"
+        width="80"
       />
-      <el-table-column
+      <af-table-column
         prop="task_name"
         :label="$t('task.taskName')"
       />
-      <el-table-column
+      <!-- 模型名 -->
+      <af-table-column
+        prop="model"
+        :label="$t('task.model')"
+      />
+      <!-- 数据集名 -->
+      <af-table-column
+        prop="dataset"
+        :label="$t('task.dataset')"
+      />
+      <af-table-column
         prop="task"
         :label="$t('task.task_type')"
         width="130"
@@ -158,12 +168,12 @@
           <span v-if="scope.row.task === 'eta'"> {{ $t('task.eta') }} </span>
           <span v-if="scope.row.task === 'map_matching'"> {{ $t('task.map_matching') }} </span>
         </template>
-      </el-table-column>
+      </af-table-column>
       <!-- <el-table-column
         prop="dataset"
         :label="$t('task.dataFile')"
       /> -->
-      <el-table-column
+      <af-table-column
         prop="task_status"
         :label="$t('task.status')"
         width="100"
@@ -174,16 +184,16 @@
           <span v-if="scope.row.task_status === 2"> {{ $t('task.completed') }} </span>
           <span v-if="scope.row.task_status === -1"> {{ $t('task.executeError') }} </span>
         </template>
-      </el-table-column>
-      <el-table-column
+      </af-table-column>
+      <af-table-column
         prop="creator"
         :label="$t('task.creator')"
       />
-      <el-table-column
+      <af-table-column
         prop="execute_time"
         :label="$t('task.executeTime')"
       />
-      <el-table-column
+      <af-table-column
         prop="execute_end_time"
         :label="$t('task.executeEndTime')"
       />
@@ -191,8 +201,9 @@
         prop="create_time"
         :label="$t('common.createTime')"
       /> -->
-      <el-table-column
+      <af-table-column
         :label="$t('common.operation')"
+        fixed="right"
       >
         <template slot-scope="scope">
           <el-button-group v-intro-if="scope.$index === 0" style="width: 120px" :data-intro="$t('taskIndexIntroL.step04')" data-step="4">
@@ -258,7 +269,7 @@
             </el-button> -->
           </el-button-group>
         </template>
-      </el-table-column>
+      </af-table-column>
     </el-table>
     <!-- 分页组件 -->
     <div>
@@ -563,7 +574,65 @@ const DEFAULT_EVALUATE_DATA = [{ 'MAE': '', 'MAPE': '', 'MSE': '', 'RMSE': '', '
   'Recall': '', 'F1-Score': '', 'MAP': '', 'PCC': '', 'RMF': '', 'AN': '', 'AL': '',
   'F1': '', 'MRR': '', 'NDCG': '' }]
 
+// 横向滚动条持续在视线范围内
+function _scrollBarFixedHandle(el) {
+  console.log(el)
+  if (!el) return
+  const tableBodyWrapDom = el.querySelector('.el-table__body-wrapper')
+  const tableBodyDom = el.querySelector('.el-table__body')
+  // top为dom上侧距离可视窗口顶部的值
+  const { top: tableBodyWrapDomTop } = tableBodyWrapDom.getBoundingClientRect()
+  const { bottom: tableBodyDomBottom } = tableBodyDom.getBoundingClientRect()
+  if (
+    tableBodyWrapDomTop >= window.innerHeight || // 表在视窗下方不可见区域
+    (tableBodyDomBottom > 0 && tableBodyDomBottom <= window.innerHeight) || // 视窗内已经可以看到最后一条数据下的滚动条
+    tableBodyWrapDom.classList.contains('is-scrolling-none') // 无滚动条
+  ) {
+    // 不做任何更改
+    tableBodyWrapDom.style.height = 'unset'
+    tableBodyWrapDom.style.marginBottom = 'unset'
+  } else {
+    // 窗口高度 - 列表距顶部值 且 不超过自身实际值
+    const wrapHeight = Math.min(
+      window.innerHeight - tableBodyWrapDomTop,
+      tableBodyDom.offsetHeight
+    )
+    tableBodyWrapDom.style.height = wrapHeight + 'px'
+    // 需要用marginBottom填充，以保持列表原有高度，避免页面的纵向滚动条变化导致页面滚动的不流畅
+    // 可以通过注释这一行代码观察其效果差异
+    tableBodyWrapDom.style.marginBottom =
+      tableBodyDom.offsetHeight - wrapHeight + 'px'
+  }
+}
+
+const ScrollBarFixed = {
+  mounted() {
+    this.$refs.taskTable.handleFixedMousewheel = function() {} // 观察源码发现，此方法会使得在right-fixed上滚动同时，wrapper也滚动
+    // 监听事件
+    document.addEventListener('scroll', this.scrollBarFixedHandle)
+    window.addEventListener('resize', this.scrollBarFixedHandle)
+  },
+  destroyed() {
+    // 在组件销毁时取消监听
+    document.removeEventListener('scroll', this.scrollBarFixedHandle)
+    window.removeEventListener('resize', this.scrollBarFixedHandle)
+  },
+  watch: {
+    _list() {
+      // 当列表数据源发生变化时，再次触发
+      this.$nextTick(this.scrollBarFixedHandle)
+    }
+  },
+  methods: {
+    scrollBarFixedHandle() {
+      _scrollBarFixedHandle(this.$el)
+    }
+  }
+}
+
 export default {
+
+  mixins: [ScrollBarFixed],
 
   data() {
     const validateExecuteTime = (rule, value, callback) => {
@@ -740,6 +809,13 @@ export default {
       const taskIsSame = tasks.every(item => item.task === defaultTask)
       if (!taskIsSame) {
         this.$message.warning(this.$t('task.selectSameTask'))
+        return
+      }
+      // 所有任务的数据集必须相同
+      const defaultDataset = tasks[0].dataset
+      const datasetIsSame = tasks.every(item => item.dataset === defaultDataset)
+      if (!datasetIsSame) {
+        this.$message.warning(this.$t('task.selectSameDataset'))
         return
       }
       // 所有任务的模型必须不同-需求修改，可以同模型对比
