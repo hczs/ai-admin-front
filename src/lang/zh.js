@@ -72,8 +72,8 @@ export default {
     templateManage: '模板管理',
     updatePassword: '修改密码',
     datasetManage: '数据集管理',
-    taskList: '任务列表',
-    tasksAdd: '新建任务',
+    taskList: '实验列表',
+    tasksAdd: '新建实验',
     tasksEdit: '编辑任务',
     datasetView: '数据集展示',
     evaluate: '模型评价指标对比',
@@ -338,19 +338,19 @@ export default {
     road_representation: '路网表征学习',
     eta: '到达时间预测',
     map_matching: '路网匹配',
-    taskName: '任务名称',
-    taskDescription: '任务描述',
+    taskName: '实验名称',
+    taskDescription: '实验描述',
     dataFile: '数据集文件',
     uploadTips: '请上传JSON文件',
     downloadExample: '下载配置文件样例',
     uploadError: '请上传JSON格式的文件！',
     taskCreateSuccess: '任务创建成功！',
-    taskNameError: '请输入任务名',
-    taskNameExistsError: '任务名重复',
+    taskNameError: '请输入实验名称',
+    taskNameExistsError: '实验名称重复',
     taskCreateError: '任务创建失败',
     OnExceedError: '最多上传一个文件，请先清除之前的文件再进行上传',
-    status: '任务状态',
-    creator: '任务创建者',
+    status: '实验状态',
+    creator: '创建者',
     numberError: '请输入数字类型的值',
     maxEpochNumberError: '请输入整数',
     maxEpochError: '请输入大于0的数',
@@ -402,17 +402,19 @@ export default {
     NDCG: '归一化折损累计增益',
     maxEpochTip: '最大训练轮数设置的越大，耗费时间越长',
     clickUpload: '点击上传JSON文件',
-    task_type: '任务类型',
+    task_type: '实验类型',
     modelEvaluateContrast: '模型对比',
-    selectTaskTip: '请选择任务进行对比',
-    selectCompleteTip: '请选择已完成的任务',
-    selectSameTask: '请选择相同类型的任务',
-    selectDifferentModelTask: '请选择使用不同模型的任务',
-    selectRoadRepresentation: '该任务类型无评价指标',
+    selectTaskTip: '请选择实验进行对比',
+    selectCompleteTip: '请选择已完成的实验',
+    selectSameTask: '请选择相同类型的实验',
+    selectDifferentModelTask: '请选择使用不同模型的实验',
+    selectRoadRepresentation: '该实验类型无评价指标',
     clickDownload: '点击下载',
     clickCatConfig: '在线查看',
     configview: '配置文件信息',
-    showResult: '展示任务结果'
+    showResult: '展示实验结果',
+    selectSameDataset: '请选择使用相同数据集的实验',
+    otherParamTip: '以下是非必填的参数'
   },
 
   // 新手引导 - 通用
@@ -425,10 +427,10 @@ export default {
     noIntro: '本页暂无新手引导内容'
   },
 
-  // 新建任务引导
+  // 新建实验引导
   addTaskIntro: {
-    step01: '这里是新建任务界面，在这您可以创建新的训练任务',
-    step02: '任务名称是必填项，请填写一个易于理解的任务名称',
+    step01: '这里是新建实验界面，在这您可以创建新的训练任务',
+    step02: '实验名称是必填项，请填写一个易于理解的实验名称',
     step03: '看这里，任务名、模型名和数据集有严格的对应关系，请按照上方链接里的表格对应关系来进行选择',
     step04: '就是点击这个链接',
     step05: '上面表单只提供了常用的任务参数设置，您可以根据需要设置更多的任务参数进行训练，需要编写config.json文件上传',
@@ -446,9 +448,9 @@ export default {
     step06: '若您的数据集无法转化为地图，我们会努力将其内容以图表方式展示；若您的数据无法展示，操作栏中将给出红字提示'
   },
 
-  // 任务列表引导
+  // 实验列表引导
   taskIndexIntroL: {
-    step01: '这里是任务列表页面，在此页面您可以执行任务、查看任务执行日志、查看任务执行结果等操作',
+    step01: '这里是实验列表页面，在此页面您可以执行任务、查看任务执行日志、查看任务执行结果等操作',
     step02: '可以在这里设置条件来对已有任务进行查询',
     step03: '您可以勾选任务前面的多选框，对已选择的任务进行模型对比',
     step04: '在操作列中：您可以编辑、删除和执行任务，并且对于已经执行完成的任务，您可以查看模型的评价指标；对于已经执行中的任务，您可以查看任务执行日志'
@@ -475,12 +477,12 @@ export default {
     title: '平台使用指南', // 大标题
     introduction: '简介',
     // 简介内容
-    introContent: '<span>本平台为LibCity库提供了可视化的操作界面，您可以在平台上传数据集选定模型训练任务，可以查看任务执行日志和模型评价指标相关信息；同时，平台也提供了完善的权限管理功能。</span>',
+    introContent: '<span>本平台为LibCity库提供了可视化的操作界面，您可以在平台上传数据集选定模型创建并执行实验，可以查看实验执行日志和模型评价指标相关信息；同时，平台也提供了完善的权限管理功能。</span>',
     feature: '特性',
     featureContent: [
       '<span>数据集可视化查看：可以对用户上传的数据集进行解析并进行GIS可视化，可自由选择地图底图，平台提供谷歌地图、谷歌卫星地图、高德地图、高德卫星地图、原始街道地图等多种底图</span>',
-      '<span>定点执行任务：可以指定任务的执行时间，在选定的时刻系统会自动执行任务</span>',
-      '<span>模型评价指标可视化对比功能：可以做到同类任务下的多模型多指标对比</span>',
+      '<span>定点执行实验：可以指定实验的执行时间，在选定的时刻系统会自动执行实验</span>',
+      '<span>模型评价指标可视化对比功能：可以做到同类实验下的多模型多指标对比</span>',
       '<span>国际化：平台支持中英文两种语言</span>',
       '<span>权限：账号权限可控制在按钮级别</span>'
     ],
@@ -488,13 +490,13 @@ export default {
     step01: '步骤一：上传数据集',
     // TODO
     step01Content: "<span><p><span>平台支持的数据集文件：可以通过</span><a target='_blank' href='https://pan.baidu.com/s/1qEfcXBO-QwZfiT0G3IYMpQ' style='color: blue'><span>百度网盘</span></a><span>（提取码：1231）或</span><a target='_blank' href='https://drive.google.com/drive/folders/1g5v2Gq1tkOq8XO0HDCZ9nOTtRpB6-gPe?usp=sharing' style='color: blue'><span>Google Drive</span></a><span>下载数据集文件。</span></p>您可以点击左侧数据集管理菜单，进入数据集管理页面，点击文件上传，选定数据集文件点击确定即可上传数据集。</span>",
-    step02: '步骤二：创建训练任务',
-    step02Content: '<span>您可以点击左侧导航中的新建任务，填写相关参数，点击确定完成任务创建工作。</span>',
-    step03: '步骤三：执行任务',
-    step03Content: '<span>点击左侧的任务列表，在操作列中找到执行按钮，点击执行，可以选择执行时间执行任务。</span>',
+    step02: '步骤二：创建实验',
+    step02Content: '<span>您可以点击左侧导航中的新建实验，填写相关参数，点击确定完成实验创建工作。</span>',
+    step03: '步骤三：执行实验',
+    step03Content: '<span>点击左侧的实验列表，在操作列中找到执行按钮，点击执行，可以选择执行时间执行实验。</span>',
     step04: '步骤四：查看运行日志',
-    step04Content: '<span>点击左侧的任务列表，在操作列中找到查看运行日志按钮，可在线查看任务运行日志信息。</span>',
+    step04Content: '<span>点击左侧的实验列表，在操作列中找到查看运行日志按钮，可在线查看实验运行日志信息。</span>',
     step05: '步骤五：查看评价指标',
-    step05Content: '<span>任务执行完毕后，在操作列中找到查看评价指标按钮，可在线查看评价指标信息。</span>'
+    step05Content: '<span>实验执行完毕后，在操作列中找到查看评价指标按钮，可在线查看评价指标信息。</span>'
   }
 }
