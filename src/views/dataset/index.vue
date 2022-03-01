@@ -47,17 +47,17 @@
           fit
           border
         >
-          <af-table-column
+          <el-table-column
             type="index"
             :index="indexMethod"
             :label="$t('common.order')"
             width="120"
           />
-          <af-table-column
+          <el-table-column
             prop="file_name"
             :label="$t('dataset.fileName')"
           />
-          <af-table-column
+          <el-table-column
             prop="file_size"
             :label="$t('dataset.fileSize')"
           />
@@ -69,15 +69,15 @@
             prop="extract_path"
             :label="$t('dataset.extractPath')"
           /> -->
-          <af-table-column
+          <el-table-column
             prop="create_time"
             :label="$t('common.createTime')"
           />
-          <af-table-column
+          <el-table-column
             prop="update_time"
             :label="$t('common.updateTime')"
           />
-          <af-table-column
+          <el-table-column
             :label="$t('common.operation')"
           >
             <template slot-scope="scope">
@@ -139,7 +139,7 @@
               </el-button-group>
 
             </template>
-          </af-table-column>
+          </el-table-column>
         </el-table>
       </div>
     </div>
@@ -277,9 +277,10 @@ export default {
     },
     // 更换底图
     getBackground() {
+      // 点击就关闭，防止客户端多次提交
+      this.showFormVisible = false
       generate_background_byID(this.file.id, this.background).then(res => {
         const fileId = this.file.id
-        this.showFormVisible = false
         // 重新获取页面数据
         this.$message({
           message: this.$t('dataset.background_ing'),
@@ -295,7 +296,7 @@ export default {
       this.$axios.get(this.BASE_API + `/business/file/${fileId}/get_file_status/`).then(res => {
         console.log('请求一次getFileStatus')
         console.log(res)
-        if (res.status === 200) {
+        if (res.data.code === 200) {
           console.log('状态更新')
           // 弹窗提醒
           this.$notify({
@@ -309,7 +310,12 @@ export default {
           return
         } else {
           // 重新轮询
-          this.longPolling(fileId)
+          console.log('重新轮询')
+          this.$nextTick(() => {
+            this.timeObj = setTimeout(() => {
+              this.longPolling(fileId)
+            }, 1000 * 5)
+          })
         }
       })
     },
