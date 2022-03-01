@@ -414,7 +414,8 @@ export default {
     configview: '配置文件信息',
     showResult: '展示实验结果',
     selectSameDataset: '请选择使用相同数据集的实验',
-    otherParamTip: '以下是非必填的参数'
+    otherParamTip: '以下是非必填的参数',
+    taskExecuteSuccessfully: '实验执行完毕'
   },
 
   // 新手引导 - 通用

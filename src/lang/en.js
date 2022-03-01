@@ -415,7 +415,8 @@ export default {
     configview: 'Configuration Information',
     showResult: 'Show task results',
     selectSameDataset: 'Please select an experiment using the same dataset',
-    otherParamTip: 'The following are non mandatory parameters'
+    otherParamTip: 'The following are non mandatory parameters',
+    taskExecuteSuccessfully: 'The experiment is completed'
   },
 
   // 新手引导 - 通用
