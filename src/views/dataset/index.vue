@@ -47,17 +47,17 @@
           fit
           border
         >
-          <el-table-column
+          <af-table-column
             type="index"
             :index="indexMethod"
             :label="$t('common.order')"
             width="120"
           />
-          <el-table-column
+          <af-table-column
             prop="file_name"
             :label="$t('dataset.fileName')"
           />
-          <el-table-column
+          <af-table-column
             prop="file_size"
             :label="$t('dataset.fileSize')"
           />
@@ -69,15 +69,15 @@
             prop="extract_path"
             :label="$t('dataset.extractPath')"
           /> -->
-          <el-table-column
+          <af-table-column
             prop="create_time"
             :label="$t('common.createTime')"
           />
-          <el-table-column
+          <af-table-column
             prop="update_time"
             :label="$t('common.updateTime')"
           />
-          <el-table-column
+          <af-table-column
             :label="$t('common.operation')"
           >
             <template slot-scope="scope">
@@ -139,7 +139,7 @@
               </el-button-group>
 
             </template>
-          </el-table-column>
+          </af-table-column>
         </el-table>
       </div>
     </div>
