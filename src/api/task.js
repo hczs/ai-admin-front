@@ -137,3 +137,11 @@ export function getStateMode(taskId) {
     params: { task: taskId }
   })
 }
+
+// 更新任务状态 get_task_statue
+export function getTaskStatus(taskId) {
+  return request({
+    url: `/business/task/${taskId}/get_task_status/`,
+    method: 'get'
+  })
+}

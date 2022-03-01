@@ -564,10 +564,11 @@
 </template>
 <script>
 import { checkPermission } from '@/utils/permission'
+import i18n from '@/lang'
 import { getTaskList, getTaskById, executeTaskById,
   deleteTaskById, getExecuteLogById, getStateEvaluateList,
   getMapMatchingEvaluateList, getTrajEvaluateList, getConfigDataById,
-  getStateMode } from '@/api/task'
+  getStateMode, getTaskStatus } from '@/api/task'
 
 const DEFAULT_EVALUATE_DATA = [{ 'MAE': '', 'MAPE': '', 'MSE': '', 'RMSE': '', 'masked_MAE': '', 'masked_MAPE': '',
   'masked_MSE': '', 'masked_RMSE': '', 'R2': '', 'EVAR': '', 'Precision': '',
@@ -576,7 +577,6 @@ const DEFAULT_EVALUATE_DATA = [{ 'MAE': '', 'MAPE': '', 'MSE': '', 'RMSE': '', '
 
 // 横向滚动条持续在视线范围内
 function _scrollBarFixedHandle(el) {
-  console.log(el)
   if (!el) return
   const tableBodyWrapDom = el.querySelector('.el-table__body-wrapper')
   const tableBodyDom = el.querySelector('.el-table__body')
@@ -710,26 +710,9 @@ export default {
     this.getList()
   },
   mounted() {
+    console.log('mounted')
     this.$nextTick(() => {
       setTimeout(() => {
-        // const rowList = Array.from(this.$refs.taskTable.$el.getElementsByClassName('el-table__row'))
-        // console.log('rowList:', rowList)
-        // console.log('cells0:', rowList[0].cells[0].classList)
-        // this.$intro.setOptions({
-        //   steps: [{
-        //     title: 'Welcome',
-        //     intro: 'Hello World! 👋'
-        //   },
-        //   {
-        //     element: rowList[0].cells[0],
-        //     intro: 'This step focuses on an image'
-        //   },
-        //   {
-        //     title: 'Farewell!',
-        //     element: rowList[0].cells[1],
-        //     intro: 'And this is our final step!'
-        //   }]
-        // })
         if (localStorage.getItem('taskIndexNew') === null || localStorage.getItem('taskIndexNew') !== '1') {
           this.$intro.start()
           localStorage.setItem('taskIndexNew', 1)
@@ -739,6 +722,29 @@ export default {
   },
   methods: {
     checkPermission,
+    // 获取任务状态，长轮询
+    pollingTaskStatus(taskId) {
+      if (this.timeObj) {
+        clearTimeout(this.timeObj)
+      }
+      getTaskStatus(taskId).then(res => {
+        if (res.code === 202) {
+          this.$nextTick(() => {
+            this.timeObj = setTimeout(() => {
+              this.pollingTaskStatus(taskId)
+            }, 1000 * 30)
+          })
+        } else if (res.code === 200) {
+          // 提示框
+          this.$notify({
+            title: i18n.t('task.taskExecuteSuccessfully'),
+            message: res.data.task_name + i18n.t('task.taskExecuteSuccessfully'),
+            type: 'success',
+            duration: 10000
+          })
+        }
+      })
+    },
     // 获取评价指标mode
     getTaskEvalueteMode(taskId) {
       getStateMode(taskId).then(res => {
@@ -953,12 +959,14 @@ export default {
         this.getList()
       })
       this.executeTaskDialogVisible = false
+      this.pollingTaskStatus(this.executeId)
     },
     executeAtTime() {
       executeTaskById(this.executeId, this.executeForm.executeTime).then(res => {
         this.getList()
       })
       this.executeTaskDialogVisible = false
+      this.pollingTaskStatus(this.executeId)
     },
     // 清空查询条件，重新获取数据
     resetData() {
