@@ -312,7 +312,9 @@ export default {
     gisSuccessfully: '可视化完成！',
     gisViewSuccessfully: '可视化完成！请点击数据集管理中的展示按钮查看数据集！',
     trajTip: '由于轨迹数据过多，这里仅展示部分轨迹数据信息',
-    deletionFailed: '有实验正在使用此数据集，请删除实验后再删除数据集'
+    deletionFailed: '有实验正在使用此数据集，请删除实验后再删除数据集',
+    canView: '可视化检验完成！',
+    canViewSuccessfully: '可视化检验完成，可以选择地图对数据集进行可视化了'
   },
   // 任务
   task: {

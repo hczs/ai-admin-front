@@ -313,7 +313,9 @@ export default {
     gisSuccessfully: 'Visualization complete!',
     gisViewSuccessfully: ' Visualization complete! Please click the display button in dataset management to view the dataset!',
     trajTip: 'Due to too much trajectory data, only part of the trajectory data information is displayed here.',
-    deletionFailed: 'There are experiments using this dataset. Please delete the experiment before deleting the dataset'
+    deletionFailed: 'There are experiments using this dataset. Please delete the experiment before deleting the dataset',
+    canView: 'Visual inspection completed!',
+    canViewSuccessfully: 'After the visualization inspection is completed, you can select the map to visualize the data set'
   },
   // 任务
   task: {

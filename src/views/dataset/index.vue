@@ -92,7 +92,7 @@
                   :title="$t('common.deleteConfirm')"
                   @onConfirm="deleteFile(scope.row.id)"
                 >
-                  <el-link v-if="!deleteDisable" slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
+                  <el-link v-if="!deleteDisable && scope.row.dataset_status !== 4" slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
                   <!-- <el-button slot="reference" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
                     {{ $t('common.delete') }}
                   </el-button> -->
@@ -287,12 +287,14 @@ export default {
           type: 'success'
         })
         // 开启长轮询
+        this.title = i18n.t('dataset.gisSuccessfully')
+        this.message = i18n.t('dataset.gisViewSuccessfully')
         this.longPolling(fileId)
         this.getList(this.queryParam)
       })
     },
     // 长轮询获取状态
-    longPolling(fileId) {
+    longPolling(fileId, title, message) {
       this.$axios.get(this.BASE_API + `/business/file/${fileId}/get_file_status/`).then(res => {
         console.log('请求一次getFileStatus')
         console.log(res)
@@ -300,8 +302,8 @@ export default {
           console.log('状态更新')
           // 弹窗提醒
           this.$notify({
-            title: i18n.t('dataset.gisSuccessfully'),
-            message: res.data.data.file_name + i18n.t('dataset.gisViewSuccessfully'),
+            title: this.title,
+            message: res.data.data.file_name + this.message,
             type: 'success',
             duration: 10000
           })
@@ -354,6 +356,9 @@ export default {
         this.$message.error(this.$t('dataset.atomicError'))
       }
       this.getList(this.queryParam)
+      this.title = i18n.t('dataset.canView')
+      this.message = i18n.t('dataset.canViewSuccessfully')
+      this.longPolling(response.data.id)
     },
     // 上传之前，检查文件类型
     handleBeforeUpload(file) {
