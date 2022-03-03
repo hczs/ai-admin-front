@@ -277,9 +277,10 @@ export default {
     },
     // 更换底图
     getBackground() {
+      // 点击就关闭，防止客户端多次提交
+      this.showFormVisible = false
       generate_background_byID(this.file.id, this.background).then(res => {
         const fileId = this.file.id
-        this.showFormVisible = false
         // 重新获取页面数据
         this.$message({
           message: this.$t('dataset.background_ing'),
@@ -295,7 +296,7 @@ export default {
       this.$axios.get(this.BASE_API + `/business/file/${fileId}/get_file_status/`).then(res => {
         console.log('请求一次getFileStatus')
         console.log(res)
-        if (res.status === 200) {
+        if (res.data.code === 200) {
           console.log('状态更新')
           // 弹窗提醒
           this.$notify({
@@ -309,7 +310,12 @@ export default {
           return
         } else {
           // 重新轮询
-          this.longPolling(fileId)
+          console.log('重新轮询')
+          this.$nextTick(() => {
+            this.timeObj = setTimeout(() => {
+              this.longPolling(fileId)
+            }, 1000 * 5)
+          })
         }
       })
     },
@@ -321,12 +327,18 @@ export default {
     deleteFile(id) {
       this.listLoading = true
       deleteFileById(id).then(res => {
-        // 重新获取页面数据
-        this.$message({
-          message: this.$t('common.deleteSucceeded'),
-          type: 'success'
-        })
-        this.getList(this.queryParam)
+        if (res.code === 400) {
+          // 提示数据集正在被使用
+          this.$message.error(this.$t('dataset.deletionFailed'))
+        } else {
+          // 重新获取页面数据
+          this.$message({
+            message: this.$t('common.deleteSucceeded'),
+            type: 'success'
+          })
+          this.getList(this.queryParam)
+        }
+        this.listLoading = false
       }).catch(() => {
         this.listLoading = false
         this.$message.error(this.$t('common.deletionFailed'))

@@ -311,7 +311,8 @@ export default {
     choosemap: '选择可视化底图',
     gisSuccessfully: '可视化完成！',
     gisViewSuccessfully: '可视化完成！请点击数据集管理中的展示按钮查看数据集！',
-    trajTip: '由于轨迹数据过多，这里仅展示部分轨迹数据信息'
+    trajTip: '由于轨迹数据过多，这里仅展示部分轨迹数据信息',
+    deletionFailed: '有实验正在使用此数据集，请删除实验后再删除数据集'
   },
   // 任务
   task: {
