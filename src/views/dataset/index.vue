@@ -327,12 +327,18 @@ export default {
     deleteFile(id) {
       this.listLoading = true
       deleteFileById(id).then(res => {
-        // 重新获取页面数据
-        this.$message({
-          message: this.$t('common.deleteSucceeded'),
-          type: 'success'
-        })
-        this.getList(this.queryParam)
+        if (res.code === 400) {
+          // 提示数据集正在被使用
+          this.$message.error(this.$t('dataset.deletionFailed'))
+        } else {
+          // 重新获取页面数据
+          this.$message({
+            message: this.$t('common.deleteSucceeded'),
+            type: 'success'
+          })
+          this.getList(this.queryParam)
+        }
+        this.listLoading = false
       }).catch(() => {
         this.listLoading = false
         this.$message.error(this.$t('common.deletionFailed'))

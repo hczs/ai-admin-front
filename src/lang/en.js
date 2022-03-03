@@ -312,7 +312,8 @@ export default {
     choosemap: 'choose background',
     gisSuccessfully: 'Visualization complete!',
     gisViewSuccessfully: ' Visualization complete! Please click the display button in dataset management to view the dataset!',
-    trajTip: 'Due to too much trajectory data, only part of the trajectory data information is displayed here.'
+    trajTip: 'Due to too much trajectory data, only part of the trajectory data information is displayed here.',
+    deletionFailed: 'There are experiments using this dataset. Please delete the experiment before deleting the dataset'
   },
   // 任务
   task: {
