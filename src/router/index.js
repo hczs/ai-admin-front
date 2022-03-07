@@ -85,6 +85,19 @@ export const constantRoutes = [
     ]
   },
 
+  // {
+  //   path: '/map',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'map',
+  //       component: () => import('@/views/google/map'),
+  //       name: 'map',
+  //       meta: { title: 'map', icon: 'task1' }
+  //     }
+  //   ]
+  // },
+
   {
     path: '/task',
     component: Layout,

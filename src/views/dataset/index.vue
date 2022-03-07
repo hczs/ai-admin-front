@@ -82,21 +82,6 @@
           >
             <template slot-scope="scope">
               <el-button-group>
-                <el-popconfirm
-                  :confirm-button-text="$t('common.confirm')"
-                  :cancel-button-text="$t('common.cancel')"
-                  confirm-button-type="danger"
-                  cancel-button-type="info"
-                  icon="el-icon-info"
-                  icon-color="red"
-                  :title="$t('common.deleteConfirm')"
-                  @onConfirm="deleteFile(scope.row.id)"
-                >
-                  <el-link v-if="!deleteDisable" slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
-                  <!-- <el-button slot="reference" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
-                    {{ $t('common.delete') }}
-                  </el-button> -->
-                </el-popconfirm>
                 <div v-intro-if="scope.$index === 0" :data-intro="$t('addDataIntro.step05')" data-step="5">
                   <div v-intro-if="scope.$index === 0" :data-intro="$t('addDataIntro.step06')" data-step="6">
                     <el-link v-if="scope.row.dataset_status === 1" style="margin-left: 10px" icon="el-icon-view">
@@ -287,12 +272,14 @@ export default {
           type: 'success'
         })
         // 开启长轮询
+        this.title = i18n.t('dataset.gisSuccessfully')
+        this.message = i18n.t('dataset.gisViewSuccessfully')
         this.longPolling(fileId)
         this.getList(this.queryParam)
       })
     },
     // 长轮询获取状态
-    longPolling(fileId) {
+    longPolling(fileId, title, message) {
       this.$axios.get(this.BASE_API + `/business/file/${fileId}/get_file_status/`).then(res => {
         console.log('请求一次getFileStatus')
         console.log(res)
@@ -300,8 +287,8 @@ export default {
           console.log('状态更新')
           // 弹窗提醒
           this.$notify({
-            title: i18n.t('dataset.gisSuccessfully'),
-            message: res.data.data.file_name + i18n.t('dataset.gisViewSuccessfully'),
+            title: this.title,
+            message: res.data.data.file_name + this.message,
             type: 'success',
             duration: 10000
           })
@@ -354,6 +341,9 @@ export default {
         this.$message.error(this.$t('dataset.atomicError'))
       }
       this.getList(this.queryParam)
+      this.title = i18n.t('dataset.canView')
+      this.message = i18n.t('dataset.canViewSuccessfully')
+      this.longPolling(response.data.id)
     },
     // 上传之前，检查文件类型
     handleBeforeUpload(file) {
