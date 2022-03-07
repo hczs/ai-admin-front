@@ -77,7 +77,7 @@ export default {
     tasksEdit: '编辑任务',
     datasetView: '数据集展示',
     evaluate: '模型评价指标对比',
-    taskResult: '任务结果展示'
+    taskResult: '实验结果展示'
   },
   navbar: {
     dashboard: '首页',
@@ -89,7 +89,7 @@ export default {
     updatePassword: '修改密码'
   },
   login: {
-    title: '系统登录',
+    title: 'LibCity实验管理系统',
     logIn: '登录',
     accountNumber: '账号',
     password: '密码',
@@ -322,8 +322,8 @@ export default {
     stateModeTip: '本次评价指标评估模式为：',
     // 任务执行参数
     task: '要执行的任务名',
-    model: '要执行的模型名',
-    dataset: '要执行的数据集',
+    model: '模型',
+    dataset: '数据集',
     config_file: '自定义的配置文件名',
     config_file1: '自定义的配置文件',
     saved_model: '是否保存训练好的模型',
@@ -481,7 +481,8 @@ export default {
     title: '平台使用指南', // 大标题
     introduction: '简介',
     // 简介内容
-    introContent: '<span>本平台为LibCity库提供了可视化的操作界面，您可以在平台上传数据集选定模型创建并执行实验，可以查看实验执行日志和模型评价指标相关信息；同时，平台也提供了完善的权限管理功能。</span>',
+    // introContent: '<span>本平台为LibCity库提供了可视化的操作界面，您可以在平台上传数据集选定模型创建并执行实验，可以查看实验执行日志和模型评价指标相关信息；同时，平台也提供了完善的权限管理功能。</span>',
+    introContent: '<span>本平台为LibCity库提供了可视化的操作界面，您可以在平台上传数据集选定模型创建并执行实验，可以查看实验执行日志和模型评价指标相关信息，同时平台也提供了完善的权限管理功能。LibCity 由北航智慧城市兴趣小组<a target="blank" href="https://www.bigscity.com/" style="color: blue">BIGSCity</a>开发和维护，它是一个统一、全面、可扩展的代码库，为交通预测领域的研究人员提供了一个可靠的实验工具和便捷的开发框架。 我们的库基于 PyTorch 实现，并将与交通预测相关的所有必要步骤或组件包含到系统的流水线中，使研究人员能够进行全面的对比实验。 我们的库将有助于交通预测领域的标准化和可复现性。详细信息请访问我们的<a target="blank" href="https://libcity.ai/" style="color: blue">主页</a>以及<a target="blank" href="https://github.com/LibCity" style="color: blue">代码仓库</a>。</span>',
     feature: '特性',
     featureContent: [
       '<span>数据集可视化查看：可以对用户上传的数据集进行解析并进行GIS可视化，可自由选择地图底图，平台提供谷歌地图、谷歌卫星地图、高德地图、高德卫星地图、原始街道地图等多种底图</span>',
@@ -501,6 +502,14 @@ export default {
     step04: '步骤四：查看运行日志',
     step04Content: '<span>点击左侧的实验列表，在操作列中找到查看运行日志按钮，可在线查看实验运行日志信息。</span>',
     step05: '步骤五：查看评价指标',
-    step05Content: '<span>实验执行完毕后，在操作列中找到查看评价指标按钮，可在线查看评价指标信息。</span>'
+    step05Content: '<span>实验执行完毕后，在操作列中找到查看评价指标按钮，可在线查看评价指标信息。</span>',
+    // 脚注
+    realtedLinks: '相关链接',
+    homepage: 'https://libcity.ai/',
+    homepageWord: '主页',
+    document: 'https://bigscity-libcity-docs.readthedocs.io/zh_CN/latest/#',
+    documentWord: '文档',
+    paperLibrary: '论文仓库',
+    aboutUs: '关于我们'
   }
 }

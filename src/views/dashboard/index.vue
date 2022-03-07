@@ -65,6 +65,35 @@
         <el-step status="process" :title="$t('dashboard.step05')" :description="$t('dashboard.step05Content')" icon="el-icon-view" /> -->
       </el-steps>
     </el-card>
+    <!-- 脚注 -->
+    <el-card class="container" style="margin-top: 20px" :header="$t('dashboard.realtedLinks')" shadow="always">
+      <span slot="header" class="card-title">{{ $t('dashboard.realtedLinks') }}</span>
+      <!-- <p class="card-p" /></p> -->
+      <div class="related-link">
+        <el-row :gutter="20">
+          <el-col :span="4">
+            <a target="_blank" :href="$t('dashboard.homepage')">{{ $t('dashboard.homepageWord') }}</a>
+          </el-col>
+          <el-col :span="4">
+            <a target="_blank" :href="$t('dashboard.document')">
+              {{ $t('dashboard.documentWord') }}
+            </a>
+          </el-col>
+          <el-col :span="4">
+            <a target="_blank" href="https://github.com/LibCity">Github</a>
+          </el-col>
+          <el-col :span="4">
+            <a target="_blank" href="https://github.com/LibCity/Bigscity-LibCity-PaperList">{{ $t('dashboard.paperLibrary') }}</a>
+          </el-col>
+          <el-col :span="4">
+            <a target="_blank" href="https://libcity.ai/#/about">{{ $t('dashboard.aboutUs') }}</a>
+          </el-col>
+          <el-col :span="4">
+            <a target="_blank" href="https://www.bigscity.com/">BIGSCity</a>
+          </el-col>
+        </el-row>
+      </div>
+    </el-card>
   </div>
 </template>
 
@@ -137,6 +166,14 @@ export default {
   font-size: 16px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", "Helvetica Neue", Helvetica, Tahoma, Arial,"PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   color:#000;
+}
+/* 相关链接样式 */
+.related-link > a {
+  font-style: normal;
+  font-variant: normal;
+  font-size: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", "Helvetica Neue", Helvetica, Tahoma, Arial,"PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  margin-left: 10px;
 }
 
 /* li */

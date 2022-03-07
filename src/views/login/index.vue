@@ -198,7 +198,7 @@ $light_gray:#eee;
 
   .login-form {
     position: relative;
-    width: 520px;
+    width: 580px;
     max-width: 100%;
     padding: 160px 35px 0;
     margin: 0 auto;
@@ -243,6 +243,7 @@ $light_gray:#eee;
       font-size: 18px;
       right: 0px;
       cursor: pointer;
+      display: inline;
     }
   }
 

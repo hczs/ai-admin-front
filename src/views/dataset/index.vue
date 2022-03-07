@@ -82,21 +82,6 @@
           >
             <template slot-scope="scope">
               <el-button-group>
-                <el-popconfirm
-                  :confirm-button-text="$t('common.confirm')"
-                  :cancel-button-text="$t('common.cancel')"
-                  confirm-button-type="danger"
-                  cancel-button-type="info"
-                  icon="el-icon-info"
-                  icon-color="red"
-                  :title="$t('common.deleteConfirm')"
-                  @onConfirm="deleteFile(scope.row.id)"
-                >
-                  <el-link v-if="!deleteDisable && scope.row.dataset_status !== 4" slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
-                  <!-- <el-button slot="reference" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
-                    {{ $t('common.delete') }}
-                  </el-button> -->
-                </el-popconfirm>
                 <div v-intro-if="scope.$index === 0" :data-intro="$t('addDataIntro.step05')" data-step="5">
                   <div v-intro-if="scope.$index === 0" :data-intro="$t('addDataIntro.step06')" data-step="6">
                     <el-link v-if="scope.row.dataset_status === 1" style="margin-left: 10px" icon="el-icon-view">

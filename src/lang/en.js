@@ -89,7 +89,7 @@ export default {
     updatePassword: 'Change Password'
   },
   login: {
-    title: 'System Login',
+    title: 'LibCity Experimental Management System',
     logIn: 'Login',
     accountNumber: 'Account',
     password: 'Password',
@@ -482,7 +482,8 @@ export default {
     title: 'Platform User Guide', // 大标题
     introduction: 'Introduction',
     // 简介内容
-    introContent: '<span>This platform provides a visual interface for the LibCity library. You can upload datasets on the platform to select model execute experiments, and you can view experiment execution logs and model evaluation indicators related information; at the same time, the platform also provides a complete authority management function .</span>',
+    // introContent: '<span>This platform provides a visual interface for the LibCity library. You can upload datasets on the platform to select model execute experiments, and you can view experiment execution logs and model evaluation indicators related information; at the same time, the platform also provides a complete authority management function .</span>',
+    introContent: '<span>This platform provides a visual operation interface for the LibCity library. You can upload a dataset and select a model on the platform to create and execute experiments, and you can view the experiment execution logs and information related to model evaluation indicators. At the same time, the platform also provides a complete authority management function.Developed and maintained by the Beihang Smart City Interest Group <a target="blank" href="https://www.bigscity.com/" style="color: blue">BIGSCity</a>, LibCity is a unified, comprehensive, and extensible library, which provides researchers with a credible experimental tool and a convenient development framework in the traffic prediction field. Our library is implemented based on PyTorch and includes all the necessary steps or components related to traffic prediction into a systematic pipeline, allowing researchers to conduct comprehensive experiments. Our library will contribute to the standardization and reproducibility in the field of traffic prediction.For more information, please visit our <a target="blank" href="https://libcity.ai/" style="color: blue">HomePage</a> and <a target="blank" href="https://github.com/LibCity" style="color: blue">Code Repository</a>. </span>',
     feature: 'Feature',
     featureContent: [
       '<span>Dataset visualization: You can parse and visualize the data set uploaded by the user, and you can freely choose the map base map. The platform provides Google Maps, Google Satellite Maps, AutoNavi Maps, AutoNavi Satellite Maps, Original Street Maps, etc. Various basemaps</span>',
@@ -502,6 +503,14 @@ export default {
     step04: 'Step 4: View the running log',
     step04Content: '<span>Click the experiment list on the left, and find the View running log button in the operation column to view the experiment running log information online.</span>',
     step05: 'Step 5: Check the evaluation indicators',
-    step05Content: '<span>After the experiment is executed, find the View Evaluation Indicators button in the operation column to view the evaluation indicator information online.</span>'
+    step05Content: '<span>After the experiment is executed, find the View Evaluation Indicators button in the operation column to view the evaluation indicator information online.</span>',
+    // 脚注
+    realtedLinks: 'Related Links',
+    homepage: 'https://libcity.ai/',
+    homepageWord: 'HomePage',
+    document: 'https://bigscity-libcity-docs.readthedocs.io/en/latest/#',
+    documentWord: 'Document',
+    paperLibrary: 'Paper Library',
+    aboutUs: 'About Us'
   }
 }
