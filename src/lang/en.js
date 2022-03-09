@@ -324,6 +324,7 @@ export default {
     // 任务执行参数
     task: 'task',
     model: 'model',
+    expId: 'Experiment ID',
     dataset: 'dataset',
     config_file: 'config_file',
     config_file1: 'config_file',
@@ -358,6 +359,7 @@ export default {
     numberError: 'Please enter a value of numeric type',
     maxEpochNumberError: 'please enter an integer',
     maxEpochError: 'Please enter a number greater than 0',
+    floatError: 'Please enter decimal',
     noStart: 'Not started',
     execute: 'Execute',
     executing: 'Executing',
@@ -419,7 +421,8 @@ export default {
     showResult: 'Show task results',
     selectSameDataset: 'Please select an experiment using the same dataset',
     otherParamTip: 'The following are non mandatory parameters',
-    taskExecuteSuccessfully: 'The experiment is completed'
+    taskExecuteSuccessfully: 'The experiment is completed',
+    downloadModel: 'Download training model'
   },
 
   // 新手引导 - 通用

@@ -106,6 +106,22 @@
             </el-popover>
 
           </el-form-item>
+
+          <el-form-item :label="$t('task.batch_size')" prop="batch_size" style="text-align: left">
+            <el-input-number v-model.number="task.batch_size" controls-position="right" />
+          </el-form-item>
+
+          <el-form-item :label="$t('task.learning_rate')" prop="learning_rate" style="text-align: left">
+            <el-input-number v-model.number="task.learning_rate" controls-position="right" />
+          </el-form-item>
+
+          <el-form-item :label="$t('task.train_rate')" prop="train_rate" style="text-align: left">
+            <el-input-number v-model.number="task.train_rate" controls-position="right" />
+          </el-form-item>
+          <el-form-item :label="$t('task.eval_rate')" prop="eval_rate" style="text-align: left">
+            <el-input-number v-model.number="task.eval_rate" controls-position="right" />
+          </el-form-item>
+
           <el-form-item :label="$t('task.gpu')" style="text-align: left">
 
             <el-radio-group v-model="task.gpu">
@@ -130,18 +146,12 @@
               <el-radio :label="false">{{ $t('common.no') }}</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item :label="$t('task.batch_size')" prop="batch_size" style="text-align: left">
-            <el-input-number v-model.number="task.batch_size" controls-position="right" />
+
+          <!-- expid实验ID -->
+          <el-form-item v-if="task.train == false" :label="$t('task.expId')" prop="exp_id" style="text-align: left">
+            <el-input-number v-model.number="task.exp_id" controls-position="right" />
           </el-form-item>
-          <el-form-item :label="$t('task.train_rate')" prop="train_rate" style="text-align: left">
-            <el-input-number v-model.number="task.train_rate" controls-position="right" />
-          </el-form-item>
-          <el-form-item :label="$t('task.eval_rate')" prop="eval_rate" style="text-align: left">
-            <el-input-number v-model.number="task.eval_rate" controls-position="right" />
-          </el-form-item>
-          <el-form-item :label="$t('task.learning_rate')" prop="learning_rate" style="text-align: left">
-            <el-input-number v-model.number="task.learning_rate" controls-position="right" />
-          </el-form-item>
+
           <!-- 如果需要配置更多参数，可以上传配置文件 -->
           <el-divider content-position="center">{{ $t('task.taskMoreParamTip') }}</el-divider>
           <el-form-item :label="$t('task.config_file')" :data-intro="$t('addTaskIntro.step05')" data-step="5">
@@ -203,12 +213,33 @@ export default {
     }
     const validateMaxEpoch = (rule, value, callback) => {
       // 必须是大于0的整数
-      if (typeof (value) !== 'number') {
-        callback(new Error(this.$t('task.numberError')))
-      } else if (value % 1 !== 0) {
-        callback(new Error(this.$t('task.maxEpochNumberError')))
-      } else if (value < 0) {
-        callback(new Error(this.$t('task.maxEpochError')))
+      if (typeof (value) !== 'undefined') {
+        if (typeof (value) !== 'number') {
+          callback(new Error(this.$t('task.numberError')))
+        } else if (value % 1 !== 0) {
+          callback(new Error(this.$t('task.maxEpochNumberError')))
+        } else if (value < 0) {
+          callback(new Error(this.$t('task.maxEpochError')))
+        } else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
+    const validateFloat = (rule, value, callback) => {
+      // 必须是小数
+      if (typeof (value) !== 'undefined') {
+        console.log('value:', value)
+        if (typeof (value) !== 'number') {
+          callback(new Error(this.$t('task.numberError')))
+        } else if (value % 1 === 0) {
+          callback(new Error(this.$t('task.floatError')))
+        } else if (value < 0) {
+          callback(new Error(this.$t('task.maxEpochError')))
+        } else {
+          callback()
+        }
       } else {
         callback()
       }
@@ -254,11 +285,11 @@ export default {
         task: [{ required: true, message: this.$t('task.taskError') }],
         model: [{ required: true, message: this.$t('task.modelError') }],
         dataset: [{ required: true, message: this.$t('task.datasetError') }],
-        batch_size: [{ type: 'number', message: this.$t('task.numberError') }],
-        train_rate: [{ type: 'number', message: this.$t('task.numberError') }],
-        eval_rate: [{ type: 'number', message: this.$t('task.numberError') }],
-        learning_rate: [{ type: 'number', message: this.$t('task.numberError') }],
-        max_epoch: [{ validator: validateMaxEpoch }],
+        batch_size: [{ required: false, validator: validateMaxEpoch }],
+        train_rate: [{ required: false, validator: validateFloat }],
+        eval_rate: [{ required: false, validator: validateFloat }],
+        learning_rate: [{ required: false, validator: validateFloat }],
+        max_epoch: [{ required: false, validator: validateMaxEpoch }],
         gpu_id: [{ type: 'number', message: this.$t('task.numberError') }]
       }
     }

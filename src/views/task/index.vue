@@ -7,6 +7,10 @@
         <el-input v-model="queryParam.task_name" />
       </el-form-item>
 
+      <el-form-item :label="$t('task.dataset')">
+        <el-input v-model="queryParam.dataset" />
+      </el-form-item>
+
       <el-form-item :label="$t('task.task_type')">
         <el-select v-model="queryParam.task" style="float: left" clearable>
           <el-option
@@ -69,31 +73,34 @@
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" label-width="auto">
-            <el-form-item :label="$t('task.taskName')">
+            <!-- <el-form-item :label="$t('task.taskName')">
               <span>{{ props.row.task_name }}</span>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item v-if="props.row.task_description !== null" :label="$t('task.taskDescription')">
               <span>{{ props.row.task_description }}</span>
             </el-form-item>
-            <el-form-item :label="$t('task.status')">
+            <!-- 任务状态 -->
+            <!-- <el-form-item :label="$t('task.status')">
               <span v-if="props.row.task_status === 0"> {{ $t('task.noStart') }} </span>
               <span v-if="props.row.task_status === 1"> {{ $t('task.executing') }} </span>
               <span v-if="props.row.task_status === 2"> {{ $t('task.completed') }} </span>
               <span v-if="props.row.task_status === -1"> {{ $t('task.executeError') }} </span>
-            </el-form-item>
-            <el-form-item :label="$t('task.task')">
+            </el-form-item> -->
+            <!-- 所属任务 -->
+            <!-- <el-form-item :label="$t('task.task')">
               <span v-if="props.row.task === 'traffic_state_pred'"> {{ $t('task.traffic_state_pred') }} </span>
               <span v-if="props.row.task === 'traj_loc_pred'"> {{ $t('task.traj_loc_pred') }} </span>
               <span v-if="props.row.task === 'road_representation'"> {{ $t('task.road_representation') }} </span>
               <span v-if="props.row.task === 'eta'"> {{ $t('task.eta') }} </span>
               <span v-if="props.row.task === 'map_matching'"> {{ $t('task.map_matching') }} </span>
-            </el-form-item>
-            <el-form-item :label="$t('task.model')">
+            </el-form-item> -->
+            <!-- 模型和数据集 -->
+            <!-- <el-form-item :label="$t('task.model')">
               <span>{{ props.row.model }}</span>
             </el-form-item>
             <el-form-item :label="$t('task.dataset')">
               <span>{{ props.row.dataset }}</span>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item v-if="props.row.config_file !== null" :label="$t('task.config_file1')">
               <!-- <span>{{ props.row.config_file }}</span> -->
               <el-link type="primary" :underline="false" :href="BASE_API + '/business/task/' + props.row.id + '/download_task_config/'">
@@ -103,28 +110,28 @@
                 {{ $t('task.clickCatConfig') }}
               </el-link>
             </el-form-item>
-            <!-- <el-form-item :label="$t('task.saved_model')">
+            <el-form-item v-if="props.row.saved_model !== null" :label="$t('task.saved_model')">
               <span>{{ props.row.saved_model }}</span>
             </el-form-item>
-            <el-form-item :label="$t('task.train')">
+            <el-form-item v-if="props.row.train !== null" :label="$t('task.train')">
               <span>{{ props.row.train }}</span>
             </el-form-item>
-            <el-form-item :label="$t('task.batch_size')">
+            <el-form-item v-if="props.row.batch_size !== null" :label="$t('task.batch_size')">
               <span>{{ props.row.batch_size }}</span>
             </el-form-item>
-            <el-form-item :label="$t('task.train_rate')">
+            <el-form-item v-if="props.row.train_rate !== null" :label="$t('task.train_rate')">
               <span>{{ props.row.train_rate }}</span>
             </el-form-item>
-            <el-form-item :label="$t('task.eval_rate')">
+            <el-form-item v-if="props.row.eval_rate !== null" :label="$t('task.eval_rate')">
               <span>{{ props.row.eval_rate }}</span>
             </el-form-item>
-            <el-form-item :label="$t('task.learning_rate')">
+            <el-form-item v-if="props.row.learning_rate !== null" :label="$t('task.learning_rate')">
               <span>{{ props.row.learning_rate }}</span>
-            </el-form-item> -->
-            <el-form-item :label="$t('task.max_epoch')">
+            </el-form-item>
+            <el-form-item v-if="props.row.max_epoch !== null" :label="$t('task.max_epoch')">
               <span>{{ props.row.max_epoch }}</span>
             </el-form-item>
-            <el-form-item :label="$t('task.gpu')">
+            <el-form-item v-if="props.row.gpu !== null" :label="$t('task.gpu')">
               <span>{{ props.row.gpu }}</span>
             </el-form-item>
             <el-form-item v-if="props.row.gpu" :label="$t('task.gpu_id')">
@@ -146,6 +153,11 @@
         prop="task_name"
         :label="$t('task.taskName')"
       />
+      <!-- 实验ID -->
+      <af-table-column
+        prop="exp_id"
+        :label="$t('task.expId')"
+      />
       <!-- 模型名 -->
       <af-table-column
         prop="model"
@@ -158,7 +170,7 @@
       />
       <af-table-column
         prop="task"
-        :label="$t('task.task_type')"
+        :label="$t('task.task')"
         width="130"
       >
         <template slot-scope="scope">
@@ -201,17 +213,23 @@
         prop="create_time"
         :label="$t('common.createTime')"
       /> -->
-      <af-table-column
+      <el-table-column
         :label="$t('common.operation')"
         fixed="right"
+        :width="itemLabelWidth"
       >
         <template slot-scope="scope">
-          <el-button-group v-intro-if="scope.$index === 0" style="width: 120px" :data-intro="$t('taskIndexIntroL.step04')" data-step="4">
+          <el-button-group v-intro-if="scope.$index === 0" :data-intro="$t('taskIndexIntroL.step04')" data-step="4">
 
             <!-- <el-button style="width: 120px" :disabled="editDisable" type="primary" size="small" icon="el-icon-edit">
                 {{ $t('common.edit') }}
               </el-button> -->
-            <el-link style="margin-left: 10px" :disabled="editDisable || ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )" icon="el-icon-edit">
+            <!-- 编辑按钮 -->
+            <el-link
+              style="margin-left: 10px;"
+              :disabled="editDisable || ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )"
+              icon="el-icon-edit"
+            >
               <span v-if="editDisable || ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )">
                 {{ $t('common.edit') }}
               </span>
@@ -220,6 +238,7 @@
               </router-link>
             </el-link>
 
+            <!-- 删除按钮 -->
             <el-popconfirm
               :confirm-button-text="$t('common.confirm')"
               :cancel-button-text="$t('common.cancel')"
@@ -230,46 +249,85 @@
               :title="$t('common.deleteConfirm')"
               @onConfirm="deleteTask(scope.row.id)"
             >
-              <el-link v-if="!deleteDisable" slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">
+              <el-link v-if="!deleteDisable" slot="reference" style="margin-left: 10px;" :disabled="deleteDisable" icon="el-icon-delete">
                 {{ $t('common.delete') }}
               </el-link>
               <!-- <el-button slot="reference" style="width: 120px" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
                 {{ $t('common.delete') }}
               </el-button> -->
             </el-popconfirm>
-            <el-link v-if="scope.row.task_status === 0" style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-video-play" @click="execute(scope.row.id)">
+            <!-- 执行按钮 -->
+            <el-link
+              v-if="scope.row.task_status === 0"
+              style="margin-left: 10px"
+              :disabled="executeDisable"
+              icon="el-icon-video-play"
+              @click="execute(scope.row.id)"
+            >
               {{ $t('task.execute') }}
             </el-link>
-            <el-link v-if="scope.row.task_status === -1" style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-video-play" @click="execute(scope.row.id)">
+            <!-- 重新执行按钮 -->
+            <el-link
+              v-if="scope.row.task_status === -1"
+              style="margin-left: 10px"
+              :disabled="executeDisable"
+              icon="el-icon-video-play"
+              @click="execute(scope.row.id)"
+            >
               {{ $t('task.reExecute') }}
             </el-link>
-            <el-link v-if="scope.row.task_status === 1" style="margin-left: 10px" disabled icon="el-icon-loading">
+            <!-- 执行中动画 -->
+            <el-link
+              v-if="scope.row.task_status === 1"
+              style="margin-left: 10px"
+              disabled
+              icon="el-icon-loading"
+            >
               {{ $t('task.executing') }}
             </el-link>
-            <el-link v-if=" scope.row.task_status === 2 && scope.row.task !== 'road_representation' " style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-notebook-2" @click="openEvaluateDialog(scope.row.id)">
+            <!-- 查看评价指标按钮 -->
+            <el-link
+              v-if=" scope.row.task_status === 2 && scope.row.task !== 'road_representation' "
+              style="margin-left: 10px"
+              :disabled="executeDisable"
+              icon="el-icon-notebook-2"
+              @click="openEvaluateDialog(scope.row.id)"
+            >
               {{ $t('task.catEvaluate') }}
             </el-link>
-            <el-link v-if=" scope.row.task_status === 2 && scope.row.task !== 'traj_loc_pred' " style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-view" @click="showResult(scope.row.id, scope.row.dataset)">
+            <!-- 结果查看按钮 -->
+            <el-link
+              v-if=" scope.row.task_status === 2 && scope.row.task !== 'traj_loc_pred' "
+              style="margin-left: 10px;"
+              :disabled="executeDisable"
+              icon="el-icon-view"
+              @click="showResult(scope.row.exp_id, scope.row.dataset)"
+            >
               {{ $t('task.showResult') }}
             </el-link>
-            <el-link v-if="scope.row.task_status !== 0" style="margin-left: 10px" :disabled="executeDisable" icon="el-icon-document" @click="catLog(scope.row.id)">
+            <!-- 下载任务模型 -->
+            <el-link
+              v-if=" scope.row.task_status === 2 "
+              style="margin-left: 10px"
+              :disabled="executeDisable"
+              icon="el-icon-download"
+              :href="BASE_API + '/business/task/' + scope.row.id + '/download_task_model/'"
+            >
+              {{ $t('task.downloadModel') }}
+            </el-link>
+            <!-- 查看日志按钮 -->
+            <el-link
+              v-if="scope.row.task_status !== 0"
+              style="margin-left: 10px"
+              :disabled="executeDisable"
+              icon="el-icon-document"
+              @click="catLog(scope.row.id)"
+            >
               {{ $t('task.catLog') }}
             </el-link>
-            <!-- <el-button style="width: 120px" :disabled="executeDisable" type="primary" size="small" icon="el-icon-video-play" @click="execute(scope.row.id)">
-              {{ $t('task.execute') }}
-            </el-button> -->
-            <!-- <el-button v-if="scope.row.task_status === 1" style="width: 120px" disabled type="primary" size="small" icon="el-icon-loading">
-              {{ $t('task.executing') }}
-            </el-button> -->
-            <!-- <el-button v-if="scope.row.task_status === 2" style="width: 120px" type="success" size="small" icon="el-icon-circle-check">
-              {{ $t('task.completed') }}
-            </el-button> -->
-            <!-- <el-button v-if="scope.row.task_status !== 0" style="width: 120px" type="success" size="small" icon="el-icon-circle-check">
-              {{ $t('task.completed') }}
-            </el-button> -->
           </el-button-group>
         </template>
-      </af-table-column>
+      </el-table-column>
     </el-table>
     <!-- 分页组件 -->
     <div>
@@ -565,6 +623,7 @@
 <script>
 import { checkPermission } from '@/utils/permission'
 import i18n from '@/lang'
+import Cookies from 'js-cookie'
 import { getTaskList, getTaskById, executeTaskById,
   deleteTaskById, getExecuteLogById, getStateEvaluateList,
   getMapMatchingEvaluateList, getTrajEvaluateList, getConfigDataById,
@@ -648,6 +707,8 @@ export default {
     }
     return {
       BASE_API: window.global_url.Base_url,
+      itemLabelWidth: 150,
+      language: '',
       tableData: [],
       task: {},
       listLoading: true,
@@ -705,9 +766,31 @@ export default {
       this.doLayout()
     }
   },
+  updated() {
+    console.log('this.language', this.language)
+    if (!this.language) {
+      console.log('Cookies.get(language)', Cookies.get('language'))
+      this.language = Cookies.get('language')
+    }
+    if (this.language === 'zh') {
+      this.itemLabelWidth = '150'
+    } else {
+      this.itemLabelWidth = '220'
+    }
+  },
   created() {
     this.checkButtonPermission()
     this.getList()
+    console.log('this.language', this.language)
+    if (!this.language) {
+      console.log('Cookies.get(language)', Cookies.get('language'))
+      this.language = Cookies.get('language')
+    }
+    if (this.language === 'zh') {
+      this.itemLabelWidth = '150'
+    } else {
+      this.itemLabelWidth = '220'
+    }
   },
   mounted() {
     console.log('mounted')
@@ -735,6 +818,9 @@ export default {
             }, 1000 * 30)
           })
         } else if (res.code === 200) {
+          // 刷新页面
+          this.getList()
+          console.log('任务执行完毕')
           // 提示框
           this.$notify({
             title: i18n.t('task.taskExecuteSuccessfully'),
@@ -1014,6 +1100,10 @@ export default {
 }
 </script>
 <style>
+
+.word {
+  word-break: break-word !important;
+}
 .el-picker-panel__footer .el-button--text.el-picker-panel__link-btn {
   display: '';
 }

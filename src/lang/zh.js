@@ -321,20 +321,21 @@ export default {
     // 评价指标mode提示信息
     stateModeTip: '本次评价指标评估模式为：',
     // 任务执行参数
-    task: '要执行的任务名',
+    task: '所属任务',
+    expId: '实验ID',
     model: '模型',
     dataset: '数据集',
     config_file: '自定义的配置文件名',
     config_file1: '自定义的配置文件',
     saved_model: '是否保存训练好的模型',
-    train: '如果模型已经预训练过了，是否要重新训练模型',
-    batch_size: '训练集和验证集的批次大小',
-    train_rate: '训练集在整个数据集中所占的比例',
-    eval_rate: '验证集在整个数据集中所占的比例',
+    train: '是否重新训练',
+    batch_size: '批次大小',
+    train_rate: '训练集所占比例',
+    eval_rate: '验证集所占比例',
     learning_rate: '学习率',
-    max_epoch: '最大的训练轮数',
+    max_epoch: '最大训练轮数',
     gpu: '是否使用GPU',
-    gpu_id: '使用的GPU的ID',
+    gpu_id: 'GPU编号',
     // 任务参数
     traffic_state_pred: '交通状态预测',
     traj_loc_pred: '轨迹下一跳预测',
@@ -357,6 +358,7 @@ export default {
     numberError: '请输入数字类型的值',
     maxEpochNumberError: '请输入整数',
     maxEpochError: '请输入大于0的数',
+    floatError: '请输入小数',
     noStart: '未开始',
     execute: '执行',
     executing: '进行中',
@@ -418,7 +420,8 @@ export default {
     showResult: '展示实验结果',
     selectSameDataset: '请选择使用相同数据集的实验',
     otherParamTip: '以下是非必填的参数',
-    taskExecuteSuccessfully: '实验执行完毕'
+    taskExecuteSuccessfully: '实验执行完毕',
+    downloadModel: '下载训练模型'
   },
 
   // 新手引导 - 通用
