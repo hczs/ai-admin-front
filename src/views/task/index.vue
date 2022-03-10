@@ -767,30 +767,12 @@ export default {
     }
   },
   updated() {
-    console.log('this.language', this.language)
-    if (!this.language) {
-      console.log('Cookies.get(language)', Cookies.get('language'))
-      this.language = Cookies.get('language')
-    }
-    if (this.language === 'zh') {
-      this.itemLabelWidth = '150'
-    } else {
-      this.itemLabelWidth = '220'
-    }
+    this.columnAdapt()
   },
   created() {
     this.checkButtonPermission()
     this.getList()
-    console.log('this.language', this.language)
-    if (!this.language) {
-      console.log('Cookies.get(language)', Cookies.get('language'))
-      this.language = Cookies.get('language')
-    }
-    if (this.language === 'zh') {
-      this.itemLabelWidth = '150'
-    } else {
-      this.itemLabelWidth = '220'
-    }
+    this.columnAdapt()
   },
   mounted() {
     console.log('mounted')
@@ -805,6 +787,22 @@ export default {
   },
   methods: {
     checkPermission,
+    // 自适应操作列列宽
+    columnAdapt() {
+      console.log('this.language', this.language)
+      if (!this.language) {
+        console.log('Cookies.get(language)', Cookies.get('language'))
+        this.language = Cookies.get('language')
+        if (!this.language) {
+          Cookies.set('language', 'zh')
+        }
+      }
+      if (this.language === 'zh') {
+        this.itemLabelWidth = '150'
+      } else {
+        this.itemLabelWidth = '220'
+      }
+    },
     // 获取任务状态，长轮询
     pollingTaskStatus(taskId) {
       if (this.timeObj) {
