@@ -66,31 +66,68 @@
       </el-steps>
     </el-card>
     <!-- 脚注 -->
-    <el-card class="container" style="margin-top: 20px" :header="$t('dashboard.realtedLinks')" shadow="always">
-      <span slot="header" class="card-title">{{ $t('dashboard.realtedLinks') }}</span>
+    <el-card shadow="never" class="container" style="margin-top: 20px">
+      <!-- <span slot="header" class="card-title">{{ $t('dashboard.realtedLinks') }}</span> -->
       <!-- <p class="card-p" /></p> -->
       <div class="related-link">
         <el-row :gutter="20">
-          <el-col :span="4">
-            <a target="_blank" :href="$t('dashboard.homepage')">{{ $t('dashboard.homepageWord') }}</a>
+          <el-col :span="12">
+            <img src="../../icons/logo2.png" alt="logo">
           </el-col>
-          <el-col :span="4">
+          <el-col :span="12">
+            <el-row style="margin-top: 13px" :gutter="20">
+              <el-col :span="8">
+                <a target="_blank" :href="$t('dashboard.homepage')">{{ $t('dashboard.homepageWord') }}</a>
+              </el-col>
+              <el-col :span="8">
+                <a target="_blank" :href="$t('dashboard.document')">
+                  {{ $t('dashboard.documentWord') }}
+                </a>
+              </el-col>
+              <el-col :span="8">
+                <a target="_blank" href="https://github.com/LibCity">Github</a>
+              </el-col>
+            </el-row>
+            <el-row style="margin-top: 30px" :gutter="20">
+              <el-col :span="8">
+                <a target="_blank" href="https://github.com/LibCity/Bigscity-LibCity-PaperList">{{ $t('dashboard.paperLibrary') }}</a>
+              </el-col>
+              <el-col :span="8">
+                <a target="_blank" href="https://libcity.ai/#/about">{{ $t('dashboard.aboutUs') }}</a>
+              </el-col>
+              <el-col :span="8">
+                <a target="_blank" href="https://www.bigscity.com/">BIGSCity</a>
+              </el-col>
+            </el-row>
+            <!-- <a target="_blank" :href="$t('dashboard.homepage')">{{ $t('dashboard.homepageWord') }}</a>
             <a target="_blank" :href="$t('dashboard.document')">
               {{ $t('dashboard.documentWord') }}
             </a>
-          </el-col>
-          <el-col :span="4">
-            <a target="_blank" href="https://github.com/LibCity">Github</a>
-          </el-col>
-          <el-col :span="4">
-            <a target="_blank" href="https://github.com/LibCity/Bigscity-LibCity-PaperList">{{ $t('dashboard.paperLibrary') }}</a>
-          </el-col>
-          <el-col :span="4">
+            <a target="_blank" href="https://github.com/LibCity">Github</a> -->
+            <!-- <a target="_blank" href="https://github.com/LibCity/Bigscity-LibCity-PaperList">{{ $t('dashboard.paperLibrary') }}</a>
             <a target="_blank" href="https://libcity.ai/#/about">{{ $t('dashboard.aboutUs') }}</a>
+            <a target="_blank" href="https://www.bigscity.com/">BIGSCity</a> -->
           </el-col>
-          <el-col :span="4">
+          <!-- <el-col :span="4">
+            <a target="_blank" :href="$t('dashboard.homepage')">{{ $t('dashboard.homepageWord') }}</a>
+          </el-col> -->
+          <!-- <el-col :span="4">
+            <a target="_blank" :href="$t('dashboard.document')">
+              {{ $t('dashboard.documentWord') }}
+            </a>
+          </el-col> -->
+          <!-- <el-col :span="4">
+            <a target="_blank" href="https://github.com/LibCity">Github</a>
+          </el-col> -->
+          <!-- <el-col :span="4">
+            <a target="_blank" href="https://github.com/LibCity/Bigscity-LibCity-PaperList">{{ $t('dashboard.paperLibrary') }}</a>
+          </el-col> -->
+          <!-- <el-col :span="4">
+            <a target="_blank" href="https://libcity.ai/#/about">{{ $t('dashboard.aboutUs') }}</a>
+          </el-col> -->
+          <!-- <el-col :span="4">
             <a target="_blank" href="https://www.bigscity.com/">BIGSCity</a>
-          </el-col>
+          </el-col> -->
         </el-row>
       </div>
     </el-card>
