@@ -51,7 +51,7 @@ export default {
 
   methods: {
     trajectoriesTip() {
-      const trajectories = ['Gowalla', 'BrightKite', 'Fousquare', 'Instagram', 'Chengdu_Taxi_Sample1', 'Beijing_Taxi_Sample', 'Seattle']
+      const trajectories = ['Gowalla', 'BrightKite', 'Fousquare', 'Instagram', 'Chengdu_Taxi_Sample1', 'Beijing_Taxi_Sample']
       const noList = ['LOOP_SEATTLE']
       var tip = true
       trajectories.forEach((item) => {

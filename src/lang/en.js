@@ -422,6 +422,7 @@ export default {
     selectSameDataset: 'Please select an experiment using the same dataset',
     otherParamTip: 'The following are non mandatory parameters',
     taskExecuteSuccessfully: 'The experiment is completed',
+    taskExecuteError: 'Experiment execution error',
     downloadModel: 'Download training model'
   },
 

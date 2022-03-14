@@ -421,6 +421,7 @@ export default {
     selectSameDataset: '请选择使用相同数据集的实验',
     otherParamTip: '以下是非必填的参数',
     taskExecuteSuccessfully: '实验执行完毕',
+    taskExecuteError: '实验执行错误',
     downloadModel: '下载训练模型'
   },
 

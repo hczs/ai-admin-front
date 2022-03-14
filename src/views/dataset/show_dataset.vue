@@ -59,7 +59,7 @@ export default {
 
     // 轨迹类型的数据集添加弹窗提示
     trajectoriesTip() {
-      const trajectories = ['Gowalla', 'BrightKite', 'Fousquare', 'Instagram', 'Chengdu_Taxi_Sample1', 'Beijing_Taxi_Sample', 'Seattle']
+      const trajectories = ['Gowalla', 'BrightKite', 'Fousquare', 'Instagram', 'Chengdu_Taxi_Sample1', 'Beijing_Taxi_Sample']
       const noList = ['LOOP_SEATTLE']
       var tip = true
       trajectories.forEach((item) => {
@@ -68,13 +68,9 @@ export default {
           // 不包含
           noList.forEach((item) => {
             if (this.reportUrl.toUpperCase().indexOf(item.toUpperCase()) !== -1) {
-              console.log('no包含')
               tip = false
             }
           })
-          console.log('包含')
-          console.log('this.reportUrl.toUpperCase(): ', this.reportUrl.toUpperCase())
-          console.log('item.toUpperCase(): ', item.toUpperCase())
           // 弹窗提醒
           if (tip) {
             this.$notify.info({

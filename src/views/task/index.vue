@@ -816,16 +816,25 @@ export default {
             }, 1000 * 30)
           })
         } else if (res.code === 200) {
+          console.log('res', res)
           // 刷新页面
           this.getList()
-          console.log('任务执行完毕')
-          // 提示框
-          this.$notify({
-            title: i18n.t('task.taskExecuteSuccessfully'),
-            message: res.data.task_name + i18n.t('task.taskExecuteSuccessfully'),
-            type: 'success',
-            duration: 10000
-          })
+          if (res.data.task_status === -1) {
+            // 提示框
+            this.$notify.error({
+              title: i18n.t('task.taskExecuteError'),
+              message: res.data.task_name + i18n.t('task.taskExecuteError'),
+              duration: 10000
+            })
+          } else {
+            // 提示框
+            this.$notify({
+              title: i18n.t('task.taskExecuteSuccessfully'),
+              message: res.data.task_name + i18n.t('task.taskExecuteSuccessfully'),
+              type: 'success',
+              duration: 10000
+            })
+          }
         }
       })
     },
