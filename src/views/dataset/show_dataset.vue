@@ -59,7 +59,7 @@ export default {
 
     // 轨迹类型的数据集添加弹窗提示
     trajectoriesTip() {
-      const trajectories = ['Gowalla', 'BrightKite', 'Fousquare', 'Instagram', 'Chengdu_Taxi_Sample1', 'Beijing_Taxi_Sample']
+      const trajectories = ['Gowalla', 'BrightKite', 'Fousquare', 'Instagram', 'Chengdu_Taxi_Sample1', 'Beijing_Taxi_Sample', 'foursquare']
       const noList = ['LOOP_SEATTLE']
       var tip = true
       trajectories.forEach((item) => {
