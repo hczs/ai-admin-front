@@ -141,11 +141,6 @@ import { getRoleList, getRoleById, addRole, deleteRoleById, updateRoleById, role
 import { getPermissionTree } from '@/api/permission'
 import { checkPermission } from '@/utils/permission'
 
-// 查询参数
-const defaultQueryParam = {
-  page: 1,
-  size: 10
-}
 export default {
   data() {
     const validateRoleName = (rule, value, callback) => {
@@ -170,7 +165,10 @@ export default {
       },
       listLoading: true,
       tableData: [],
-      queryParam: defaultQueryParam,
+      queryParam: {
+        page: 1,
+        size: 10
+      },
       dialogFormVisible: false,
       total: 0,
       defaultPage: 1,

@@ -32,10 +32,28 @@
           <el-button type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
         </el-form>
       </div>
+      <!-- 样例数据下载 数据集上传按钮 查看数据说明按钮 -->
       <div style="float: right">
         <div style="width: 100%; height: 100%" :data-intro="$t('addDataIntro.step03')" data-step="3">
-          <a :href="BASE_API + '/business/file/download/'"><el-button type="primary" size="medium" icon="el-icon-download">{{ lable=$t('dataset.datasetDownload') }}</el-button></a>
-          <el-button style="margin-left: 10px" :disabled="addDisable" type="primary" size="medium" icon="el-icon-circle-plus-outline" @click="dialogFormVisible = true">
+          <!-- 样例数据下载 -->
+          <a :href="BASE_API + '/business/file/download/'">
+            <el-button type="primary" size="medium" icon="el-icon-download">
+              {{ lable=$t('dataset.datasetDownload') }}
+            </el-button></a>
+          <!-- 查看数据说明 -->
+          <a target="_blank" :href="$t('dataset.atomicExplainUrl')" style="margin-left: 10px">
+            <el-button type="primary" size="medium" icon="el-icon-info">
+              {{ lable=$t('dataset.atomicExplain') }}
+            </el-button></a>
+          <!-- 数据集上传 -->
+          <el-button
+            style="margin-left: 10px"
+            :disabled="addDisable"
+            type="primary"
+            size="medium"
+            icon="el-icon-circle-plus-outline"
+            @click="dialogFormVisible = true"
+          >
             {{ $t('dataset.fileUpload') }}
           </el-button>
         </div>
@@ -61,14 +79,6 @@
             prop="file_size"
             :label="$t('dataset.fileSize')"
           />
-          <!-- <el-table-column
-            prop="file_path"
-            :label="$t('dataset.filePath')"
-          />
-          <el-table-column
-            prop="extract_path"
-            :label="$t('dataset.extractPath')"
-          /> -->
           <el-table-column
             prop="create_time"
             :label="$t('common.createTime')"
@@ -81,7 +91,18 @@
             :label="$t('common.operation')"
           >
             <template slot-scope="scope">
+              <!--
+                关于 scope.row.dataset_status 的状态说明：
+                数据集错误，不能展示 --- -1
+                正在解析运行中 --- 0
+                geojson 生成完毕（可以选择底图渲染并可视化了） --- 1
+                可视化 html 生成完毕 --- 2
+                已经生成geojson但是没有进行可视化处理 --- 3
+                正在生成geojson（检查是否可以进行可视化处理） --- 4
+                用来表示完成html文件生成 --- 5
+               -->
               <el-button-group>
+                <!-- 删除按钮带确认提示 -->
                 <el-popconfirm
                   :confirm-button-text="$t('common.confirm')"
                   :cancel-button-text="$t('common.cancel')"
@@ -93,7 +114,7 @@
                   @onConfirm="deleteFile(scope.row.id)"
                 >
                   <el-link
-                    v-if="!deleteDisable && scope.row.dataset_status !== 4"
+                    v-if="!deleteDisable"
                     slot="reference"
                     style="margin-left: 10px"
                     :disabled="deleteDisable"
@@ -104,40 +125,57 @@
                 </el-popconfirm>
                 <div v-intro-if="scope.$index === 0" :data-intro="$t('addDataIntro.step05')" data-step="5">
                   <div v-intro-if="scope.$index === 0" :data-intro="$t('addDataIntro.step06')" data-step="6">
-                    <el-link v-if="scope.row.dataset_status === 1" style="margin-left: 10px" icon="el-icon-view">
+                    <!-- 只有 2 或 5 的时候才能显示展示按钮 -->
+                    <el-link
+                      v-if="scope.row.dataset_status === 2 || scope.row.dataset_status === 5"
+                      style="margin-left: 10px"
+                      icon="el-icon-view"
+                    >
                       <router-link :to="'/dataset/show_dataset/'+scope.row.file_name">
                         {{ $t('common.view') }}
                       </router-link>
                     </el-link>
-                    <el-link v-if="scope.row.dataset_status === 2" style="margin-left: 10px" icon="el-icon-view">
-                      <router-link :to="'/dataset/show_dataset/'+scope.row.file_name">
-                        {{ $t('common.view') }}
-                      </router-link>
-                    </el-link>
-                    <el-link v-if="scope.row.dataset_status === 5" style="margin-left: 10px" icon="el-icon-view">
-                      <router-link :to="'/dataset/show_dataset/'+scope.row.file_name">
-                        {{ $t('common.view') }}
-                      </router-link>
-                    </el-link>
-                    <el-link v-if="scope.row.dataset_status === -1" icon="el-icon-error" disabled style="margin-left: 10px; color: red">{{ $t('dataset.showFail') }}</el-link>
-                    <el-link v-if="scope.row.dataset_status === 0" disabled style="margin-left: 10px" icon="el-icon-loading">{{ $t('dataset.processing') }}</el-link>
-                    <el-link v-if="scope.row.dataset_status === 3" icon="el-icon-info" disabled style="margin-left: 10px; color: green">
+                    <!-- -1 的时候代表后台出异常了,显示错误按钮 -->
+                    <el-link
+                      v-if="scope.row.dataset_status === -1"
+                      icon="el-icon-error"
+                      disabled
+                      style="margin-left: 10px; color: red"
+                    >{{ $t('dataset.showFail') }}</el-link>
+                    <!-- 0 代表正在处理中 -->
+                    <el-link
+                      v-if="scope.row.dataset_status === 0"
+                      disabled
+                      style="margin-left: 10px"
+                      icon="el-icon-loading"
+                    >{{ $t('dataset.processing') }}</el-link>
+                    <!-- 3 表示已经生成geojson了,但是没有渲染到html中,提醒渲染 -->
+                    <el-link
+                      v-if="scope.row.dataset_status === 3"
+                      icon="el-icon-info"
+                      disabled
+                      style="margin-left: 10px; color: green"
+                    >
                       {{ $t('dataset.Remainshow') }}
                     </el-link>
-                    <el-link v-if="scope.row.dataset_status === 4" icon="el-icon-loading" disabled style="margin-left: 10px">
+                    <!-- 4 表示正在生成geojson，也就是可视化检验中 -->
+                    <el-link
+                      v-if="scope.row.dataset_status === 4"
+                      icon="el-icon-loading"
+                      disabled
+                      style="margin-left: 10px"
+                    >
                       {{ $t('dataset.preprocessing') }}
                     </el-link>
                   </div>
                   <div v-intro-if="scope.row.dataset_status == 2 || scope.row.dataset_status == 1 || scope.row.dataset_status == 3" :data-intro="$t('addDataIntro.step07')" data-step="7" style="margin-left: 10px">
-                    <el-link v-if="scope.row.dataset_status == -1" disabled style="margin-right: 10px" />
-                    <el-link v-if="scope.row.dataset_status == 0" disabled style="margin-right: 10px" />
-                    <el-link v-if="scope.row.dataset_status == 4" disabled style="margin-right: 10px" />
-                    <el-link v-if="scope.row.dataset_status == 5" disabled style="margin-right: 10px" />
-                    <el-link v-if="scope.row.dataset_status == 1" style="margin-right: 10px" icon="el-icon-circle-plus-outline" @click="openSekectMap(scope.row.id)">{{ $t('dataset.choosemap') }}
-                    </el-link>
-                    <el-link v-if="scope.row.dataset_status == 2" style="margin-right: 10px" icon="el-icon-circle-plus-outline" @click="openSekectMap(scope.row.id)">{{ $t('dataset.choosemap') }}
-                    </el-link>
-                    <el-link v-if="scope.row.dataset_status == 3" style="margin-right: 10px" icon="el-icon-circle-plus-outline" @click="openSekectMap(scope.row.id)">{{ $t('dataset.choosemap') }}
+                    <!-- 1 2 5 的时候可以展示选择底图 -->
+                    <el-link
+                      v-if="scope.row.dataset_status == 1 || scope.row.dataset_status == 2 || scope.row.dataset_status == 3"
+                      style="margin-right: 10px"
+                      icon="el-icon-circle-plus-outline"
+                      @click="openSekectMap(scope.row.id)"
+                    >{{ $t('dataset.choosemap') }}
                     </el-link>
                   </div>
                 </div>
@@ -179,7 +217,7 @@
         <div slot="tip" class="el-upload__tip">{{ $t('dataset.uploadTips') }}</div>
       </el-upload>
     </el-dialog>
-    <!--  -->
+    <!-- 选择可视化底图 -->
     <el-dialog :title="$t('common.getview')" :visible.sync="showFormVisible">
       <el-form ref="elForm1" :rules="rules" :model="dataset" label-width="auto" label-position="left">
         <el-form-item :label="$t('dataset.background')" prop="background">
@@ -202,13 +240,6 @@ import { getFileList, deleteFileById, generate_background_byID } from '@/api/fil
 import { checkPermission } from '@/utils/permission'
 import i18n from '@/lang'
 
-// 查询参数
-const queryParam = {
-  page: 1,
-  size: 10,
-  file_name: '',
-  create_time: ''
-}
 export default {
   data() {
     return {
@@ -229,7 +260,12 @@ export default {
       tableData: [],
       listLoading: true,
       background: '1',
-      queryParam: queryParam,
+      queryParam: {
+        page: 1,
+        size: 10,
+        file_name: '',
+        create_time: ''
+      },
       total: 0,
       defaultPage: 1,
       defaultSize: 10,

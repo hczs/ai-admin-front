@@ -315,7 +315,9 @@ export default {
     trajTip: 'Due to too much trajectory data, only part of the trajectory data information is displayed here.',
     deletionFailed: 'There are experiments using this dataset. Please delete the experiment before deleting the dataset',
     canView: 'Visual inspection completed!',
-    canViewSuccessfully: 'After the visualization inspection is completed, you can select the map to visualize the data set'
+    canViewSuccessfully: 'After the visualization inspection is completed, you can select the map to visualize the data set',
+    atomicExplain: 'View data format description',
+    atomicExplainUrl: 'https://bigscity-libcity-docs.readthedocs.io/en/latest/user_guide/data/atomic_files.html'
   },
   // 任务
   task: {

@@ -182,14 +182,6 @@ import { getAccountList, getAccountById, addAccount, updateAccountById, deleteAc
 import { getRoleList } from '@/api/role'
 import { checkPermission } from '@/utils/permission'
 
-// 查询参数
-const queryParam = {
-  page: 1,
-  size: 10,
-  account_number: '',
-  create_time: '',
-  roles: null
-}
 // 角色对象
 const account = {
   id: '',
@@ -199,6 +191,7 @@ const account = {
 }
 export default {
   data() {
+    // 账号校验
     const validateAccountNumber = (rule, value, callback) => {
       if (value.length === 0) {
         callback(new Error(this.$t('account.accountNumberError')))
@@ -213,6 +206,7 @@ export default {
         })
       }
     }
+    // 密码校验
     const validatePassword = (rule, value, callback) => {
       if (!value || value.length < 6) {
         callback(new Error(this.$t('login.passwordError')))
@@ -224,7 +218,13 @@ export default {
       account: account,
       listLoading: true,
       tableData: [],
-      queryParam: queryParam,
+      queryParam: {
+        page: 1,
+        size: 10,
+        account_number: '',
+        create_time: '',
+        roles: null
+      },
       dialogFormVisible: false,
       total: 0,
       dialogType: 'add',

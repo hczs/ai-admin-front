@@ -314,7 +314,9 @@ export default {
     trajTip: '由于轨迹数据过多，这里仅展示部分轨迹数据信息',
     deletionFailed: '有实验正在使用此数据集，请删除实验后再删除数据集',
     canView: '可视化检验完成！',
-    canViewSuccessfully: '可视化检验完成，可以选择地图对数据集进行可视化了'
+    canViewSuccessfully: '可视化检验完成，可以选择地图对数据集进行可视化了',
+    atomicExplain: '查看数据格式说明',
+    atomicExplainUrl: 'https://bigscity-libcity-docs.readthedocs.io/zh_CN/latest/user_guide/data/atomic_files.html'
   },
   // 任务
   task: {
@@ -328,7 +330,7 @@ export default {
     config_file: '自定义的配置文件名',
     config_file1: '自定义的配置文件',
     saved_model: '是否保存训练好的模型',
-    train: '是否重新训练',
+    train: '是否使用以往实验保存的模型',
     batch_size: '批次大小',
     train_rate: '训练集所占比例',
     eval_rate: '验证集所占比例',

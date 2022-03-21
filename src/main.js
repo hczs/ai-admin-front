@@ -8,6 +8,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 // import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 import '@/styles/index.scss' // global css
+// 改样式
+import '@/styles/boco.scss' // boco css
+
 import Plugin from 'v-fit-columns' // 列宽自适应插件
 import AFTableColumn from 'af-table-column' // 列宽自适应插件2
 import intro from 'intro.js' // 新手引导js库
