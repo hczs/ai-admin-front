@@ -44,7 +44,6 @@
           </el-select>
         </el-form-item> -->
           <!-- 以下为任务执行参数配置 -->
-
           <el-divider content-position="center">
             <!-- {{ $t('task.taskParamTip') }} -->
             <el-link target="_blank" type="primary" href="https://github.com/LibCity/Bigscity-LibCity-Docs-zh_CN/blob/master/source/user_guide/data/dataset_for_task.md">
@@ -197,6 +196,7 @@ import { getFileListAll } from '@/api/file'
 import { addTask, taskExists, getTaskById, updateTaskById } from '@/api/task'
 export default {
   data() {
+    // 任务名称校验
     const validateTaskName = (rule, value, callback) => {
       if (value.length === 0) {
         callback(new Error(this.$t('task.taskNameError')))
@@ -211,6 +211,7 @@ export default {
         })
       }
     }
+    // 大于 0 的整数校验
     const validateMaxEpoch = (rule, value, callback) => {
       // 必须是大于0的整数
       if (typeof (value) !== 'undefined') {
@@ -227,6 +228,7 @@ export default {
         callback()
       }
     }
+    // 小数校验
     const validateFloat = (rule, value, callback) => {
       // 必须是小数
       if (typeof (value) !== 'undefined') {
@@ -246,12 +248,14 @@ export default {
     }
     return {
       BASE_API: window.global_url.Base_url,
+      // 任务默认值
       task: {
         task_name: '',
         max_epoch: 1,
         task: 'traffic_state_pred',
         model: 'GRU',
-        gpu: false
+        saved_model: true,
+        train: false
       },
       fileLimit: 1,
       formLabelWidth: '10%',
