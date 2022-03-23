@@ -275,6 +275,7 @@ export default {
       // 按钮权限
       addDisable: true,
       deleteDisable: true,
+      listPermission: true,
       file: {}
     }
   },
@@ -293,15 +294,22 @@ export default {
   },
 
   created() {
-    this.getList(this.queryParam)
     this.checkButtonPermission()
+    // 如果发现没有 listPermission 就需要向其展示权限不足提示
+    if (!this.listPermission) {
+      this.$router.push('/forbidden/index')
+    }
+
+    this.getList(this.queryParam)
   },
   methods: {
     checkPermission,
     checkButtonPermission() {
       this.addDisable = !checkPermission(['datasetUpload'])
       this.deleteDisable = !checkPermission(['datasetDelete'])
+      this.listPermission = checkPermission(['datasetList'])
     },
+    // 获取数据集列表
     getList(queryParam) {
       this.listLoading = true
       getFileList(queryParam).then(res => {
@@ -312,6 +320,7 @@ export default {
         this.listLoading = false
       })
     },
+    // 打开更换底图弹框
     openSekectMap(id) {
       this.file.id = id
       this.showFormVisible = true
@@ -337,10 +346,7 @@ export default {
     // 长轮询获取状态
     longPolling(fileId, title, message) {
       this.$axios.get(this.BASE_API + `/business/file/${fileId}/get_file_status/`).then(res => {
-        console.log('请求一次getFileStatus')
-        console.log(res)
         if (res.data.code === 200) {
-          console.log('状态更新')
           // 弹窗提醒
           this.$notify({
             title: this.title,
@@ -353,7 +359,6 @@ export default {
           return
         } else {
           // 重新轮询
-          console.log('重新轮询')
           this.$nextTick(() => {
             this.timeObj = setTimeout(() => {
               this.longPolling(fileId)

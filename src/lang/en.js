@@ -263,7 +263,8 @@ export default {
     roleNameError: 'Please enter role name',
     roleNameExistsError: 'Role name already exists',
     descriptionError: 'Please enter role description',
-    permissionTreeError: 'Please assign permissions to the role'
+    permissionTreeError: 'Please assign permissions to the role',
+    protectedRole: 'The role is reserved by the system and cannot be deleted!'
   },
   // 账号相关
   account: {
@@ -280,7 +281,8 @@ export default {
     addedSuccessfully: 'The initial password of the account is: ',
     resetPassword: 'reset password',
     resetPasswordSuccessfully: 'Password reset succeeded!',
-    resetPasswordFailed: 'Password reset failed, unknown error'
+    resetPasswordFailed: 'Password reset failed, unknown error',
+    protectedAccount: 'The account number is reserved by the system and cannot be deleted!'
   },
   // 数据集相关
   dataset: {

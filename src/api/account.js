@@ -60,3 +60,12 @@ export function accountExists(data) {
     data
   })
 }
+
+// 获取验证码
+export function getAuthCode(data) {
+  return request({
+    url: '/auth/account/send_code/',
+    method: 'post',
+    data
+  })
+}

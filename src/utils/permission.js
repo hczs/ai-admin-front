@@ -1,5 +1,6 @@
 import store from '@/store'
 
+// 此方法返回当前用户是否有 value 中定义的权限 如果有权限 返回 true
 export function checkPermission(value) {
   if (value && value instanceof Array && value.length > 0) {
     const permissions = store.getters && store.getters.permissions
