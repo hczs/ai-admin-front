@@ -353,7 +353,7 @@ export default {
     interruptExp: '中断实验',
     interruptConfirm: '确定中断此实验？',
     tips: '提示',
-    interruptOk: '实验正在中断中...请耐心等待 10 秒左右',
+    interruptOk: '实验正在中断中...请耐心等待 20 秒左右',
     interruptCancel: '已取消中断',
     // 评价指标mode提示信息
     stateModeTip: '本次评价指标评估模式为：',

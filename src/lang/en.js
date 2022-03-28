@@ -351,6 +351,11 @@ export default {
   },
   // 任务
   task: {
+    interruptExp: 'Interrupt experiment',
+    interruptConfirm: 'Are you sure to interrupt this experiment?',
+    tips: 'Tips',
+    interruptOk: 'The experiment is being interrupted Please wait patiently for about 20 seconds',
+    interruptCancel: 'Interrupt canceled',
     // 评价指标mode提示信息
     stateModeTip: 'The evaluation model of this evaluation index is as follows:',
     // 任务执行参数
