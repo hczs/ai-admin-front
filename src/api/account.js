@@ -9,6 +9,15 @@ export function getAccountList(queryParam) {
   })
 }
 
+// 列表数据查询 只返回 id 和 account number
+export function getSimpleAccountList(queryParam) {
+  return request({
+    url: '/auth/account/list_all/',
+    method: 'get',
+    params: queryParam
+  })
+}
+
 // 回显单个数据
 export function getAccountById(accountId) {
   return request({
@@ -56,6 +65,15 @@ export function updatePassword(data) {
 export function accountExists(data) {
   return request({
     url: '/auth/account/exists/',
+    method: 'post',
+    data
+  })
+}
+
+// 获取验证码
+export function getAuthCode(data) {
+  return request({
+    url: '/auth/account/send_code/',
     method: 'post',
     data
   })

@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'AI管理平台',
+  title: 'LibCity实验管理系统',
 
   /**
    * @type {boolean} true | false

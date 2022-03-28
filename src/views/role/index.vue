@@ -123,7 +123,6 @@
             ref="tree"
             :data="permissionTree"
             show-checkbox
-            check-strictly
             node-key="id"
             :props="defaultProps"
           />
@@ -141,11 +140,6 @@ import { getRoleList, getRoleById, addRole, deleteRoleById, updateRoleById, role
 import { getPermissionTree } from '@/api/permission'
 import { checkPermission } from '@/utils/permission'
 
-// 查询参数
-const defaultQueryParam = {
-  page: 1,
-  size: 10
-}
 export default {
   data() {
     const validateRoleName = (rule, value, callback) => {
@@ -170,7 +164,10 @@ export default {
       },
       listLoading: true,
       tableData: [],
-      queryParam: defaultQueryParam,
+      queryParam: {
+        page: 1,
+        size: 10
+      },
       dialogFormVisible: false,
       total: 0,
       defaultPage: 1,
@@ -186,6 +183,7 @@ export default {
       addDisable: true,
       editDisable: true,
       deleteDisable: true,
+      listPermission: true,
       // 表单校验
       rules: {
         name: [{ required: true, trigger: 'blur', validator: validateRoleName }],
@@ -195,9 +193,14 @@ export default {
   },
 
   created() {
+    this.checkButtonPermission()
+    // 如果发现没有 listPermission 就需要向其展示权限不足提示
+    if (!this.listPermission) {
+      this.$router.push('/forbidden/index')
+    }
+
     this.getList(this.queryParam)
     this.getPermissionTree()
-    this.checkButtonPermission()
   },
 
   mounted() {
@@ -217,6 +220,7 @@ export default {
       this.addDisable = !checkPermission(['roleAdd'])
       this.editDisable = !checkPermission(['roleEdit'])
       this.deleteDisable = !checkPermission(['roleDelete'])
+      this.listPermission = checkPermission(['roleList'])
     },
     // 初始化角色列表数据
     getList(queryParam) {
@@ -248,6 +252,9 @@ export default {
         }
         this.dialogFormVisible = false
         this.role.permissions = this.$refs.tree.getCheckedKeys()
+        // bug 树节点父子关联的时候，选中部分子节点并不会把父节点的id也传过去，所以父节点需要单独获取
+        const parent = this.$refs.tree.getHalfCheckedKeys()
+        this.role.permissions.push(...parent)
         if (this.dialogType === 'edit') {
           this.listLoading = true
           updateRoleById(this.role.id, this.role).then(res => {
@@ -302,7 +309,16 @@ export default {
       }
       getRoleById(id).then(res => {
         this.role = res.data
-        this.$refs.tree.setCheckedKeys(this.role.permissions)
+        // 只设置子节点选中情况，不设置父节点选中情况
+        this.$nextTick(() => {
+          const arr = []
+          this.role.permissions.forEach(item => {
+            if (!this.$refs.tree.getNode(item).childNodes || !this.$refs.tree.getNode(item).childNodes.length) {
+              arr.push(item)
+            }
+          })
+          this.$refs.tree.setCheckedKeys(arr)
+        })
       })
       this.dialogType = 'edit'
       this.dialogFormVisible = true
@@ -310,17 +326,23 @@ export default {
     // 删除数据
     deleteRole(id) {
       this.listLoading = true
-      deleteRoleById(id).then(res => {
-        // 重新获取页面数据
-        this.$message({
-          message: this.$t('common.deleteSucceeded'),
-          type: 'success'
-        })
-        this.getList(this.queryParam)
-      }).catch(() => {
+      if (id === 6 || id === 12) {
+        this.$message.error(this.$t('role.protectedRole'))
         this.listLoading = false
-        this.$message.error(this.$t('common.deletionFailed'))
-      })
+        return false
+      } else {
+        deleteRoleById(id).then(res => {
+        // 重新获取页面数据
+          this.$message({
+            message: this.$t('common.deleteSucceeded'),
+            type: 'success'
+          })
+          this.getList(this.queryParam)
+        }).catch(() => {
+          this.listLoading = false
+          this.$message.error(this.$t('common.deletionFailed'))
+        })
+      }
     },
     indexMethod(index) {
       return (this.queryParam.page - 1) * this.queryParam.size + index + 1

@@ -109,6 +109,26 @@ export default {
     repeatPassword: '再次输入新密码',
     updatePasswordSuccess: '密码修改成功,请重新登录'
   },
+  // 注册相关
+  register: {
+    repeatPassword: '请再次输入密码',
+    inputMail: '请输入邮箱',
+    inputCode: '请输入验证码',
+    register: '注册',
+    getCode: '获取验证码',
+    getCodeAgain: 's后重新获取',
+    pleaseInputMail: '请填写邮箱',
+    pleaseInputCode: '请填写验证码',
+    wrongMailFormat: '邮箱格式不正确',
+    toLogin: '已有账号？去登录',
+    toRegister: '没有账号？点击注册',
+    title: '用户注册',
+    sendCodeError: '验证码发送失败',
+    registerError: '注册失败',
+    registerSuccess: '注册成功',
+    sendCodeSuccess: '验证码发送成功，请注意查收',
+    mailRepeat: '此邮箱已注册过本系统'
+  },
   documentation: {
     documentation: '文档',
     github: 'Github 地址'
@@ -262,7 +282,8 @@ export default {
     roleNameError: '请填写角色名称',
     roleNameExistsError: '角色名称已存在',
     descriptionError: '请填写角色描述',
-    permissionTreeError: '请为角色分配权限'
+    permissionTreeError: '请为角色分配权限',
+    protectedRole: '系统保留角色，不可删除！'
   },
   // 账号相关
   account: {
@@ -279,10 +300,19 @@ export default {
     addedSuccessfully: '该账号初始密码为：',
     resetPassword: '重置密码',
     resetPasswordSuccessfully: '密码重置成功！',
-    resetPasswordFailed: '密码重置失败，未知错误'
+    resetPasswordFailed: '密码重置失败，未知错误',
+    protectedAccount: '系统保留账号，不可删除！'
   },
   // 数据集相关
   dataset: {
+    creator: '上传者',
+    visibility: '状态',
+    public: '公开',
+    private: '私有',
+    all: '所有',
+    isPublic: '是否公开',
+    selectFile: '选取文件',
+    submit: '提交',
     datasetDownload: '样例数据下载',
     preprocessing: '数据集可视化检验中',
     processing: '数据集处理中',
@@ -294,7 +324,7 @@ export default {
     extractPath: '解压路径',
     fileUpload: '文件上传',
     pleaseInputFileName: '请输入文件名称',
-    clickUpload: '点击这里上传文件',
+    clickUpload: '将文件拖到此处，或点击上传',
     uploadTips: '注意：只能上传ZIP文件，数据包应包含数据原子文件，包括：xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、xxx.gridod、config.json；对于不同的交通预测任务，可能用到不同的原子文件，同一个数据集不一定包含全部几种原子文件。',
     uploadSuccess: '文件上传成功！',
     background: '选择可视化底图',
@@ -314,7 +344,9 @@ export default {
     trajTip: '由于轨迹数据过多，这里仅展示部分轨迹数据信息',
     deletionFailed: '有实验正在使用此数据集，请删除实验后再删除数据集',
     canView: '可视化检验完成！',
-    canViewSuccessfully: '可视化检验完成，可以选择地图对数据集进行可视化了'
+    canViewSuccessfully: '可视化检验完成，可以选择地图对数据集进行可视化了',
+    atomicExplain: '查看数据格式说明',
+    atomicExplainUrl: 'https://bigscity-libcity-docs.readthedocs.io/zh_CN/latest/user_guide/data/atomic_files.html'
   },
   // 任务
   task: {
@@ -328,7 +360,7 @@ export default {
     config_file: '自定义的配置文件名',
     config_file1: '自定义的配置文件',
     saved_model: '是否保存训练好的模型',
-    train: '是否重新训练',
+    train: '是否使用以往实验保存的模型',
     batch_size: '批次大小',
     train_rate: '训练集所占比例',
     eval_rate: '验证集所占比例',
@@ -421,6 +453,7 @@ export default {
     selectSameDataset: '请选择使用相同数据集的实验',
     otherParamTip: '以下是非必填的参数',
     taskExecuteSuccessfully: '实验执行完毕',
+    taskExecuteError: '实验执行错误',
     downloadModel: '下载训练模型'
   },
 

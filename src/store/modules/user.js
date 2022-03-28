@@ -21,6 +21,9 @@ const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
   },
+  SET_ID: (state, id) => {
+    state.id = id
+  },
   SET_NAME: (state, name) => {
     state.name = name
   },
@@ -60,8 +63,7 @@ const actions = {
         if (!data) {
           reject(i18n.t('login.verificationFailed'))
         }
-        const { permissions, accountNumber, avatar, roles } = data
-
+        const { permissions, accountNumber, avatar, roles, id } = data
         // permissions must be a non-empty array
         if (!permissions || permissions.length <= 0) {
           reject(i18n.t('login.permissionIsNull'))
@@ -71,6 +73,7 @@ const actions = {
         commit('SET_NAME', accountNumber)
         commit('SET_AVATAR', avatar)
         commit('SET_ROLES', roles)
+        commit('SET_ID', id)
         resolve(data)
       }).catch(error => {
         reject(error)

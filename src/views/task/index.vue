@@ -220,11 +220,14 @@
       >
         <template slot-scope="scope">
           <el-button-group v-intro-if="scope.$index === 0" :data-intro="$t('taskIndexIntroL.step04')" data-step="4">
-
-            <!-- <el-button style="width: 120px" :disabled="editDisable" type="primary" size="small" icon="el-icon-edit">
-                {{ $t('common.edit') }}
-              </el-button> -->
-            <!-- 编辑按钮 -->
+            <!--
+              关于 scope.row.task_status 的状态说明
+              0 未开始
+              1 进行中
+              2 已完成
+              -1 执行错误
+             -->
+            <!-- 编辑按钮（进行中 或 已完成 或 禁止编辑 的时候，无法编辑） -->
             <el-link
               style="margin-left: 10px;"
               :disabled="editDisable || ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )"
@@ -249,14 +252,12 @@
               :title="$t('common.deleteConfirm')"
               @onConfirm="deleteTask(scope.row.id)"
             >
-              <el-link v-if="!deleteDisable" slot="reference" style="margin-left: 10px;" :disabled="deleteDisable" icon="el-icon-delete">
+              <!-- 没有删除权限，就不显示删除按钮 -->
+              <el-link v-if="!deleteDisable" slot="reference" style="margin-left: 10px;" icon="el-icon-delete">
                 {{ $t('common.delete') }}
               </el-link>
-              <!-- <el-button slot="reference" style="width: 120px" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
-                {{ $t('common.delete') }}
-              </el-button> -->
             </el-popconfirm>
-            <!-- 执行按钮 -->
+            <!-- 执行按钮 只有未开始的时候，才可以执行 -->
             <el-link
               v-if="scope.row.task_status === 0"
               style="margin-left: 10px"
@@ -266,7 +267,7 @@
             >
               {{ $t('task.execute') }}
             </el-link>
-            <!-- 重新执行按钮 -->
+            <!-- 重新执行按钮 只有出错的时候，才可以重新执行 -->
             <el-link
               v-if="scope.row.task_status === -1"
               style="margin-left: 10px"
@@ -285,11 +286,10 @@
             >
               {{ $t('task.executing') }}
             </el-link>
-            <!-- 查看评价指标按钮 -->
+            <!-- 查看评价指标按钮 有查看权限就有这个按钮 下面都是 -->
             <el-link
               v-if=" scope.row.task_status === 2 && scope.row.task !== 'road_representation' "
               style="margin-left: 10px"
-              :disabled="executeDisable"
               icon="el-icon-notebook-2"
               @click="openEvaluateDialog(scope.row.id)"
             >
@@ -299,7 +299,6 @@
             <el-link
               v-if=" scope.row.task_status === 2 && scope.row.task !== 'traj_loc_pred' "
               style="margin-left: 10px;"
-              :disabled="executeDisable"
               icon="el-icon-view"
               @click="showResult(scope.row.exp_id, scope.row.dataset)"
             >
@@ -309,7 +308,6 @@
             <el-link
               v-if=" scope.row.task_status === 2 "
               style="margin-left: 10px"
-              :disabled="executeDisable"
               icon="el-icon-download"
               :href="BASE_API + '/business/task/' + scope.row.id + '/download_task_model/'"
             >
@@ -319,7 +317,6 @@
             <el-link
               v-if="scope.row.task_status !== 0"
               style="margin-left: 10px"
-              :disabled="executeDisable"
               icon="el-icon-document"
               @click="catLog(scope.row.id)"
             >
@@ -748,6 +745,7 @@ export default {
       executeDisable: true,
       editDisable: true,
       deleteDisable: true,
+      listPermission: true,
       evaluateData: [{ 'MAE': '', 'MAPE': '', 'MSE': '', 'RMSE': '', 'masked_MAE': '', 'masked_MAPE': '',
         'masked_MSE': '', 'masked_RMSE': '', 'R2': '', 'EVAR': '', 'Precision': '',
         'Recall': '', 'F1-Score': '', 'MAP': '', 'PCC': '', 'RMF': '', 'AN': '', 'AL': '',
@@ -771,11 +769,14 @@ export default {
   },
   created() {
     this.checkButtonPermission()
+    // 如果发现没有 listPermission 就需要向其展示权限不足提示
+    if (!this.listPermission) {
+      this.$router.push('/forbidden/index')
+    }
     this.getList()
     this.columnAdapt()
   },
   mounted() {
-    console.log('mounted')
     this.$nextTick(() => {
       setTimeout(() => {
         if (localStorage.getItem('taskIndexNew') === null || localStorage.getItem('taskIndexNew') !== '1') {
@@ -789,9 +790,7 @@ export default {
     checkPermission,
     // 自适应操作列列宽
     columnAdapt() {
-      console.log('this.language', this.language)
       if (!this.language) {
-        console.log('Cookies.get(language)', Cookies.get('language'))
         this.language = Cookies.get('language')
         if (!this.language) {
           Cookies.set('language', 'zh')
@@ -818,23 +817,26 @@ export default {
         } else if (res.code === 200) {
           // 刷新页面
           this.getList()
-          console.log('任务执行完毕')
-          // 提示框
-          this.$notify({
-            title: i18n.t('task.taskExecuteSuccessfully'),
-            message: res.data.task_name + i18n.t('task.taskExecuteSuccessfully'),
-            type: 'success',
-            duration: 10000
-          })
+          if (res.data.task_status === -1) {
+            // 提示框
+            this.$notify.error({
+              title: i18n.t('task.taskExecuteError'),
+              message: res.data.task_name + i18n.t('task.taskExecuteError'),
+              duration: 10000
+            })
+          } else {
+            // 提示框
+            this.$notify({
+              title: i18n.t('task.taskExecuteSuccessfully'),
+              message: res.data.task_name + i18n.t('task.taskExecuteSuccessfully'),
+              type: 'success',
+              duration: 10000
+            })
+          }
         }
       })
     },
-    // 获取评价指标mode
-    getTaskEvalueteMode(taskId) {
-      getStateMode(taskId).then(res => {
-        console.log(res)
-      })
-    },
+
     // 解决elementui表格fixed错位bug
     doLayout() {
       this.$nextTick(() => {
@@ -846,12 +848,12 @@ export default {
     checkButtonPermission() {
       this.executeDisable = !checkPermission(['taskExecute'])
       this.editDisable = !checkPermission(['taskEdit'])
+      // 如果没有删除权限，那么 deleteDisable 会是 true
       this.deleteDisable = !checkPermission(['taskDelete'])
+      this.listPermission = checkPermission(['expList'])
     },
     // 查看任务结果文件
     showResult(taskId, dataset) {
-      console.log('taskId:', taskId)
-      console.log('dataset:', dataset)
       // 新窗口打开
       const routeData = this.$router.resolve({
         path: '/task/result',
@@ -926,8 +928,6 @@ export default {
       // 取出id list
       const taskIds = tasks.map(item => item.id)
       const taskIdsStr = taskIds.join(',')
-      console.log(taskIds)
-      console.log(taskIdsStr)
       // 新窗口打开
       const routeData = this.$router.resolve({
         path: '/evaluate/index',

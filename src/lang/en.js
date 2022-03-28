@@ -263,7 +263,8 @@ export default {
     roleNameError: 'Please enter role name',
     roleNameExistsError: 'Role name already exists',
     descriptionError: 'Please enter role description',
-    permissionTreeError: 'Please assign permissions to the role'
+    permissionTreeError: 'Please assign permissions to the role',
+    protectedRole: 'The role is reserved by the system and cannot be deleted!'
   },
   // 账号相关
   account: {
@@ -280,10 +281,19 @@ export default {
     addedSuccessfully: 'The initial password of the account is: ',
     resetPassword: 'reset password',
     resetPasswordSuccessfully: 'Password reset succeeded!',
-    resetPasswordFailed: 'Password reset failed, unknown error'
+    resetPasswordFailed: 'Password reset failed, unknown error',
+    protectedAccount: 'The account number is reserved by the system and cannot be deleted!'
   },
   // 数据集相关
   dataset: {
+    creator: 'uploader',
+    visibility: 'state',
+    public: 'public',
+    private: 'private',
+    all: 'all',
+    isPublic: 'Public or Not',
+    selectFile: 'Select File',
+    submit: 'Submit',
     datasetDownload: ' Download Sample',
     fileName: 'File name',
     fileSize: 'File size',
@@ -295,7 +305,7 @@ export default {
     extractPath: 'Decompression path',
     fileUpload: 'File upload',
     pleaseInputFileName: 'Please enter a file name',
-    clickUpload: 'Click here to upload the file',
+    clickUpload: 'Drag files here, or click upload',
     uploadTips: 'Note: only zip files can be uploaded, The data package shall contain data atomic files, including: xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、xxx.gridod、config.json; For different traffic prediction tasks, different atomic files may be used, and a dataset may not contain all kinds of atomic files.',
     uploadSuccess: 'File upload succeeded!',
     background: 'choose background',
@@ -315,7 +325,9 @@ export default {
     trajTip: 'Due to too much trajectory data, only part of the trajectory data information is displayed here.',
     deletionFailed: 'There are experiments using this dataset. Please delete the experiment before deleting the dataset',
     canView: 'Visual inspection completed!',
-    canViewSuccessfully: 'After the visualization inspection is completed, you can select the map to visualize the data set'
+    canViewSuccessfully: 'After the visualization inspection is completed, you can select the map to visualize the data set',
+    atomicExplain: 'View data format description',
+    atomicExplainUrl: 'https://bigscity-libcity-docs.readthedocs.io/en/latest/user_guide/data/atomic_files.html'
   },
   // 任务
   task: {
@@ -422,6 +434,7 @@ export default {
     selectSameDataset: 'Please select an experiment using the same dataset',
     otherParamTip: 'The following are non mandatory parameters',
     taskExecuteSuccessfully: 'The experiment is completed',
+    taskExecuteError: 'Experiment execution error',
     downloadModel: 'Download training model'
   },
 

@@ -38,6 +38,12 @@ export const constantRoutes = [
   },
 
   {
+    path: '/register',
+    component: () => import('@/views/register/index'),
+    hidden: true
+  },
+
+  {
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
@@ -108,6 +114,21 @@ export const constantRoutes = [
         component: () => import('@/views/task/result'),
         name: 'taskResult',
         meta: { title: 'taskResult', icon: 'task1' },
+        hidden: true
+      }
+    ]
+  },
+
+  // 无权限访问页面
+  {
+    path: '/forbidden',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/forbidden/index'),
+        name: 'forbidden',
+        // meta: { title: 'taskResult', icon: 'task1' },
         hidden: true
       }
     ]

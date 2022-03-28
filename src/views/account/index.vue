@@ -89,10 +89,12 @@
       >
         <template slot-scope="scope">
           <el-button-group v-intro-if="scope.$index === 0" :data-intro="$t('accountManageIntro.step04')" data-step="4">
-            <el-link :disabled="editDisable" style="margin-left: 10px" icon="el-icon-edit" @click="edit(scope.row.id)">{{ $t('common.edit') }}</el-link>
-            <!-- <el-button :disabled="editDisable" type="primary" size="small" icon="el-icon-edit" @click="edit(scope.row.id)">
-              {{ $t('common.edit') }}
-            </el-button> -->
+            <el-link
+              :disabled="editDisable"
+              style="margin-left: 10px"
+              icon="el-icon-edit"
+              @click="edit(scope.row.id)"
+            >{{ $t('common.edit') }}</el-link>
             <el-popconfirm
               :confirm-button-text="$t('common.confirm')"
               :cancel-button-text="$t('common.cancel')"
@@ -103,12 +105,20 @@
               :title="$t('common.deleteConfirm')"
               @onConfirm="deleteAccount(scope.row.id)"
             >
-              <el-link v-if="!deleteDisable" slot="reference" style="margin-left: 10px" :disabled="deleteDisable" icon="el-icon-delete">{{ $t('common.delete') }}</el-link>
-              <!-- <el-button slot="reference" :disabled="deleteDisable" type="danger" size="small" icon="el-icon-delete">
-                {{ $t('common.delete') }}
-              </el-button> -->
+              <el-link
+                v-if="!deleteDisable"
+                slot="reference"
+                style="margin-left: 10px"
+                :disabled="deleteDisable"
+                icon="el-icon-delete"
+              >{{ $t('common.delete') }}</el-link>
             </el-popconfirm>
-            <el-link :disabled="editDisable" style="margin-left: 10px" icon="el-icon-refresh-right" @click="openResetDialog(scope.row.id)">{{ $t('account.resetPassword') }}</el-link>
+            <el-link
+              :disabled="editDisable"
+              style="margin-left: 10px"
+              icon="el-icon-refresh-right"
+              @click="openResetDialog(scope.row.id)"
+            >{{ $t('account.resetPassword') }}</el-link>
           </el-button-group>
         </template>
       </el-table-column>
@@ -182,14 +192,6 @@ import { getAccountList, getAccountById, addAccount, updateAccountById, deleteAc
 import { getRoleList } from '@/api/role'
 import { checkPermission } from '@/utils/permission'
 
-// 查询参数
-const queryParam = {
-  page: 1,
-  size: 10,
-  account_number: '',
-  create_time: '',
-  roles: null
-}
 // 角色对象
 const account = {
   id: '',
@@ -199,6 +201,7 @@ const account = {
 }
 export default {
   data() {
+    // 账号校验
     const validateAccountNumber = (rule, value, callback) => {
       if (value.length === 0) {
         callback(new Error(this.$t('account.accountNumberError')))
@@ -213,6 +216,7 @@ export default {
         })
       }
     }
+    // 密码校验
     const validatePassword = (rule, value, callback) => {
       if (!value || value.length < 6) {
         callback(new Error(this.$t('login.passwordError')))
@@ -224,7 +228,13 @@ export default {
       account: account,
       listLoading: true,
       tableData: [],
-      queryParam: queryParam,
+      queryParam: {
+        page: 1,
+        size: 10,
+        account_number: '',
+        create_time: '',
+        roles: null
+      },
       dialogFormVisible: false,
       total: 0,
       dialogType: 'add',
@@ -237,6 +247,7 @@ export default {
       addDisable: true,
       editDisable: true,
       deleteDisable: true,
+      listPermission: true,
       // 表单校验
       rules: {
         account_number: [{ required: true, trigger: 'blur', validator: validateAccountNumber }]
@@ -249,9 +260,15 @@ export default {
   },
 
   created() {
+    this.checkButtonPermission()
+    // 如果发现没有 listPermission 就需要向其展示权限不足提示
+    if (!this.listPermission) {
+      this.$router.push('/forbidden/index')
+    }
+
+    // 权限通过，获取数据
     this.getList(this.queryParam)
     this.getRoleList()
-    this.checkButtonPermission()
   },
 
   mounted() {
@@ -271,6 +288,7 @@ export default {
       this.addDisable = !checkPermission(['accountAdd'])
       this.editDisable = !checkPermission(['accountEdit'])
       this.deleteDisable = !checkPermission(['accountDelete'])
+      this.listPermission = checkPermission(['accountList'])
     },
     // 获取列表数据
     getList(queryParam) {
@@ -317,11 +335,6 @@ export default {
         if (this.dialogType === 'add') {
           this.listLoading = true
           addAccount(this.account).then(res => {
-          // 重新获取页面数据
-            // this.$message({
-            //   message: this.$t('common.addedSuccessfully'),
-            //   type: 'success'
-            // })
             this.$notify({
               title: this.$t('common.addedSuccessfully'),
               message: this.$t('account.addedSuccessfully') + res.data.raw_password,
@@ -362,6 +375,7 @@ export default {
     },
     // 重置密码提交
     resetPassword() {
+      this.resetPasswordDialogVisible = false
       this.$refs['passwordForm'].validate(valid => {
         if (!valid) {
           return false
@@ -383,17 +397,24 @@ export default {
     },
     deleteAccount(id) {
       this.listLoading = true
-      deleteAccountById(id).then(res => {
-        // 重新获取页面数据
-        this.$message({
-          message: this.$t('common.deleteSucceeded'),
-          type: 'success'
-        })
-        this.resetData()
-      }).catch(() => {
+      // 删除之前检查是否是系统保留账户
+      if (id === 3) {
+        this.$message.error(this.$t('account.protectedAccount'))
         this.listLoading = false
-        this.$message.error(this.$t('common.deletionFailed'))
-      })
+        return false
+      } else {
+        deleteAccountById(id).then(res => {
+        // 重新获取页面数据
+          this.$message({
+            message: this.$t('common.deleteSucceeded'),
+            type: 'success'
+          })
+          this.resetData()
+        }).catch(() => {
+          this.listLoading = false
+          this.$message.error(this.$t('common.deletionFailed'))
+        })
+      }
     },
     indexMethod(index) {
       return (this.queryParam.page - 1) * this.queryParam.size + index + 1

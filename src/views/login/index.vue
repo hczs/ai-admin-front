@@ -1,6 +1,11 @@
 <template>
   <div class="login-container">
+
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+
+      <div class="img-container" style="margin: 0 auto">
+        <img class="logo" src="../../icons/logo.png" alt="logo">
+      </div>
 
       <div class="title-container">
         <h3 class="title">{{ $t('login.title') }}</h3>
@@ -47,7 +52,13 @@
       </el-form-item>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">{{ $t('login.logIn') }}</el-button>
-
+      <div style="float: right">
+        <router-link to="/register">
+          <el-link style="color: white">
+            {{ $t('register.toRegister') }}
+          </el-link>
+        </router-link>
+      </div>
     </el-form>
   </div>
 </template>
@@ -139,8 +150,6 @@ export default {
 </script>
 
 <style lang="scss">
-/* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
 $bg:#283443;
 $light_gray:#fff;
@@ -190,6 +199,21 @@ $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
 
+.img-container {
+    width:159px;
+    height: 146px;
+    position: relative;
+}
+
+.logo {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
 .login-container {
   min-height: 100%;
   width: 100%;
@@ -200,7 +224,7 @@ $light_gray:#eee;
     position: relative;
     width: 580px;
     max-width: 100%;
-    padding: 160px 35px 0;
+    padding: 60px 35px 0;
     margin: 0 auto;
     overflow: hidden;
   }
@@ -231,7 +255,7 @@ $light_gray:#eee;
     .title {
       font-size: 26px;
       color: $light_gray;
-      margin: 0px auto 40px auto;
+      margin: 16px auto 40px auto;
       text-align: center;
       font-weight: bold;
     }
