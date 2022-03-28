@@ -25,6 +25,7 @@ export function deleteFileById(fileId) {
   })
 }
 
+// 更新文件公开 私有 状态
 export function updateFileVisibility(fileId, visibility) {
   return request({
     url: `/business/file/${fileId}/update_visibility/`,

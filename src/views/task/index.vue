@@ -1,7 +1,7 @@
 <template>
   <div class="app-container" :data-intro="$t('taskIndexIntroL.step01')" data-step="1">
     <!-- 顶部查询表单 -->
-    <el-form :inline="true" class="demo-form-inline" :data-intro="$t('taskIndexIntroL.step02')" data-step="2">
+    <el-form size="small" :inline="true" class="demo-form-inline" :data-intro="$t('taskIndexIntroL.step02')" data-step="2">
 
       <el-form-item :label="$t('task.taskName')">
         <el-input v-model="queryParam.task_name" />
@@ -9,6 +9,38 @@
 
       <el-form-item :label="$t('task.dataset')">
         <el-input v-model="queryParam.dataset" />
+      </el-form-item>
+
+      <el-form-item :label="$t('task.creator')">
+        <el-select
+          v-model="queryParam.creator"
+          style="float: left"
+          clearable
+          filterable
+          @change="onCreatorChange"
+        >
+          <el-option
+            v-for="item in accountList"
+            :key="item.id"
+            :label="item.account_number"
+            :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item :label="$t('dataset.visibility')">
+        <el-select
+          v-model="queryParam.visibility"
+          style="float: left"
+          clearable
+        >
+          <el-option
+            v-for="item in visibilityList"
+            :key="item.id"
+            :label="item.value"
+            :value="item.id"
+          />
+        </el-select>
       </el-form-item>
 
       <el-form-item :label="$t('task.task_type')">
@@ -52,10 +84,10 @@
           default-time="00:00:00"
         />
       </el-form-item> -->
-      <el-button type="primary" icon="el-icon-search" @click="getQueryList()">{{ $t('common.search') }}</el-button>
-      <el-button type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
+      <el-button size="small" type="primary" icon="el-icon-search" @click="getQueryList()">{{ $t('common.search') }}</el-button>
+      <el-button size="small" type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
     </el-form>
-    <el-button :data-intro="$t('taskIndexIntroL.step03')" data-step="3" type="primary" style="float: right" @click="contrast()">
+    <el-button size="small" :data-intro="$t('taskIndexIntroL.step03')" data-step="3" type="primary" style="float: right" @click="contrast()">
       {{ $t('task.modelEvaluateContrast') }}
     </el-button>
     <!-- 数据表格 -->
@@ -64,6 +96,7 @@
       v-loading="listLoading"
       :data="tableData"
       border
+      stripe
     >
       <el-table-column
         fixed="left"
@@ -149,6 +182,27 @@
         :label="$t('common.order')"
         width="80"
       />
+      <el-table-column
+        prop="visibility"
+        :label="$t('dataset.visibility')"
+        width="200"
+      >
+        <template slot-scope="scope">
+          <el-switch
+            v-if="currentUserName === scope.row.creator"
+            v-model="scope.row.visibility"
+            :active-value="1"
+            :inactive-value="0"
+            :active-text="$t('dataset.public')"
+            :inactive-text="$t('dataset.private')"
+            @change="visibilitySwitchChange($event, scope.row.id)"
+          />
+          <div v-else>
+            <span v-if="scope.row.visibility === 1"> {{ $t('dataset.public') }} </span>
+            <span v-if="scope.row.visibility === 0"> {{ $t('dataset.private') }} </span>
+          </div>
+        </template>
+      </el-table-column>
       <af-table-column
         prop="task_name"
         :label="$t('task.taskName')"
@@ -168,6 +222,7 @@
         prop="dataset"
         :label="$t('task.dataset')"
       />
+
       <af-table-column
         prop="task"
         :label="$t('task.task')"
@@ -619,12 +674,13 @@
 </template>
 <script>
 import { checkPermission } from '@/utils/permission'
+import { getSimpleAccountList } from '@/api/account'
 import i18n from '@/lang'
 import Cookies from 'js-cookie'
 import { getTaskList, getTaskById, executeTaskById,
   deleteTaskById, getExecuteLogById, getStateEvaluateList,
   getMapMatchingEvaluateList, getTrajEvaluateList, getConfigDataById,
-  getStateMode, getTaskStatus } from '@/api/task'
+  getStateMode, getTaskStatus, updateTaskVisibility } from '@/api/task'
 
 const DEFAULT_EVALUATE_DATA = [{ 'MAE': '', 'MAPE': '', 'MSE': '', 'RMSE': '', 'masked_MAE': '', 'masked_MAPE': '',
   'masked_MSE': '', 'masked_RMSE': '', 'R2': '', 'EVAR': '', 'Precision': '',
@@ -704,6 +760,9 @@ export default {
     }
     return {
       BASE_API: window.global_url.Base_url,
+      visibilityList: [{ id: 1, value: '公开' }],
+      currentUserName: '',
+      accountList: [],
       itemLabelWidth: 150,
       language: '',
       tableData: [],
@@ -775,6 +834,8 @@ export default {
     }
     this.getList()
     this.columnAdapt()
+    this.getAccountList()
+    this.currentUserName = this.$store.getters.name
   },
   mounted() {
     this.$nextTick(() => {
@@ -788,6 +849,28 @@ export default {
   },
   methods: {
     checkPermission,
+    // 公开 私有 开关变化时触发此方法，更新对应状态
+    visibilitySwitchChange(newValue, taskId) {
+      updateTaskVisibility(taskId, newValue).then(res => {
+        this.getList()
+      })
+    },
+    // 当创建者下拉框值改变时，自动改变状态下拉列表值
+    onCreatorChange(creatorId) {
+      if (creatorId === this.$store.getters.id) {
+        this.visibilityList = [{ id: 1, value: this.$t('dataset.public') },
+          { id: 0, value: this.$t('dataset.private') }, { id: 2, value: this.$t('dataset.all') }]
+      } else {
+        this.visibilityList = [{ id: 1, value: this.$t('dataset.public') }]
+        this.queryParam.visibility = this.visibilityList[0].id
+      }
+    },
+    // 获取账号列表下拉值
+    getAccountList() {
+      getSimpleAccountList().then(res => {
+        this.accountList = res.data
+      })
+    },
     // 自适应操作列列宽
     columnAdapt() {
       if (!this.language) {

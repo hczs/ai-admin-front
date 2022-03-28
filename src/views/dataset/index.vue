@@ -97,6 +97,7 @@
           size="medium"
           fit
           border
+          stripe
         >
           <el-table-column
             type="index"
@@ -342,7 +343,6 @@ export default {
       dataset: {
       },
       currentUserName: '',
-      currentVisibility: 0,
       uploadForm: {
         isPublic: false
       }, // 上传表单数据对象

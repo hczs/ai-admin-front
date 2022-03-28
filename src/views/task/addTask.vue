@@ -33,6 +33,15 @@
               clearable
             />
           </el-form-item>
+          <el-form-item :label="$t('dataset.isPublic')" style="text-align: left" prop="visibility">
+            <el-switch
+              v-model="task.visibility"
+              :active-text="$t('dataset.public')"
+              :inactive-text="$t('dataset.private')"
+              :active-value="1"
+              :inactive-value="0"
+            />
+          </el-form-item>
           <!-- <el-form-item :label="$t('task.dataFile')" prop="data_file">
           <el-select v-model="task.data_file" style="float: left"  >
             <el-option

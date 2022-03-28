@@ -44,6 +44,15 @@ export function updateTaskById(taskId, data) {
   })
 }
 
+// 更新任务公开私有状态
+export function updateTaskVisibility(taskId, visibility) {
+  return request({
+    url: `/business/task/${taskId}/update_visibility/`,
+    method: 'get',
+    params: { visibility: visibility }
+  })
+}
+
 // 删除
 export function deleteTaskById(taskId) {
   return request({

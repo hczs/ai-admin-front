@@ -109,6 +109,26 @@ export default {
     repeatPassword: 'Enter the new password again',
     updatePasswordSuccess: 'Password changed successfully, please log in again'
   },
+  // 注册相关
+  register: {
+    repeatPassword: 'Please enter the password again',
+    inputMail: 'please input your email',
+    inputCode: 'please enter verification code',
+    register: 'register',
+    getCode: 'Get Captcha',
+    getCodeAgain: 'Reacquire after s',
+    pleaseInputMail: 'please enter your email',
+    pleaseInputCode: 'Please fill in the verification code',
+    wrongMailFormat: 'E-mail format is incorrect',
+    toLogin: 'Already have an account? go to login',
+    toRegister: 'No account? Click to register',
+    title: 'User registration',
+    sendCodeError: 'Failed to send verification code',
+    registerError: 'registration failed',
+    registerSuccess: 'registration success',
+    sendCodeSuccess: 'The verification code has been sent successfully, please pay attention to check',
+    mailRepeat: 'This email has been registered with this system'
+  },
   documentation: {
     documentation: 'Documentation',
     github: 'Github Repository'
