@@ -102,12 +102,13 @@
               :underline="false"
               style="color: white; padding-top: 8px"
               @click="getCode()"
-            >{{ $t('register.getCode') }}</el-link>
+            >{{ $t('register.getCode') }}
+            </el-link>
             <el-link
               v-else
               :underline="false"
               style="color: white; padding-top: 8px"
-            >{{ codeSecond }}{{ $t('register.getCodeAgain') }}</el-link>
+            >{{ $t('register.getCode') }}({{ codeSecond }})</el-link>
           </el-col>
         </el-row>
       </el-form-item>

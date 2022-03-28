@@ -305,6 +305,14 @@ export default {
   },
   // 数据集相关
   dataset: {
+    creator: '上传者',
+    visibility: '状态',
+    public: '公开',
+    private: '私有',
+    all: '所有',
+    isPublic: '是否公开',
+    selectFile: '选取文件',
+    submit: '提交',
     datasetDownload: '样例数据下载',
     preprocessing: '数据集可视化检验中',
     processing: '数据集处理中',
@@ -316,7 +324,7 @@ export default {
     extractPath: '解压路径',
     fileUpload: '文件上传',
     pleaseInputFileName: '请输入文件名称',
-    clickUpload: '点击这里上传文件',
+    clickUpload: '将文件拖到此处，或点击上传',
     uploadTips: '注意：只能上传ZIP文件，数据包应包含数据原子文件，包括：xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、xxx.gridod、config.json；对于不同的交通预测任务，可能用到不同的原子文件，同一个数据集不一定包含全部几种原子文件。',
     uploadSuccess: '文件上传成功！',
     background: '选择可视化底图',

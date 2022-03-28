@@ -286,6 +286,14 @@ export default {
   },
   // 数据集相关
   dataset: {
+    creator: 'uploader',
+    visibility: 'state',
+    public: 'public',
+    private: 'private',
+    all: 'all',
+    isPublic: 'Public or Not',
+    selectFile: 'Select File',
+    submit: 'Submit',
     datasetDownload: ' Download Sample',
     fileName: 'File name',
     fileSize: 'File size',
@@ -297,7 +305,7 @@ export default {
     extractPath: 'Decompression path',
     fileUpload: 'File upload',
     pleaseInputFileName: 'Please enter a file name',
-    clickUpload: 'Click here to upload the file',
+    clickUpload: 'Drag files here, or click upload',
     uploadTips: 'Note: only zip files can be uploaded, The data package shall contain data atomic files, including: xxx.geo、xxx.usr、xxx.rel、xxx.dyna、xxx.ext、xxx.grid、xxx.gridod、config.json; For different traffic prediction tasks, different atomic files may be used, and a dataset may not contain all kinds of atomic files.',
     uploadSuccess: 'File upload succeeded!',
     background: 'choose background',

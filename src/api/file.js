@@ -25,6 +25,14 @@ export function deleteFileById(fileId) {
   })
 }
 
+export function updateFileVisibility(fileId, visibility) {
+  return request({
+    url: `/business/file/${fileId}/update_visibility/`,
+    method: 'get',
+    params: { visibility: visibility }
+  })
+}
+
 // 展示
 export function showFileByFileName(file_name) {
   return request({

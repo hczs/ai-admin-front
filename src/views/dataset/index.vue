@@ -3,13 +3,45 @@
     <div style="width: 99%; margin-left: 13px; height: 80%">
       <!-- 顶部查询表单 -->
       <div style="height: 80%" :data-intro="$t('addDataIntro.step02')" data-step="2">
-        <el-form :inline="true" class="demo-form-inline">
+        <el-form size="small" :inline="true" class="demo-form-inline">
 
           <el-form-item :label="$t('dataset.fileName')">
             <el-input v-model="queryParam.file_name" :placeholder="$t('dataset.pleaseInputFileName')" />
           </el-form-item>
 
-          <el-form-item :label="$t('common.createTime')">
+          <el-form-item :label="$t('dataset.creator')">
+            <el-select
+              v-model="queryParam.creator"
+              style="float: left"
+              clearable
+              filterable
+              @change="onCreatorChange"
+            >
+              <el-option
+                v-for="item in accountList"
+                :key="item.id"
+                :label="item.account_number"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item :label="$t('dataset.visibility')">
+            <el-select
+              v-model="queryParam.visibility"
+              style="float: left"
+              clearable
+            >
+              <el-option
+                v-for="item in visibilityList"
+                :key="item.id"
+                :label="item.value"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+
+          <!-- <el-form-item :label="$t('common.createTime')">
             <el-date-picker
               v-model="queryParam.begin"
               type="datetime"
@@ -27,9 +59,9 @@
               value-format="yyyy-MM-dd HH:mm:ss"
               default-time="00:00:00"
             />
-          </el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="getQueryList()">{{ $t('common.search') }}</el-button>
-          <el-button type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
+          </el-form-item> -->
+          <el-button type="primary" size="small" icon="el-icon-search" @click="getQueryList()">{{ $t('common.search') }}</el-button>
+          <el-button type="default" size="small" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
         </el-form>
       </div>
       <!-- 样例数据下载 数据集上传按钮 查看数据说明按钮 -->
@@ -37,12 +69,12 @@
         <div style="width: 100%; height: 100%" :data-intro="$t('addDataIntro.step03')" data-step="3">
           <!-- 样例数据下载 -->
           <a :href="BASE_API + '/business/file/download/'">
-            <el-button type="primary" size="medium" icon="el-icon-download">
+            <el-button type="primary" size="small" icon="el-icon-download">
               {{ lable=$t('dataset.datasetDownload') }}
             </el-button></a>
           <!-- 查看数据说明 -->
           <a target="_blank" :href="$t('dataset.atomicExplainUrl')" style="margin-left: 10px">
-            <el-button type="primary" size="medium" icon="el-icon-info">
+            <el-button type="primary" size="small" icon="el-icon-info">
               {{ lable=$t('dataset.atomicExplain') }}
             </el-button></a>
           <!-- 数据集上传 -->
@@ -50,7 +82,7 @@
             style="margin-left: 10px"
             :disabled="addDisable"
             type="primary"
-            size="medium"
+            size="small"
             icon="el-icon-circle-plus-outline"
             @click="dialogFormVisible = true"
           >
@@ -62,6 +94,7 @@
         <el-table
           v-loading="listLoading"
           :data="tableData"
+          size="medium"
           fit
           border
         >
@@ -71,24 +104,53 @@
             :label="$t('common.order')"
             width="120"
           />
-          <el-table-column
+          <af-table-column
             prop="file_name"
             :label="$t('dataset.fileName')"
+            sortable
+          />
+          <af-table-column
+            prop="creator"
+            :label="$t('dataset.creator')"
+            sortable
           />
           <el-table-column
+            prop="visibility"
+            :label="$t('dataset.visibility')"
+            width="200"
+          >
+            <template slot-scope="scope">
+              <el-switch
+                v-if="currentUserName === scope.row.creator"
+                v-model="scope.row.visibility"
+                :active-value="1"
+                :inactive-value="0"
+                :active-text="$t('dataset.public')"
+                :inactive-text="$t('dataset.private')"
+                @change="visibilitySwitchChange($event, scope.row.id)"
+              />
+              <div v-else>
+                <span v-if="scope.row.visibility === 1"> {{ $t('dataset.public') }} </span>
+                <span v-if="scope.row.visibility === 0"> {{ $t('dataset.private') }} </span>
+              </div>
+            </template>
+          </el-table-column>
+          <af-table-column
             prop="file_size"
             :label="$t('dataset.fileSize')"
           />
-          <el-table-column
+          <af-table-column
             prop="create_time"
             :label="$t('common.createTime')"
+            sortable
           />
-          <el-table-column
+          <!-- <el-table-column
             prop="update_time"
             :label="$t('common.updateTime')"
-          />
-          <el-table-column
+          /> -->
+          <af-table-column
             :label="$t('common.operation')"
+            width="200"
           >
             <template slot-scope="scope">
               <!--
@@ -182,7 +244,7 @@
               </el-button-group>
 
             </template>
-          </el-table-column>
+          </af-table-column>
         </el-table>
       </div>
     </div>
@@ -202,20 +264,51 @@
       />
     </div>
     <!-- 添加/编辑 对话框 -->
-    <el-dialog :title="$t('dataset.fileUpload')" :visible.sync="dialogFormVisible">
-      <el-upload
-        ref="elupload"
-        class="upload-demo"
-        :action="BASE_API + '/business/file/'"
-        name="dataset"
-        multiple
-        :on-success="handleFileUploadSuccess"
-        :before-upload="handleBeforeUpload"
-        accept="application/x-zip-compressed"
-      >
-        <el-button size="small" type="primary"> {{ $t('dataset.clickUpload') }}</el-button>
-        <div slot="tip" class="el-upload__tip">{{ $t('dataset.uploadTips') }}</div>
-      </el-upload>
+    <el-dialog
+      :destroy-on-close="true"
+      :title="$t('dataset.fileUpload')"
+      :visible.sync="dialogFormVisible"
+    >
+      <div style="margin: 0 atuo">
+        <el-form ref="uploadForm" :model="uploadForm">
+          <el-form-item :label="$t('dataset.isPublic')" prop="isPublic">
+            <el-switch
+              v-model="uploadForm.isPublic"
+              :active-text="$t('dataset.public')"
+              :inactive-text="$t('dataset.private')"
+            />
+          </el-form-item>
+          <el-form-item :label="$t('dataset.selectFile')">
+            <el-upload
+              ref="elupload"
+              :action="BASE_API + '/business/file/'"
+              name="dataset"
+              :data="uploadForm"
+              :headers="uploadHeaders"
+              :file-list="filelist"
+              multiple
+              drag
+              :auto-upload="false"
+              :on-success="handleFileUploadSuccess"
+              :before-upload="handleBeforeUpload"
+              accept="application/x-zip-compressed"
+            >
+              <i class="el-icon-upload" />
+              <div class="el-upload__text">{{ $t('dataset.clickUpload') }}</div>
+              <!-- <el-button size="small" type="primary"> {{ $t('dataset.clickUpload') }}</el-button> -->
+              <div slot="tip" class="el-upload__tip">{{ $t('dataset.uploadTips') }}</div>
+            </el-upload>
+          </el-form-item>
+          <el-row :gutter="20" type="flex" justify="center">
+            <el-col :span="6">
+              <el-button type="primary" size="medium" @click="submitUpload">{{ $t('dataset.submit') }}</el-button>
+            </el-col>
+            <el-col :span="6">
+              <el-button type="primary" size="medium" @click="dialogFormVisible = false">{{ $t('common.cancel') }}</el-button>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
     </el-dialog>
     <!-- 选择可视化底图 -->
     <el-dialog :title="$t('common.getview')" :visible.sync="showFormVisible">
@@ -236,7 +329,9 @@
   </div>
 </template>
 <script>
-import { getFileList, deleteFileById, generate_background_byID } from '@/api/file'
+import { getFileList, deleteFileById, generate_background_byID, updateFileVisibility } from '@/api/file'
+import { getSimpleAccountList } from '@/api/account'
+import { getToken } from '@/utils/auth'
 import { checkPermission } from '@/utils/permission'
 import i18n from '@/lang'
 
@@ -246,6 +341,15 @@ export default {
       BASE_API: window.global_url.Base_url,
       dataset: {
       },
+      currentUserName: '',
+      currentVisibility: 0,
+      uploadForm: {
+        isPublic: false
+      }, // 上传表单数据对象
+      uploadHeaders: {
+        'Authorization': 'Bearer ' + getToken()
+      },
+      visibilityList: [{ id: 1, value: '公开' }],
       backgroundParamList: [
         { id: '1', label: this.$t('dataset.google') },
         { id: '2', label: this.$t('dataset.google_s') },
@@ -276,7 +380,8 @@ export default {
       addDisable: true,
       deleteDisable: true,
       listPermission: true,
-      file: {}
+      file: {},
+      accountList: []
     }
   },
   mounted() {
@@ -299,8 +404,9 @@ export default {
     if (!this.listPermission) {
       this.$router.push('/forbidden/index')
     }
-
+    this.getAccountList()
     this.getList(this.queryParam)
+    this.currentUserName = this.$store.getters.name
   },
   methods: {
     checkPermission,
@@ -308,6 +414,28 @@ export default {
       this.addDisable = !checkPermission(['datasetUpload'])
       this.deleteDisable = !checkPermission(['datasetDelete'])
       this.listPermission = checkPermission(['datasetList'])
+    },
+    visibilitySwitchChange(newValue, datasetId) {
+      updateFileVisibility(datasetId, newValue).then(res => {
+        this.getList(this.queryParam)
+      })
+    },
+    submitUpload() {
+      this.$refs.elupload.submit()
+    },
+    onCreatorChange(creatorId) {
+      if (creatorId === this.$store.getters.id) {
+        this.visibilityList = [{ id: 1, value: this.$t('dataset.public') },
+          { id: 0, value: this.$t('dataset.private') }, { id: 2, value: this.$t('dataset.all') }]
+      } else {
+        this.visibilityList = [{ id: 1, value: this.$t('dataset.public') }]
+        this.queryParam.visibility = this.visibilityList[0].id
+      }
+    },
+    getAccountList() {
+      getSimpleAccountList().then(res => {
+        this.accountList = res.data
+      })
     },
     // 获取数据集列表
     getList(queryParam) {
@@ -395,8 +523,10 @@ export default {
     // 文件上传相关
     // 上传成功，刷新页面
     handleFileUploadSuccess(response, file, filelist) {
-      if (response.code === 200) {
+      if (response.code >= 200 <= 300) {
         this.$message.success(this.$t('dataset.uploadSuccess'))
+        this.filelist = []
+        this.dialogFormVisible = false
       } else if (response.code === 400) {
         file.status = 'error'
         this.$message.error(this.$t('dataset.atomicError'))
