@@ -341,6 +341,16 @@
             >
               {{ $t('task.executing') }}
             </el-link>
+            <!-- 中断实验 -->
+            <el-link
+              v-if="scope.row.task_status === 1"
+              style="margin-left: 10px"
+              icon="el-icon-circle-close"
+              @click="openInterruptExpBox(scope.row.id)"
+            >
+              {{ $t('task.interruptExp') }}
+            </el-link>
+
             <!-- 查看评价指标按钮 有查看权限就有这个按钮 下面都是 -->
             <el-link
               v-if=" scope.row.task_status === 2 && scope.row.task !== 'road_representation' "
@@ -677,10 +687,8 @@ import { checkPermission } from '@/utils/permission'
 import { getSimpleAccountList } from '@/api/account'
 import i18n from '@/lang'
 import Cookies from 'js-cookie'
-import { getTaskList, getTaskById, executeTaskById,
-  deleteTaskById, getExecuteLogById, getStateEvaluateList,
-  getMapMatchingEvaluateList, getTrajEvaluateList, getConfigDataById,
-  getStateMode, getTaskStatus, updateTaskVisibility } from '@/api/task'
+import { getTaskList, getTaskById, executeTaskById, deleteTaskById, getExecuteLogById, getStateEvaluateList, getMapMatchingEvaluateList,
+  getTrajEvaluateList, getConfigDataById, getStateMode, getTaskStatus, updateTaskVisibility, interruptExp } from '@/api/task'
 
 const DEFAULT_EVALUATE_DATA = [{ 'MAE': '', 'MAPE': '', 'MSE': '', 'RMSE': '', 'masked_MAE': '', 'masked_MAPE': '',
   'masked_MSE': '', 'masked_RMSE': '', 'R2': '', 'EVAR': '', 'Precision': '',
@@ -849,6 +857,34 @@ export default {
   },
   methods: {
     checkPermission,
+    // 打开中断实验消息框
+    openInterruptExpBox(expId) {
+      this.$confirm(this.$t('task.interruptConfirm'), this.$t('task.tips'), {
+        confirmButtonText: this.$t('common.confirm'),
+        cancelButtonText: this.$t('common.cancel'),
+        type: 'warning'
+      }).then(() => {
+        interruptExp(expId).then(res => {
+          if (res.code === 200) {
+            this.$message({
+              type: 'success',
+              message: this.$t('task.interruptOk')
+            })
+            this.pollingTaskStatus(expId, 5)
+            this.getList()
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.$t('task.interruptCancel')
+        })
+      })
+    },
+    // 中断实验
+    interruptTask(expId) {
+
+    },
     // 公开 私有 开关变化时触发此方法，更新对应状态
     visibilitySwitchChange(newValue, taskId) {
       updateTaskVisibility(taskId, newValue).then(res => {
@@ -886,7 +922,7 @@ export default {
       }
     },
     // 获取任务状态，长轮询
-    pollingTaskStatus(taskId) {
+    pollingTaskStatus(taskId, seconds) {
       if (this.timeObj) {
         clearTimeout(this.timeObj)
       }
@@ -894,8 +930,8 @@ export default {
         if (res.code === 202) {
           this.$nextTick(() => {
             this.timeObj = setTimeout(() => {
-              this.pollingTaskStatus(taskId)
-            }, 1000 * 30)
+              this.pollingTaskStatus(taskId, seconds)
+            }, 1000 * seconds)
           })
         } else if (res.code === 200) {
           // 刷新页面
@@ -1126,14 +1162,16 @@ export default {
         this.getList()
       })
       this.executeTaskDialogVisible = false
-      this.pollingTaskStatus(this.executeId)
+      // 5 秒后再开始轮询，因为有一种情况是状态为执行错误的实验，重新执行后第一时间获取到的状态是错误，轮询就会停止
+      setTimeout(this.pollingTaskStatus(this.executeId, 30), 1000 * 5)
     },
     executeAtTime() {
       executeTaskById(this.executeId, this.executeForm.executeTime).then(res => {
         this.getList()
       })
       this.executeTaskDialogVisible = false
-      this.pollingTaskStatus(this.executeId)
+      // 5 秒后再开始轮询，因为有一种情况是状态为执行错误的实验，重新执行后第一时间获取到的状态是错误，轮询就会停止
+      setTimeout(this.pollingTaskStatus(this.executeId, 30), 1000 * 5)
     },
     // 清空查询条件，重新获取数据
     resetData() {

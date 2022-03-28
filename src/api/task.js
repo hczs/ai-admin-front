@@ -53,6 +53,14 @@ export function updateTaskVisibility(taskId, visibility) {
   })
 }
 
+// 中断实验
+export function interruptExp(taskId) {
+  return request({
+    url: `/business/task/${taskId}/interrupt_exp/`,
+    method: 'get'
+  })
+}
+
 // 删除
 export function deleteTaskById(taskId) {
   return request({
