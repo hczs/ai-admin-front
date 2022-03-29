@@ -313,6 +313,7 @@ export default {
   },
   // 数据集相关
   dataset: {
+    datasetRepeatError: 'Duplicate dataset',
     download: 'Download',
     creator: 'uploader',
     visibility: 'state',

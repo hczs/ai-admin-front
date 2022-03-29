@@ -312,6 +312,7 @@ export default {
   },
   // 数据集相关
   dataset: {
+    datasetRepeatError: '数据集重复',
     download: '下载',
     creator: '上传者',
     visibility: '状态',

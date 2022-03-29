@@ -543,18 +543,23 @@ export default {
     // 文件上传相关
     // 上传成功，刷新页面
     handleFileUploadSuccess(response, file, filelist) {
-      if (response.code >= 200 <= 300) {
+      console.log(response)
+      if (response.code >= 200 && response.code <= 300) {
         this.$message.success(this.$t('dataset.uploadSuccess'))
         this.filelist = []
         this.dialogFormVisible = false
+        this.getList(this.queryParam)
+        this.title = i18n.t('dataset.canView')
+        this.message = i18n.t('dataset.canViewSuccessfully')
+        this.longPolling(response.data.id)
       } else if (response.code === 400) {
         file.status = 'error'
         this.$message.error(this.$t('dataset.atomicError'))
+      } else if (response.code === 409) {
+        // 数据集重复
+        file.status = 'error'
+        this.$message.error(this.$t('dataset.datasetRepeatError'))
       }
-      this.getList(this.queryParam)
-      this.title = i18n.t('dataset.canView')
-      this.message = i18n.t('dataset.canViewSuccessfully')
-      this.longPolling(response.data.id)
     },
     // 上传之前，检查文件类型
     handleBeforeUpload(file) {
