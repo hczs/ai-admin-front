@@ -288,6 +288,7 @@ export default {
   },
   // 账号相关
   account: {
+    mail: 'E-mail',
     accountNumber: 'Account',
     edit: 'Edit Account',
     add: 'Add Account',

@@ -287,6 +287,7 @@ export default {
   },
   // 账号相关
   account: {
+    mail: '邮箱',
     accountNumber: '账号',
     edit: '编辑账号',
     add: '添加账号',

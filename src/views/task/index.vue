@@ -28,7 +28,8 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="$t('dataset.visibility')">
+      <!-- 实验状态 私有/公开 -->
+      <el-form-item :label="$t('dataset.isPublic')">
         <el-select
           v-model="queryParam.visibility"
           style="float: left"
@@ -87,7 +88,14 @@
       <el-button size="small" type="primary" icon="el-icon-search" @click="getQueryList()">{{ $t('common.search') }}</el-button>
       <el-button size="small" type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
     </el-form>
-    <el-button size="small" :data-intro="$t('taskIndexIntroL.step03')" data-step="3" type="primary" style="float: right" @click="contrast()">
+    <el-button
+      size="small"
+      :data-intro="$t('taskIndexIntroL.step03')"
+      data-step="3"
+      type="primary"
+      style="float: right"
+      @click="contrast()"
+    >
       {{ $t('task.modelEvaluateContrast') }}
     </el-button>
     <!-- 数据表格 -->
@@ -96,7 +104,6 @@
       v-loading="listLoading"
       :data="tableData"
       border
-      stripe
     >
       <el-table-column
         fixed="left"
@@ -182,30 +189,12 @@
         :label="$t('common.order')"
         width="80"
       />
-      <el-table-column
-        prop="visibility"
-        :label="$t('dataset.visibility')"
-        width="200"
-      >
-        <template slot-scope="scope">
-          <el-switch
-            v-if="currentUserName === scope.row.creator"
-            v-model="scope.row.visibility"
-            :active-value="1"
-            :inactive-value="0"
-            :active-text="$t('dataset.public')"
-            :inactive-text="$t('dataset.private')"
-            @change="visibilitySwitchChange($event, scope.row.id)"
-          />
-          <div v-else>
-            <span v-if="scope.row.visibility === 1"> {{ $t('dataset.public') }} </span>
-            <span v-if="scope.row.visibility === 0"> {{ $t('dataset.private') }} </span>
-          </div>
-        </template>
-      </el-table-column>
+
+      <!-- 实验名称 -->
       <af-table-column
         prop="task_name"
         :label="$t('task.taskName')"
+        sortable
       />
       <!-- 实验ID -->
       <af-table-column
@@ -256,14 +245,39 @@
         prop="creator"
         :label="$t('task.creator')"
       />
+      <!-- 状态 -->
+      <el-table-column
+        prop="visibility"
+        :label="$t('dataset.isPublic')"
+        width="160"
+      >
+        <template slot-scope="scope">
+          <el-switch
+            v-if="currentUserName === scope.row.creator"
+            v-model="scope.row.visibility"
+            :active-value="1"
+            :inactive-value="0"
+            :active-text="$t('dataset.public')"
+            :inactive-text="$t('dataset.private')"
+            @change="visibilitySwitchChange($event, scope.row.id)"
+          />
+          <div v-else>
+            <span v-if="scope.row.visibility === 1"> {{ $t('dataset.public') }} </span>
+            <span v-if="scope.row.visibility === 0"> {{ $t('dataset.private') }} </span>
+          </div>
+        </template>
+      </el-table-column>
       <af-table-column
         prop="execute_time"
         :label="$t('task.executeTime')"
+        sortable
       />
       <af-table-column
         prop="execute_end_time"
         :label="$t('task.executeEndTime')"
+        sortable
       />
+
       <!-- <el-table-column
         prop="create_time"
         :label="$t('common.createTime')"
@@ -283,7 +297,9 @@
               -1 执行错误
              -->
             <!-- 编辑按钮（进行中 或 已完成 或 禁止编辑 的时候，无法编辑） -->
+            <!-- 实验只能由创建者进行编辑 -->
             <el-link
+              v-if="currentUserName === scope.row.creator"
               style="margin-left: 10px;"
               :disabled="editDisable || ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )"
               icon="el-icon-edit"
@@ -307,14 +323,19 @@
               :title="$t('common.deleteConfirm')"
               @onConfirm="deleteTask(scope.row.id)"
             >
-              <!-- 没有删除权限，就不显示删除按钮 -->
-              <el-link v-if="!deleteDisable" slot="reference" style="margin-left: 10px;" icon="el-icon-delete">
+              <!-- 当有删除权限 并且 是实验的创建者的时候 就展示删除按钮 -->
+              <el-link
+                v-if="!deleteDisable && currentUserName === scope.row.creator"
+                slot="reference"
+                style="margin-left: 10px;"
+                icon="el-icon-delete"
+              >
                 {{ $t('common.delete') }}
               </el-link>
             </el-popconfirm>
-            <!-- 执行按钮 只有未开始的时候，才可以执行 -->
+            <!-- 执行按钮 只有未开始的时候，才可以执行 PS 只有本人可以执行本人创建的实验 -->
             <el-link
-              v-if="scope.row.task_status === 0"
+              v-if="scope.row.task_status === 0 && currentUserName === scope.row.creator"
               style="margin-left: 10px"
               :disabled="executeDisable"
               icon="el-icon-video-play"
@@ -322,9 +343,9 @@
             >
               {{ $t('task.execute') }}
             </el-link>
-            <!-- 重新执行按钮 只有出错的时候，才可以重新执行 -->
+            <!-- 重新执行按钮 只有出错的时候，才可以重新执行 PS 本人创建的实验只有自己可以执行,其他人只能看 -->
             <el-link
-              v-if="scope.row.task_status === -1"
+              v-if="scope.row.task_status === -1 && currentUserName === scope.row.creator"
               style="margin-left: 10px"
               :disabled="executeDisable"
               icon="el-icon-video-play"
@@ -341,9 +362,9 @@
             >
               {{ $t('task.executing') }}
             </el-link>
-            <!-- 中断实验 -->
+            <!-- 中断实验 只能中断自己创建的实验 -->
             <el-link
-              v-if="scope.row.task_status === 1"
+              v-if="scope.row.task_status === 1 && currentUserName === scope.row.creator"
               style="margin-left: 10px"
               icon="el-icon-circle-close"
               @click="openInterruptExpBox(scope.row.id)"
@@ -1275,4 +1296,27 @@ export default {
   background-color: #e4e4e4;
  }
 
+</style>
+<style lang="scss" scoped>
+.el-table {
+	.el-table__header-wrapper, .el-table__fixed-header-wrapper {
+		th {
+			word-break: break-word;
+			background-color: #f8f8f9;
+			color: #515a6e;
+			height: 40px;
+			font-size: 13px;
+		}
+	}
+	.el-table__body-wrapper {
+		.el-button [class*="el-icon-"] + span {
+			margin-left: 1px;
+		}
+	}
+}
+.el-table .fixed-width .el-button--mini {
+	padding-left: 0;
+	padding-right: 0;
+	width: inherit;
+}
 </style>
