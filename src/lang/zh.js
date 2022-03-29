@@ -306,6 +306,7 @@ export default {
   },
   // 数据集相关
   dataset: {
+    download: '下载',
     creator: '上传者',
     visibility: '状态',
     public: '公开',

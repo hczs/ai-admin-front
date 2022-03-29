@@ -191,9 +191,9 @@
                 <el-link
                   style="margin-left: 10px"
                   icon="el-icon-download"
-                  @click="downloadDataset(scope.row.id)"
+                  :href="BASE_API + '/business/file/' + scope.row.id + '/download_by_id/'"
                 >
-                  下载
+                  {{ $t('dataset.download') }}
                 </el-link>
                 <div v-intro-if="scope.$index === 0" :data-intro="$t('addDataIntro.step05')" data-step="5">
                   <div v-intro-if="scope.$index === 0" :data-intro="$t('addDataIntro.step06')" data-step="6">
@@ -339,7 +339,7 @@
   </div>
 </template>
 <script>
-import { getFileList, deleteFileById, generate_background_byID, updateFileVisibility } from '@/api/file'
+import { getFileList, deleteFileById, generate_background_byID, updateFileVisibility, downloadFileById } from '@/api/file'
 import { getSimpleAccountList } from '@/api/account'
 import { getToken } from '@/utils/auth'
 import { checkPermission } from '@/utils/permission'
@@ -427,6 +427,9 @@ export default {
     // 点击下载按钮
     downloadDataset(datasetId) {
       console.log('下载数据集:', datasetId)
+      downloadFileById(datasetId).then(res => {
+        console.log(res)
+      })
     },
     // 公开私有按钮改变
     visibilitySwitchChange(newValue, datasetId) {

@@ -67,3 +67,11 @@ export function getFileStatus(fileId) {
     method: 'get'
   })
 }
+
+// 通过数据集id下载数据集
+export function downloadFileById(fileId) {
+  return request({
+    url: `/business/file/${fileId}/download_by_id/`,
+    method: 'get'
+  })
+}
