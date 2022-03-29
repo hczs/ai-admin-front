@@ -114,6 +114,12 @@
             :label="$t('dataset.creator')"
             sortable
           />
+
+          <af-table-column
+            prop="file_size"
+            :label="$t('dataset.fileSize')"
+          />
+          <!-- 公开 私有 状态 -->
           <el-table-column
             prop="visibility"
             :label="$t('dataset.visibility')"
@@ -135,10 +141,6 @@
               </div>
             </template>
           </el-table-column>
-          <af-table-column
-            prop="file_size"
-            :label="$t('dataset.fileSize')"
-          />
           <af-table-column
             prop="create_time"
             :label="$t('common.createTime')"
@@ -175,8 +177,9 @@
                   :title="$t('common.deleteConfirm')"
                   @onConfirm="deleteFile(scope.row.id)"
                 >
+                  <!-- 当这个人有删除权限 并且 也是当前数据集的上传者的时候 展示删除按钮 -->
                   <el-link
-                    v-if="!deleteDisable"
+                    v-if="!deleteDisable && currentUserName === scope.row.creator"
                     slot="reference"
                     style="margin-left: 10px"
                     :disabled="deleteDisable"
@@ -185,6 +188,13 @@
                     {{ $t('common.delete') }}
                   </el-link>
                 </el-popconfirm>
+                <el-link
+                  style="margin-left: 10px"
+                  icon="el-icon-download"
+                  :href="BASE_API + '/business/file/' + scope.row.id + '/download_by_id/'"
+                >
+                  {{ $t('dataset.download') }}
+                </el-link>
                 <div v-intro-if="scope.$index === 0" :data-intro="$t('addDataIntro.step05')" data-step="5">
                   <div v-intro-if="scope.$index === 0" :data-intro="$t('addDataIntro.step06')" data-step="6">
                     <!-- 只有 2 或 5 的时候才能显示展示按钮 -->
@@ -329,7 +339,7 @@
   </div>
 </template>
 <script>
-import { getFileList, deleteFileById, generate_background_byID, updateFileVisibility } from '@/api/file'
+import { getFileList, deleteFileById, generate_background_byID, updateFileVisibility, downloadFileById } from '@/api/file'
 import { getSimpleAccountList } from '@/api/account'
 import { getToken } from '@/utils/auth'
 import { checkPermission } from '@/utils/permission'
@@ -342,7 +352,6 @@ export default {
       dataset: {
       },
       currentUserName: '',
-      currentVisibility: 0,
       uploadForm: {
         isPublic: false
       }, // 上传表单数据对象
@@ -415,14 +424,24 @@ export default {
       this.deleteDisable = !checkPermission(['datasetDelete'])
       this.listPermission = checkPermission(['datasetList'])
     },
+    // 点击下载按钮
+    downloadDataset(datasetId) {
+      console.log('下载数据集:', datasetId)
+      downloadFileById(datasetId).then(res => {
+        console.log(res)
+      })
+    },
+    // 公开私有按钮改变
     visibilitySwitchChange(newValue, datasetId) {
       updateFileVisibility(datasetId, newValue).then(res => {
         this.getList(this.queryParam)
       })
     },
+    // 提交确认上传
     submitUpload() {
       this.$refs.elupload.submit()
     },
+    // 搜索表单 - 上传者下拉框改变
     onCreatorChange(creatorId) {
       if (creatorId === this.$store.getters.id) {
         this.visibilityList = [{ id: 1, value: this.$t('dataset.public') },
@@ -432,6 +451,7 @@ export default {
         this.queryParam.visibility = this.visibilityList[0].id
       }
     },
+    // 获取系统所有账户列表
     getAccountList() {
       getSimpleAccountList().then(res => {
         this.accountList = res.data
@@ -566,3 +586,26 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.el-table {
+	.el-table__header-wrapper, .el-table__fixed-header-wrapper {
+		th {
+			word-break: break-word;
+			background-color: #f8f8f9;
+			color: #515a6e;
+			height: 40px;
+			font-size: 13px;
+		}
+	}
+	.el-table__body-wrapper {
+		.el-button [class*="el-icon-"] + span {
+			margin-left: 1px;
+		}
+	}
+}
+.el-table .fixed-width .el-button--mini {
+	padding-left: 0;
+	padding-right: 0;
+	width: inherit;
+}
+</style>

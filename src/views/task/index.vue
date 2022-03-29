@@ -1,7 +1,7 @@
 <template>
   <div class="app-container" :data-intro="$t('taskIndexIntroL.step01')" data-step="1">
     <!-- 顶部查询表单 -->
-    <el-form :inline="true" class="demo-form-inline" :data-intro="$t('taskIndexIntroL.step02')" data-step="2">
+    <el-form size="small" :inline="true" class="demo-form-inline" :data-intro="$t('taskIndexIntroL.step02')" data-step="2">
 
       <el-form-item :label="$t('task.taskName')">
         <el-input v-model="queryParam.task_name" />
@@ -9,6 +9,39 @@
 
       <el-form-item :label="$t('task.dataset')">
         <el-input v-model="queryParam.dataset" />
+      </el-form-item>
+
+      <el-form-item :label="$t('task.creator')">
+        <el-select
+          v-model="queryParam.creator"
+          style="float: left"
+          clearable
+          filterable
+          @change="onCreatorChange"
+        >
+          <el-option
+            v-for="item in accountList"
+            :key="item.id"
+            :label="item.account_number"
+            :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
+
+      <!-- 实验状态 私有/公开 -->
+      <el-form-item :label="$t('dataset.isPublic')">
+        <el-select
+          v-model="queryParam.visibility"
+          style="float: left"
+          clearable
+        >
+          <el-option
+            v-for="item in visibilityList"
+            :key="item.id"
+            :label="item.value"
+            :value="item.id"
+          />
+        </el-select>
       </el-form-item>
 
       <el-form-item :label="$t('task.task_type')">
@@ -52,10 +85,17 @@
           default-time="00:00:00"
         />
       </el-form-item> -->
-      <el-button type="primary" icon="el-icon-search" @click="getQueryList()">{{ $t('common.search') }}</el-button>
-      <el-button type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
+      <el-button size="small" type="primary" icon="el-icon-search" @click="getQueryList()">{{ $t('common.search') }}</el-button>
+      <el-button size="small" type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
     </el-form>
-    <el-button :data-intro="$t('taskIndexIntroL.step03')" data-step="3" type="primary" style="float: right" @click="contrast()">
+    <el-button
+      size="small"
+      :data-intro="$t('taskIndexIntroL.step03')"
+      data-step="3"
+      type="primary"
+      style="float: right"
+      @click="contrast()"
+    >
       {{ $t('task.modelEvaluateContrast') }}
     </el-button>
     <!-- 数据表格 -->
@@ -149,9 +189,12 @@
         :label="$t('common.order')"
         width="80"
       />
+
+      <!-- 实验名称 -->
       <af-table-column
         prop="task_name"
         :label="$t('task.taskName')"
+        sortable
       />
       <!-- 实验ID -->
       <af-table-column
@@ -168,6 +211,7 @@
         prop="dataset"
         :label="$t('task.dataset')"
       />
+
       <af-table-column
         prop="task"
         :label="$t('task.task')"
@@ -201,14 +245,39 @@
         prop="creator"
         :label="$t('task.creator')"
       />
+      <!-- 状态 -->
+      <el-table-column
+        prop="visibility"
+        :label="$t('dataset.isPublic')"
+        width="160"
+      >
+        <template slot-scope="scope">
+          <el-switch
+            v-if="currentUserName === scope.row.creator"
+            v-model="scope.row.visibility"
+            :active-value="1"
+            :inactive-value="0"
+            :active-text="$t('dataset.public')"
+            :inactive-text="$t('dataset.private')"
+            @change="visibilitySwitchChange($event, scope.row.id)"
+          />
+          <div v-else>
+            <span v-if="scope.row.visibility === 1"> {{ $t('dataset.public') }} </span>
+            <span v-if="scope.row.visibility === 0"> {{ $t('dataset.private') }} </span>
+          </div>
+        </template>
+      </el-table-column>
       <af-table-column
         prop="execute_time"
         :label="$t('task.executeTime')"
+        sortable
       />
       <af-table-column
         prop="execute_end_time"
         :label="$t('task.executeEndTime')"
+        sortable
       />
+
       <!-- <el-table-column
         prop="create_time"
         :label="$t('common.createTime')"
@@ -228,7 +297,9 @@
               -1 执行错误
              -->
             <!-- 编辑按钮（进行中 或 已完成 或 禁止编辑 的时候，无法编辑） -->
+            <!-- 实验只能由创建者进行编辑 -->
             <el-link
+              v-if="currentUserName === scope.row.creator"
               style="margin-left: 10px;"
               :disabled="editDisable || ( (scope.row.task_status) == 1 || (scope.row.task_status) === 2 )"
               icon="el-icon-edit"
@@ -252,14 +323,19 @@
               :title="$t('common.deleteConfirm')"
               @onConfirm="deleteTask(scope.row.id)"
             >
-              <!-- 没有删除权限，就不显示删除按钮 -->
-              <el-link v-if="!deleteDisable" slot="reference" style="margin-left: 10px;" icon="el-icon-delete">
+              <!-- 当有删除权限 并且 是实验的创建者的时候 就展示删除按钮 -->
+              <el-link
+                v-if="!deleteDisable && currentUserName === scope.row.creator"
+                slot="reference"
+                style="margin-left: 10px;"
+                icon="el-icon-delete"
+              >
                 {{ $t('common.delete') }}
               </el-link>
             </el-popconfirm>
-            <!-- 执行按钮 只有未开始的时候，才可以执行 -->
+            <!-- 执行按钮 只有未开始的时候，才可以执行 PS 只有本人可以执行本人创建的实验 -->
             <el-link
-              v-if="scope.row.task_status === 0"
+              v-if="scope.row.task_status === 0 && currentUserName === scope.row.creator"
               style="margin-left: 10px"
               :disabled="executeDisable"
               icon="el-icon-video-play"
@@ -267,9 +343,9 @@
             >
               {{ $t('task.execute') }}
             </el-link>
-            <!-- 重新执行按钮 只有出错的时候，才可以重新执行 -->
+            <!-- 重新执行按钮 只有出错的时候，才可以重新执行 PS 本人创建的实验只有自己可以执行,其他人只能看 -->
             <el-link
-              v-if="scope.row.task_status === -1"
+              v-if="scope.row.task_status === -1 && currentUserName === scope.row.creator"
               style="margin-left: 10px"
               :disabled="executeDisable"
               icon="el-icon-video-play"
@@ -286,6 +362,16 @@
             >
               {{ $t('task.executing') }}
             </el-link>
+            <!-- 中断实验 只能中断自己创建的实验 -->
+            <el-link
+              v-if="scope.row.task_status === 1 && currentUserName === scope.row.creator"
+              style="margin-left: 10px"
+              icon="el-icon-circle-close"
+              @click="openInterruptExpBox(scope.row.id)"
+            >
+              {{ $t('task.interruptExp') }}
+            </el-link>
+
             <!-- 查看评价指标按钮 有查看权限就有这个按钮 下面都是 -->
             <el-link
               v-if=" scope.row.task_status === 2 && scope.row.task !== 'road_representation' "
@@ -619,12 +705,11 @@
 </template>
 <script>
 import { checkPermission } from '@/utils/permission'
+import { getSimpleAccountList } from '@/api/account'
 import i18n from '@/lang'
 import Cookies from 'js-cookie'
-import { getTaskList, getTaskById, executeTaskById,
-  deleteTaskById, getExecuteLogById, getStateEvaluateList,
-  getMapMatchingEvaluateList, getTrajEvaluateList, getConfigDataById,
-  getStateMode, getTaskStatus } from '@/api/task'
+import { getTaskList, getTaskById, executeTaskById, deleteTaskById, getExecuteLogById, getStateEvaluateList, getMapMatchingEvaluateList,
+  getTrajEvaluateList, getConfigDataById, getStateMode, getTaskStatus, updateTaskVisibility, interruptExp } from '@/api/task'
 
 const DEFAULT_EVALUATE_DATA = [{ 'MAE': '', 'MAPE': '', 'MSE': '', 'RMSE': '', 'masked_MAE': '', 'masked_MAPE': '',
   'masked_MSE': '', 'masked_RMSE': '', 'R2': '', 'EVAR': '', 'Precision': '',
@@ -704,6 +789,9 @@ export default {
     }
     return {
       BASE_API: window.global_url.Base_url,
+      visibilityList: [{ id: 1, value: '公开' }],
+      currentUserName: '',
+      accountList: [],
       itemLabelWidth: 150,
       language: '',
       tableData: [],
@@ -775,6 +863,8 @@ export default {
     }
     this.getList()
     this.columnAdapt()
+    this.getAccountList()
+    this.currentUserName = this.$store.getters.name
   },
   mounted() {
     this.$nextTick(() => {
@@ -788,6 +878,56 @@ export default {
   },
   methods: {
     checkPermission,
+    // 打开中断实验消息框
+    openInterruptExpBox(expId) {
+      this.$confirm(this.$t('task.interruptConfirm'), this.$t('task.tips'), {
+        confirmButtonText: this.$t('common.confirm'),
+        cancelButtonText: this.$t('common.cancel'),
+        type: 'warning'
+      }).then(() => {
+        interruptExp(expId).then(res => {
+          if (res.code === 200) {
+            this.$message({
+              type: 'success',
+              message: this.$t('task.interruptOk')
+            })
+            this.pollingTaskStatus(expId, 5)
+            this.getList()
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.$t('task.interruptCancel')
+        })
+      })
+    },
+    // 中断实验
+    interruptTask(expId) {
+
+    },
+    // 公开 私有 开关变化时触发此方法，更新对应状态
+    visibilitySwitchChange(newValue, taskId) {
+      updateTaskVisibility(taskId, newValue).then(res => {
+        this.getList()
+      })
+    },
+    // 当创建者下拉框值改变时，自动改变状态下拉列表值
+    onCreatorChange(creatorId) {
+      if (creatorId === this.$store.getters.id) {
+        this.visibilityList = [{ id: 1, value: this.$t('dataset.public') },
+          { id: 0, value: this.$t('dataset.private') }, { id: 2, value: this.$t('dataset.all') }]
+      } else {
+        this.visibilityList = [{ id: 1, value: this.$t('dataset.public') }]
+        this.queryParam.visibility = this.visibilityList[0].id
+      }
+    },
+    // 获取账号列表下拉值
+    getAccountList() {
+      getSimpleAccountList().then(res => {
+        this.accountList = res.data
+      })
+    },
     // 自适应操作列列宽
     columnAdapt() {
       if (!this.language) {
@@ -803,7 +943,7 @@ export default {
       }
     },
     // 获取任务状态，长轮询
-    pollingTaskStatus(taskId) {
+    pollingTaskStatus(taskId, seconds) {
       if (this.timeObj) {
         clearTimeout(this.timeObj)
       }
@@ -811,8 +951,8 @@ export default {
         if (res.code === 202) {
           this.$nextTick(() => {
             this.timeObj = setTimeout(() => {
-              this.pollingTaskStatus(taskId)
-            }, 1000 * 30)
+              this.pollingTaskStatus(taskId, seconds)
+            }, 1000 * seconds)
           })
         } else if (res.code === 200) {
           // 刷新页面
@@ -1043,14 +1183,16 @@ export default {
         this.getList()
       })
       this.executeTaskDialogVisible = false
-      this.pollingTaskStatus(this.executeId)
+      // 5 秒后再开始轮询，因为有一种情况是状态为执行错误的实验，重新执行后第一时间获取到的状态是错误，轮询就会停止
+      setTimeout(this.pollingTaskStatus(this.executeId, 30), 1000 * 5)
     },
     executeAtTime() {
       executeTaskById(this.executeId, this.executeForm.executeTime).then(res => {
         this.getList()
       })
       this.executeTaskDialogVisible = false
-      this.pollingTaskStatus(this.executeId)
+      // 5 秒后再开始轮询，因为有一种情况是状态为执行错误的实验，重新执行后第一时间获取到的状态是错误，轮询就会停止
+      setTimeout(this.pollingTaskStatus(this.executeId, 30), 1000 * 5)
     },
     // 清空查询条件，重新获取数据
     resetData() {
@@ -1154,4 +1296,27 @@ export default {
   background-color: #e4e4e4;
  }
 
+</style>
+<style lang="scss" scoped>
+.el-table {
+	.el-table__header-wrapper, .el-table__fixed-header-wrapper {
+		th {
+			word-break: break-word;
+			background-color: #f8f8f9;
+			color: #515a6e;
+			height: 40px;
+			font-size: 13px;
+		}
+	}
+	.el-table__body-wrapper {
+		.el-button [class*="el-icon-"] + span {
+			margin-left: 1px;
+		}
+	}
+}
+.el-table .fixed-width .el-button--mini {
+	padding-left: 0;
+	padding-right: 0;
+	width: inherit;
+}
 </style>

@@ -1,5 +1,6 @@
 export default {
   route: {
+    bindMail: 'Bind E-Mail',
     dashboard: 'Dashboard',
     documentation: 'Documentation',
     guide: 'Guide',
@@ -80,6 +81,7 @@ export default {
     taskResult: 'Show the experimental results'
   },
   navbar: {
+    bindMail: 'Bind E-Mail',
     dashboard: 'Dashboard',
     github: 'Github',
     logOut: 'Log Out',
@@ -108,6 +110,26 @@ export default {
     newPassword: 'New password',
     repeatPassword: 'Enter the new password again',
     updatePasswordSuccess: 'Password changed successfully, please log in again'
+  },
+  // 注册相关
+  register: {
+    repeatPassword: 'Please enter the password again',
+    inputMail: 'please input your email',
+    inputCode: 'please enter verification code',
+    register: 'register',
+    getCode: 'Get Captcha',
+    getCodeAgain: 'Reacquire after s',
+    pleaseInputMail: 'please enter your email',
+    pleaseInputCode: 'Please fill in the verification code',
+    wrongMailFormat: 'E-mail format is incorrect',
+    toLogin: 'Already have an account? go to login',
+    toRegister: 'No account? Click to register',
+    title: 'User registration',
+    sendCodeError: 'Failed to send verification code',
+    registerError: 'registration failed',
+    registerSuccess: 'registration success',
+    sendCodeSuccess: 'The verification code has been sent successfully, please pay attention to check',
+    mailRepeat: 'This email has been registered with this system'
   },
   documentation: {
     documentation: 'Documentation',
@@ -268,6 +290,11 @@ export default {
   },
   // 账号相关
   account: {
+    bindSuccess: 'Binding succeeded',
+    bindError: 'Binding failed. Please check whether the mailbox and verification code are entered correctly',
+    alreadyBindTip: 'You have bound your mailbox. Please do not bind it again',
+    code: 'Captcha',
+    mail: 'E-mail',
     accountNumber: 'Account',
     edit: 'Edit Account',
     add: 'Add Account',
@@ -286,6 +313,7 @@ export default {
   },
   // 数据集相关
   dataset: {
+    download: 'Download',
     creator: 'uploader',
     visibility: 'state',
     public: 'public',
@@ -331,6 +359,11 @@ export default {
   },
   // 任务
   task: {
+    interruptExp: 'Interrupt experiment',
+    interruptConfirm: 'Are you sure to interrupt this experiment?',
+    tips: 'Tips',
+    interruptOk: 'The experiment is being interrupted Please wait patiently for about 20 seconds',
+    interruptCancel: 'Interrupt canceled',
     // 评价指标mode提示信息
     stateModeTip: 'The evaluation model of this evaluation index is as follows:',
     // 任务执行参数

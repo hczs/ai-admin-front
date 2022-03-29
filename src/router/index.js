@@ -64,6 +64,22 @@ export const constantRoutes = [
     ]
   },
 
+  // bindMail
+  {
+    path: '/bindMail',
+    component: Layout,
+    redirect: '/bindMail',
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/mail/bind'),
+        name: 'bind mail',
+        meta: { title: 'bindMail' },
+        hidden: true
+      }
+    ]
+  },
+
   {
     path: '/',
     component: Layout,

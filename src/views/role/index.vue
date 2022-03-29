@@ -1,7 +1,7 @@
 <template>
   <div class="app-container" :data-intro="$t('roleManageIntro.step01')" data-step="1">
     <!-- 顶部查询表单 -->
-    <el-form :inline="true" class="demo-form-inline" :data-intro="$t('roleManageIntro.step02')" data-step="2">
+    <el-form size="small" :inline="true" class="demo-form-inline" :data-intro="$t('roleManageIntro.step02')" data-step="2">
 
       <el-form-item :label="$t('role.name')">
         <el-input v-model="queryParam.name" />
@@ -30,11 +30,20 @@
           default-time="00:00:00"
         />
       </el-form-item>
-      <el-button type="primary" icon="el-icon-search" @click="getQueryList()">{{ $t('common.search') }}</el-button>
-      <el-button type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
+      <el-button size="small" type="primary" icon="el-icon-search" @click="getQueryList()">{{ $t('common.search') }}</el-button>
+      <el-button size="small" type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
     </el-form>
 
-    <el-button :data-intro="$t('roleManageIntro.step03')" data-step="3" style="float: right" :disabled="addDisable" type="primary" size="medium" icon="el-icon-circle-plus-outline" @click="add()">
+    <el-button
+      size="small"
+      :data-intro="$t('roleManageIntro.step03')"
+      data-step="3"
+      style="float: right"
+      :disabled="addDisable"
+      type="primary"
+      icon="el-icon-circle-plus-outline"
+      @click="add()"
+    >
       {{ $t('common.add') }}
     </el-button>
     <!-- 数据表格 -->
@@ -367,3 +376,26 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.el-table {
+	.el-table__header-wrapper, .el-table__fixed-header-wrapper {
+		th {
+			word-break: break-word;
+			background-color: #f8f8f9;
+			color: #515a6e;
+			height: 40px;
+			font-size: 13px;
+		}
+	}
+	.el-table__body-wrapper {
+		.el-button [class*="el-icon-"] + span {
+			margin-left: 1px;
+		}
+	}
+}
+.el-table .fixed-width .el-button--mini {
+	padding-left: 0;
+	padding-right: 0;
+	width: inherit;
+}
+</style>

@@ -25,6 +25,7 @@ export function deleteFileById(fileId) {
   })
 }
 
+// 更新文件公开 私有 状态
 export function updateFileVisibility(fileId, visibility) {
   return request({
     url: `/business/file/${fileId}/update_visibility/`,
@@ -63,6 +64,14 @@ export function executeTaskById(taskId, execute_time) {
 export function getFileStatus(fileId) {
   return request({
     url: `/business/file/${fileId}/get_file_status/`,
+    method: 'get'
+  })
+}
+
+// 通过数据集id下载数据集
+export function downloadFileById(fileId) {
+  return request({
+    url: `/business/file/${fileId}/download_by_id/`,
     method: 'get'
   })
 }

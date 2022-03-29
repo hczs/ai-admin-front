@@ -1,5 +1,6 @@
 export default {
   route: {
+    bindMail: '绑定邮箱',
     dashboard: '首页',
     documentation: '文档',
     guide: '引导页',
@@ -80,6 +81,7 @@ export default {
     taskResult: '实验结果展示'
   },
   navbar: {
+    bindMail: '绑定邮箱',
     dashboard: '首页',
     github: '项目地址',
     logOut: '退出登录',
@@ -287,6 +289,11 @@ export default {
   },
   // 账号相关
   account: {
+    bindSuccess: '绑定成功',
+    bindError: '绑定失败，请检查邮箱和验证码是否输入正确',
+    alreadyBindTip: '您已经绑定过邮箱了，请勿重复绑定',
+    code: '验证码',
+    mail: '邮箱',
     accountNumber: '账号',
     edit: '编辑账号',
     add: '添加账号',
@@ -305,6 +312,7 @@ export default {
   },
   // 数据集相关
   dataset: {
+    download: '下载',
     creator: '上传者',
     visibility: '状态',
     public: '公开',
@@ -350,6 +358,11 @@ export default {
   },
   // 任务
   task: {
+    interruptExp: '中断实验',
+    interruptConfirm: '确定中断此实验？',
+    tips: '提示',
+    interruptOk: '实验正在中断中...请耐心等待 20 秒左右',
+    interruptCancel: '已取消中断',
     // 评价指标mode提示信息
     stateModeTip: '本次评价指标评估模式为：',
     // 任务执行参数
