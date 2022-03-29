@@ -35,6 +35,13 @@
               </span>
             </el-dropdown-item>
           </router-link>
+          <router-link to="/bindMail">
+            <el-dropdown-item divided>
+              <span style="display:block;">
+                {{ $t('navbar.bindMail') }}
+              </span>
+            </el-dropdown-item>
+          </router-link>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">
               {{ $t('navbar.logOut') }}

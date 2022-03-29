@@ -1,5 +1,6 @@
 export default {
   route: {
+    bindMail: 'Bind E-Mail',
     dashboard: 'Dashboard',
     documentation: 'Documentation',
     guide: 'Guide',
@@ -80,6 +81,7 @@ export default {
     taskResult: 'Show the experimental results'
   },
   navbar: {
+    bindMail: 'Bind E-Mail',
     dashboard: 'Dashboard',
     github: 'Github',
     logOut: 'Log Out',
@@ -288,6 +290,10 @@ export default {
   },
   // 账号相关
   account: {
+    bindSuccess: 'Binding succeeded',
+    bindError: 'Binding failed. Please check whether the mailbox and verification code are entered correctly',
+    alreadyBindTip: 'You have bound your mailbox. Please do not bind it again',
+    code: 'Captcha',
     mail: 'E-mail',
     accountNumber: 'Account',
     edit: 'Edit Account',

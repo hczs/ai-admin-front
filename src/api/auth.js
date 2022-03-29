@@ -15,7 +15,6 @@ export function getInfo() {
   })
 }
 
-// TODO
 export function logout() {
   return request({
     url: '/auth/token/black/',

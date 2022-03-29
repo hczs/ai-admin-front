@@ -78,3 +78,12 @@ export function getAuthCode(data) {
     data
   })
 }
+
+// 绑定邮箱
+export function bindMail(accountId, data) {
+  return request({
+    url: `/auth/account/${accountId}/bind_mail/`,
+    method: 'post',
+    data
+  })
+}
