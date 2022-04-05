@@ -339,7 +339,7 @@
   </div>
 </template>
 <script>
-import { getFileList, deleteFileById, generate_background_byID, updateFileVisibility, downloadFileById } from '@/api/file'
+import { getFileList, deleteFileById, generate_background_byID, updateFileVisibility } from '@/api/file'
 import { getSimpleAccountList } from '@/api/account'
 import { getToken } from '@/utils/auth'
 import { checkPermission } from '@/utils/permission'
@@ -423,13 +423,6 @@ export default {
       this.addDisable = !checkPermission(['datasetUpload'])
       this.deleteDisable = !checkPermission(['datasetDelete'])
       this.listPermission = checkPermission(['datasetList'])
-    },
-    // 点击下载按钮
-    downloadDataset(datasetId) {
-      console.log('下载数据集:', datasetId)
-      downloadFileById(datasetId).then(res => {
-        console.log(res)
-      })
     },
     // 公开私有按钮改变
     visibilitySwitchChange(newValue, datasetId) {
@@ -543,11 +536,19 @@ export default {
     // 文件上传相关
     // 上传成功，刷新页面
     handleFileUploadSuccess(response, file, filelist) {
-      console.log(response)
       if (response.code >= 200 && response.code <= 300) {
         this.$message.success(this.$t('dataset.uploadSuccess'))
-        this.filelist = []
-        this.dialogFormVisible = false
+        // 遍历 filelist 判断 filelist 每个 item percentage 是否都为 100
+        const allCompleted = filelist.every(item => {
+          if (item.percentage === 100) {
+            return true
+          } else {
+            return false
+          }
+        })
+        if (allCompleted) {
+          this.dialogFormVisible = false
+        }
         this.getList(this.queryParam)
         this.title = i18n.t('dataset.canView')
         this.message = i18n.t('dataset.canViewSuccessfully')
