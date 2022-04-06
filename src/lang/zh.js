@@ -126,7 +126,7 @@ export default {
     toRegister: '没有账号？点击注册',
     title: '用户注册',
     sendCodeError: '验证码发送失败',
-    registerError: '注册失败',
+    registerError: '注册失败，请检查验证码和邮箱是否正确！',
     registerSuccess: '注册成功',
     sendCodeSuccess: '验证码发送成功，请注意查收',
     mailRepeat: '此邮箱已注册过本系统'
