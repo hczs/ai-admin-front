@@ -126,7 +126,7 @@ export default {
     toRegister: 'No account? Click to register',
     title: 'User registration',
     sendCodeError: 'Failed to send verification code',
-    registerError: 'registration failed',
+    registerError: 'Registration failed, please check whether the verification code and email address are correct!',
     registerSuccess: 'registration success',
     sendCodeSuccess: 'The verification code has been sent successfully, please pay attention to check',
     mailRepeat: 'This email has been registered with this system'
@@ -313,6 +313,7 @@ export default {
   },
   // 数据集相关
   dataset: {
+    datasetRepeatError: 'Duplicate dataset',
     download: 'Download',
     creator: 'uploader',
     visibility: 'state',

@@ -296,6 +296,7 @@ export default {
     },
     // 新增按钮点击弹窗
     add() {
+      this.dialogType = 'add'
       this.dialogFormVisible = true
       this.role = {
         name: '',
@@ -305,10 +306,9 @@ export default {
       if (this.$refs['roleForm']) {
         this.$refs['roleForm'].resetFields()
       }
-      // 编辑过的才需要清空树节点
-      if (this.dialogType === 'edit') {
-        this.$refs.tree.setCheckedKeys(this.role.permissions)
-        this.dialogType = 'add'
+      // 清空树节点
+      if (this.$refs.tree) {
+        this.$refs.tree.setCheckedKeys(this.role.permissionTree)
       }
     },
     // 编辑按钮点击弹窗
