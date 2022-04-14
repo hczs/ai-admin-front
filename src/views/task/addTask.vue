@@ -156,7 +156,7 @@
           </el-form-item>
 
           <!-- expid实验ID -->
-          <el-form-item v-if="task.train == false" :label="$t('task.expId')" prop="exp_id" style="text-align: left">
+          <el-form-item v-if="task.train == true" :label="$t('task.expId')" prop="exp_id" style="text-align: left">
             <el-input-number v-model.number="task.exp_id" controls-position="right" />
           </el-form-item>
 

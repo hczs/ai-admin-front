@@ -3,15 +3,15 @@
     <!-- 顶部查询表单 -->
     <el-form size="small" :inline="true" class="demo-form-inline" :data-intro="$t('taskIndexIntroL.step02')" data-step="2">
 
-      <el-form-item :label="$t('task.taskName')">
+      <el-form-item class="mgl" :label="$t('task.taskName')">
         <el-input v-model="queryParam.task_name" />
       </el-form-item>
 
-      <el-form-item :label="$t('task.dataset')">
+      <el-form-item class="mgl" :label="$t('task.dataset')">
         <el-input v-model="queryParam.dataset" />
       </el-form-item>
 
-      <el-form-item :label="$t('task.creator')">
+      <el-form-item class="mgl" :label="$t('task.creator')">
         <el-select
           v-model="queryParam.creator"
           style="float: left"
@@ -29,7 +29,7 @@
       </el-form-item>
 
       <!-- 实验状态 私有/公开 -->
-      <el-form-item :label="$t('dataset.isPublic')">
+      <el-form-item class="mgl" :label="$t('dataset.isPublic')">
         <el-select
           v-model="queryParam.visibility"
           style="float: left"
@@ -44,7 +44,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="$t('task.task_type')">
+      <el-form-item class="mgl" :label="$t('task.task_type')">
         <el-select v-model="queryParam.task" style="float: left" clearable>
           <el-option
             v-for="item in taskParamList"
@@ -55,7 +55,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="$t('task.status')">
+      <el-form-item class="mgl" :label="$t('task.status')">
         <el-select v-model="queryParam.task_status" style="float: left" clearable>
           <el-option
             v-for="item in taskStatusList"
@@ -85,8 +85,8 @@
           default-time="00:00:00"
         />
       </el-form-item> -->
-      <el-button size="small" type="primary" icon="el-icon-search" @click="getQueryList()">{{ $t('common.search') }}</el-button>
-      <el-button size="small" type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
+      <el-button class="mgl" size="small" type="primary" icon="el-icon-search" @click="getQueryList()">{{ $t('common.search') }}</el-button>
+      <el-button class="mgl" size="small" type="default" icon="el-icon-delete" @click="resetData()">{{ $t('common.clear') }}</el-button>
     </el-form>
     <el-button
       size="small"
@@ -194,7 +194,6 @@
       <af-table-column
         prop="task_name"
         :label="$t('task.taskName')"
-        sortable
       />
       <!-- 实验ID -->
       <af-table-column
@@ -1240,7 +1239,9 @@ export default {
 }
 </script>
 <style>
-
+.mgl {
+  margin-left: 30px;
+}
 .word {
   word-break: break-word !important;
 }
