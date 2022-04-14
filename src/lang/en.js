@@ -410,6 +410,8 @@ export default {
     execute: 'Execute',
     executing: 'Executing',
     completed: 'Completed',
+    reserved: 'Reserved',
+    modifyExecuteTime: 'Modify time',
     executeError: 'Execution error',
     taskUpdateSuccess: 'Task updated successfully!',
     taskError: 'Please select a task name to execute',

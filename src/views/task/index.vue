@@ -237,6 +237,7 @@
           <span v-if="scope.row.task_status === 0"> {{ $t('task.noStart') }} </span>
           <span v-if="scope.row.task_status === 1"> {{ $t('task.executing') }} </span>
           <span v-if="scope.row.task_status === 2"> {{ $t('task.completed') }} </span>
+          <span v-if="scope.row.task_status === 3"> {{ $t('task.reserved') }} </span>
           <span v-if="scope.row.task_status === -1"> {{ $t('task.executeError') }} </span>
         </template>
       </af-table-column>
@@ -293,6 +294,7 @@
               0 未开始
               1 进行中
               2 已完成
+              3 已预约
               -1 执行错误
              -->
             <!-- 编辑按钮（进行中 或 已完成 或 禁止编辑 的时候，无法编辑） -->
@@ -341,6 +343,16 @@
               @click="execute(scope.row.id)"
             >
               {{ $t('task.execute') }}
+            </el-link>
+            <!-- 修改执行时间 -->
+            <el-link
+              v-if="scope.row.task_status === 3 && currentUserName === scope.row.creator"
+              style="margin-left: 10px"
+              :disabled="executeDisable"
+              icon="el-icon-video-play"
+              @click="execute(scope.row.id)"
+            >
+              {{ $t('task.modifyExecuteTime') }}
             </el-link>
             <!-- 重新执行按钮 只有出错的时候，才可以重新执行 PS 本人创建的实验只有自己可以执行,其他人只能看 -->
             <el-link
@@ -843,7 +855,8 @@ export default {
       // 指标dialog关闭时是否清空元素
       evaluateDestroyOnClose: true,
       configDialogVisible: false,
-      configData: ''
+      configData: '',
+      pollingTaskListInterval: null
     }
   },
   watch: {
@@ -864,6 +877,7 @@ export default {
     this.columnAdapt()
     this.getAccountList()
     this.currentUserName = this.$store.getters.name
+    this.pollingTaskList()
   },
   mounted() {
     this.$nextTick(() => {
@@ -874,6 +888,9 @@ export default {
         }
       }, 300)
     })
+  },
+  destroyed() {
+    clearInterval(this.pollingTaskListInterval)
   },
   methods: {
     checkPermission,
@@ -900,6 +917,28 @@ export default {
           message: this.$t('task.interruptCancel')
         })
       })
+    },
+    // 轮询任务列表 监控任务执行时间是否到达
+    pollingTaskList() {
+      // 每五秒循环检查一次 tableData
+      this.pollingTaskListInterval = setInterval(() => {
+        this.tableData.forEach(item => {
+          if (item.task_status === 3 && this.analysisExecuteTime(item.execute_time)) {
+            this.getList()
+          }
+        })
+      }, 1 * 1000)
+    },
+    // 分析时间 如何参数时间小于等于当前时间 表示任务列表该刷新了
+    analysisExecuteTime(time) {
+      if (time) {
+        const now = new Date()
+        const executeTime = new Date(time)
+        if (executeTime.getTime() <= now.getTime()) {
+          return true
+        }
+      }
+      return false
     },
     // 中断实验
     interruptTask(expId) {
