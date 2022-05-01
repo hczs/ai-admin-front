@@ -92,9 +92,13 @@
                 <el-option
                   v-for="file in fileList"
                   :key="file.id"
-                  :label="file.file_name"
+                  :label="file.file_original_name"
                   :value="file.file_name"
-                />
+                >
+                  <el-tooltip class="item" effect="dark" :content="file.creator" placement="top">
+                    <span style="float: left">{{ file.file_original_name }}</span>
+                  </el-tooltip>
+                </el-option>
               </el-select>
             </el-form-item>
           </div>
@@ -203,6 +207,7 @@
 <script>
 import { getFileListAll } from '@/api/file'
 import { addTask, taskExists, getTaskById, updateTaskById } from '@/api/task'
+import { getSimpleAccountList } from '@/api/account'
 export default {
   data() {
     // 任务名称校验
@@ -269,6 +274,7 @@ export default {
       fileLimit: 1,
       formLabelWidth: '10%',
       fileList: [],
+      accountList: [],
       taskModelDict: {
         'traffic_state_pred': [
           'GRU', 'ACFM', 'STResNet', 'DSAN', 'ACFMCommon', 'STResNetCommon', 'RNN', 'FNN', 'AutoEncoder',
@@ -377,6 +383,17 @@ export default {
     getList() {
       getFileListAll().then(res => {
         this.fileList = res.data
+        getSimpleAccountList().then(res => {
+          this.accountList = res.data
+          // 根据 fileList 的 creator 和  accountList 的 id 赋值 creator 为 accountList 的 account_number
+          this.fileList.forEach(item => {
+            this.accountList.forEach(account => {
+              if (item.creator === account.id) {
+                item.creator = account.account_number
+              }
+            })
+          })
+        })
       })
     },
     // 回显任务数据

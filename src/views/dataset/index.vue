@@ -105,7 +105,7 @@
             width="120"
           />
           <af-table-column
-            prop="file_name"
+            prop="file_original_name"
             :label="$t('dataset.fileName')"
             sortable
           />
@@ -214,6 +214,15 @@
                       disabled
                       style="margin-left: 10px; color: red"
                     >{{ $t('dataset.showFail') }}</el-link>
+                    <!-- 并且显示查看数据集错误信息按钮 -->
+                    <el-link
+                      v-if="scope.row.dataset_status === -1"
+                      style="margin-left: 10px"
+                      icon="el-icon-warning"
+                      @click="showErrorInfo(scope.row)"
+                    >
+                      {{ $t('dataset.showErrorInfo') }}
+                    </el-link>
                     <!-- 0 代表正在处理中 -->
                     <el-link
                       v-if="scope.row.dataset_status === 0"
@@ -336,6 +345,20 @@
       </el-form>
       <el-button type="primary" icon="el-icon-view" @click="getBackground()">{{ $t('common.getview') }}</el-button>
     </el-dialog>
+
+    <!-- 日志查看弹出框 -->
+    <el-dialog
+      :title="$t('dataset.errorMsgView')"
+      :visible.sync="logDialogVisible"
+      width="56%"
+      class="dialog-div"
+    >
+      <!-- <div style="white-space: pre-line; margin: 20px" v-html="logData" /> -->
+      <pre style="white-space: pre-line; margin: 20px; background-color: black; color: white; font-family: Consolas; font-size: 16px;  padding: 10px">{{ logData }}</pre>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="logDialogVisible = false">{{ $t('common.cancel') }}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -349,6 +372,8 @@ export default {
   data() {
     return {
       BASE_API: window.global_url.Base_url,
+      logDialogVisible: false, // 日志查看弹出框
+      logData: '', // 日志内容
       dataset: {
       },
       currentUserName: '',
@@ -424,6 +449,10 @@ export default {
       this.deleteDisable = !checkPermission(['datasetDelete'])
       this.listPermission = checkPermission(['datasetList'])
     },
+    showErrorInfo(datasetObj) {
+      this.logDialogVisible = true
+      this.logData = datasetObj.error_message
+    },
     // 公开私有按钮改变
     visibilitySwitchChange(newValue, datasetId) {
       updateFileVisibility(datasetId, newValue).then(res => {
@@ -488,13 +517,26 @@ export default {
     longPolling(fileId, title, message) {
       this.$axios.get(this.BASE_API + `/business/file/${fileId}/get_file_status/`).then(res => {
         if (res.data.code === 200) {
-          // 弹窗提醒
-          this.$notify({
-            title: this.title,
-            message: res.data.data.file_name + this.message,
-            type: 'success',
-            duration: 10000
-          })
+          if (res.data.data.dataset_status === -1) {
+            var errorMsg = i18n.t('dataset.gisFailed')
+            var errorTitle = i18n.t('dataset.gisFailedTitle')
+            // 错误信息弹窗提醒
+            this.$notify({
+              title: errorTitle,
+              message: res.data.data.original_file_name + errorMsg,
+              type: 'error',
+              duration: 10000
+            })
+          } else {
+            // 弹窗提醒
+            this.$notify({
+              title: this.title,
+              message: res.data.data.original_file_name + this.message,
+              type: 'success',
+              duration: 10000
+            })
+          }
+
           // 刷新list
           this.getList(this.queryParam)
           return
@@ -554,11 +596,16 @@ export default {
         this.message = i18n.t('dataset.canViewSuccessfully')
         this.longPolling(response.data.id)
       } else if (response.code === 400) {
+        // 数据集文件错误
         file.status = 'error'
+        // 清空filelist
+        filelist.splice(0, filelist.length)
         this.$message.error(this.$t('dataset.atomicError'))
       } else if (response.code === 409) {
         // 数据集重复
         file.status = 'error'
+        // 清空filelist
+        filelist.splice(0, filelist.length)
         this.$message.error(this.$t('dataset.datasetRepeatError'))
       }
     },
