@@ -206,11 +206,17 @@
         :label="$t('task.model')"
       />
       <!-- 数据集名 -->
-      <af-table-column
+      <el-table-column
         prop="dataset"
         :label="$t('task.dataset')"
-      />
-
+        width="130"
+      >
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" :content="scope.row.datasetUploader" placement="top">
+            <span> {{ scope.row.dataset }} </span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
       <af-table-column
         prop="task"
         :label="$t('task.task')"
@@ -875,7 +881,7 @@ export default {
     }
     this.getList()
     this.columnAdapt()
-    this.getAccountList()
+    // this.getAccountList()
     this.currentUserName = this.$store.getters.name
     this.pollingTaskList()
   },
@@ -1119,12 +1125,28 @@ export default {
     // 获取任务列表
     getList() {
       this.listLoading = true
-      getTaskList(this.queryParam).then(res => {
-        this.tableData = res.data.results
-        this.total = res.data.count
-        this.listLoading = false
-      }).catch(() => {
-        this.listLoading = false
+      getSimpleAccountList().then(res => {
+        this.accountList = res.data
+        getTaskList(this.queryParam).then(res => {
+          this.tableData = res.data.results
+          // 对 tableData 的 dataset 字段进行检查 dataset 值重新赋值为 dataset取第一个下划线之后的值
+          this.tableData.forEach(item => {
+            var temp = item.dataset.split('_')
+            // 移除temp的第一个元素 剩下的元素还是用下划线拼接成字符串
+            var uploader_id = temp[0]
+            temp.shift()
+            item.dataset = temp.join('_')
+            this.accountList.forEach(account => {
+              if (uploader_id === account.id.toString()) {
+                item.datasetUploader = account.account_number
+              }
+            })
+          })
+          this.total = res.data.count
+          this.listLoading = false
+        }).catch(() => {
+          this.listLoading = false
+        })
       })
     },
     // 回显任务数据

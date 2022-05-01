@@ -313,6 +313,10 @@ export default {
   // 数据集相关
   dataset: {
     datasetRepeatError: '数据集重复',
+    gisFailed: '，请查看错误信息',
+    gisFailedTitle: '数据集可视化失败',
+    errorMsgView: '错误信息内容',
+    showErrorInfo: '查看错误信息',
     download: '下载',
     creator: '上传者',
     visibility: '状态',

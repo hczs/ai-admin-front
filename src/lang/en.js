@@ -314,6 +314,10 @@ export default {
   // 数据集相关
   dataset: {
     datasetRepeatError: 'Duplicate dataset',
+    gisFailed: ', please check the error message',
+    gisFailedTitle: 'Dataset visualization failed',
+    errorMsgView: 'Error message content',
+    showErrorInfo: 'View error messages',
     download: 'Download',
     creator: 'uploader',
     visibility: 'state',
