@@ -123,15 +123,19 @@
             <el-input-number v-model.number="task.batch_size" controls-position="right" />
           </el-form-item>
 
-          <el-form-item :label="$t('task.learning_rate')" prop="learning_rate" style="text-align: left">
-            <el-input-number v-model.number="task.learning_rate" controls-position="right" />
+          <el-form-item
+            :label="$t('task.learning_rate')"
+            prop="learning_rate"
+            style="text-align: left; width: 30%"
+          >
+            <el-input v-model.number="task.learning_rate" controls-position="right" />
           </el-form-item>
 
-          <el-form-item :label="$t('task.train_rate')" prop="train_rate" style="text-align: left">
-            <el-input-number v-model.number="task.train_rate" controls-position="right" />
+          <el-form-item :label="$t('task.train_rate')" prop="train_rate" style="text-align: left; width: 30%">
+            <el-input v-model.number="task.train_rate" controls-position="right" />
           </el-form-item>
-          <el-form-item :label="$t('task.eval_rate')" prop="eval_rate" style="text-align: left">
-            <el-input-number v-model.number="task.eval_rate" controls-position="right" />
+          <el-form-item :label="$t('task.eval_rate')" prop="eval_rate" style="text-align: left; width: 30%">
+            <el-input v-model.number="task.eval_rate" controls-position="right" />
           </el-form-item>
 
           <el-form-item :label="$t('task.gpu')" style="text-align: left">
@@ -270,6 +274,8 @@ export default {
         max_epoch: 1,
         task: 'traffic_state_pred',
         model: 'GRU',
+        gpu: true,
+        gpu_id: 0,
         saved_model: true,
         train: false
       },

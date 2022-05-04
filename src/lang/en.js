@@ -103,7 +103,7 @@ export default {
     passwordError: 'The password can not be less than 6 digits',
     repeatPasswordError: 'The two passwords are inconsistent',
     permissionIsNull: 'The account does not have any permissions',
-    verificationFailed: 'Verification failed, please Login again',
+    verificationFailed: 'Account or password error, please login again',
     verificationSuccess: 'Login succeeded',
     // 修改密码相关
     oldPassword: 'Old password',
