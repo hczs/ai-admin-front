@@ -1001,18 +1001,23 @@ export default {
         } else if (res.code === 200) {
           // 刷新页面
           this.getList()
+          var item = res.data.task_name
+          var temp = item.split('_')
+          // 移除temp的第一个元素 剩下的元素还是用下划线拼接成字符串
+          temp.shift()
+          item = temp.join('_')
           if (res.data.task_status === -1) {
             // 提示框
             this.$notify.error({
               title: i18n.t('task.taskExecuteError'),
-              message: res.data.task_name_show + i18n.t('task.taskExecuteError'),
+              message: item + i18n.t('task.taskExecuteError'),
               duration: 10000
             })
           } else {
             // 提示框
             this.$notify({
               title: i18n.t('task.taskExecuteSuccessfully'),
-              message: res.data.task_name_show + i18n.t('task.taskExecuteSuccessfully'),
+              message: item + i18n.t('task.taskExecuteSuccessfully'),
               type: 'success',
               duration: 10000
             })
