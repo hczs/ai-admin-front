@@ -64,8 +64,8 @@ export function interruptExp(taskId) {
 // 删除
 export function deleteTaskById(taskId) {
   return request({
-    url: `/business/task/${taskId}/`,
-    method: 'delete'
+    url: `/business/task/${taskId}/delete/`,
+    method: 'get'
   })
 }
 

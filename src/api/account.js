@@ -38,8 +38,8 @@ export function addAccount(data) {
 // 删除
 export function deleteAccountById(accountId) {
   return request({
-    url: `/auth/account/${accountId}/`,
-    method: 'delete'
+    url: `/auth/account/${accountId}/delete/`,
+    method: 'get'
   })
 }
 

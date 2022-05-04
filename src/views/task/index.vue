@@ -192,7 +192,7 @@
 
       <!-- 实验名称 -->
       <af-table-column
-        prop="task_name"
+        prop="task_name_show"
         :label="$t('task.taskName')"
       />
       <!-- 实验ID -->
@@ -207,13 +207,13 @@
       />
       <!-- 数据集名 -->
       <el-table-column
-        prop="dataset"
+        prop="showDataset"
         :label="$t('task.dataset')"
         width="130"
       >
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" :content="scope.row.datasetUploader" placement="top">
-            <span> {{ scope.row.dataset }} </span>
+            <span> {{ scope.row.showDataset }} </span>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -1001,18 +1001,23 @@ export default {
         } else if (res.code === 200) {
           // 刷新页面
           this.getList()
+          var item = res.data.task_name
+          var temp = item.split('_')
+          // 移除temp的第一个元素 剩下的元素还是用下划线拼接成字符串
+          temp.shift()
+          item = temp.join('_')
           if (res.data.task_status === -1) {
             // 提示框
             this.$notify.error({
               title: i18n.t('task.taskExecuteError'),
-              message: res.data.task_name + i18n.t('task.taskExecuteError'),
+              message: item + i18n.t('task.taskExecuteError'),
               duration: 10000
             })
           } else {
             // 提示框
             this.$notify({
               title: i18n.t('task.taskExecuteSuccessfully'),
-              message: res.data.task_name + i18n.t('task.taskExecuteSuccessfully'),
+              message: item + i18n.t('task.taskExecuteSuccessfully'),
               type: 'success',
               duration: 10000
             })
@@ -1135,7 +1140,7 @@ export default {
             // 移除temp的第一个元素 剩下的元素还是用下划线拼接成字符串
             var uploader_id = temp[0]
             temp.shift()
-            item.dataset = temp.join('_')
+            item.showDataset = temp.join('_')
             this.accountList.forEach(account => {
               if (uploader_id === account.id.toString()) {
                 item.datasetUploader = account.account_number
