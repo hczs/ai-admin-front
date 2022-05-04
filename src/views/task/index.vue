@@ -207,13 +207,13 @@
       />
       <!-- 数据集名 -->
       <el-table-column
-        prop="dataset"
+        prop="showDataset"
         :label="$t('task.dataset')"
         width="130"
       >
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" :content="scope.row.datasetUploader" placement="top">
-            <span> {{ scope.row.dataset }} </span>
+            <span> {{ scope.row.showDataset }} </span>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -1135,7 +1135,7 @@ export default {
             // 移除temp的第一个元素 剩下的元素还是用下划线拼接成字符串
             var uploader_id = temp[0]
             temp.shift()
-            item.dataset = temp.join('_')
+            item.showDataset = temp.join('_')
             this.accountList.forEach(account => {
               if (uploader_id === account.id.toString()) {
                 item.datasetUploader = account.account_number
