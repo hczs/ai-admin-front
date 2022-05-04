@@ -20,8 +20,8 @@ export function getFileListAll() {
 // 删除
 export function deleteFileById(fileId) {
   return request({
-    url: `/business/file/${fileId}/`,
-    method: 'delete'
+    url: `/business/file/${fileId}/delete/`,
+    method: 'get'
   })
 }
 

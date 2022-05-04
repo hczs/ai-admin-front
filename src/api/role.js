@@ -29,8 +29,8 @@ export function addRole(data) {
 // 删除
 export function deleteRoleById(roleId) {
   return request({
-    url: `/auth/role/${roleId}/`,
-    method: 'delete'
+    url: `/auth/role/${roleId}/delete/`,
+    method: 'get'
   })
 }
 
