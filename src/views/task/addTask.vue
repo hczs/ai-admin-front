@@ -128,14 +128,14 @@
             prop="learning_rate"
             style="text-align: left; width: 30%"
           >
-            <el-input v-model.number="task.learning_rate" controls-position="right" />
+            <el-input v-model="task.learning_rate" />
           </el-form-item>
 
           <el-form-item :label="$t('task.train_rate')" prop="train_rate" style="text-align: left; width: 30%">
-            <el-input v-model.number="task.train_rate" controls-position="right" />
+            <el-input v-model="task.train_rate" />
           </el-form-item>
           <el-form-item :label="$t('task.eval_rate')" prop="eval_rate" style="text-align: left; width: 30%">
-            <el-input v-model.number="task.eval_rate" controls-position="right" />
+            <el-input v-model="task.eval_rate" />
           </el-form-item>
 
           <el-form-item :label="$t('task.gpu')" style="text-align: left">
@@ -251,16 +251,23 @@ export default {
     const validateFloat = (rule, value, callback) => {
       // 必须是小数
       if (typeof (value) !== 'undefined') {
-        console.log('value:', value)
-        if (typeof (value) !== 'number') {
-          callback(new Error(this.$t('task.numberError')))
-        } else if (value % 1 === 0) {
+        var regs = /^(-?\d+)(\.\d+)?$/
+        if (!regs.test(value) || value % 1 === 0) {
           callback(new Error(this.$t('task.floatError')))
         } else if (value < 0) {
           callback(new Error(this.$t('task.maxEpochError')))
         } else {
           callback()
         }
+        // if (typeof (value) !== 'number') {
+        //   callback(new Error(this.$t('task.numberError')))
+        // } else if (value % 1 === 0) {
+        //   callback(new Error(this.$t('task.floatError')))
+        // } else if (value < 0) {
+        //   callback(new Error(this.$t('task.maxEpochError')))
+        // } else {
+        //   callback()
+        // }
       } else {
         callback()
       }
