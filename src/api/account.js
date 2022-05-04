@@ -56,7 +56,7 @@ export function updateAccountById(accountId, data) {
 export function updatePassword(data) {
   return request({
     url: `/auth/account/password/`,
-    method: 'put',
+    method: 'post',
     data
   })
 }
