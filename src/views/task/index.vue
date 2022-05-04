@@ -192,7 +192,7 @@
 
       <!-- 实验名称 -->
       <af-table-column
-        prop="task_name"
+        prop="task_name_show"
         :label="$t('task.taskName')"
       />
       <!-- 实验ID -->
@@ -1005,14 +1005,14 @@ export default {
             // 提示框
             this.$notify.error({
               title: i18n.t('task.taskExecuteError'),
-              message: res.data.task_name + i18n.t('task.taskExecuteError'),
+              message: res.data.task_name_show + i18n.t('task.taskExecuteError'),
               duration: 10000
             })
           } else {
             // 提示框
             this.$notify({
               title: i18n.t('task.taskExecuteSuccessfully'),
-              message: res.data.task_name + i18n.t('task.taskExecuteSuccessfully'),
+              message: res.data.task_name_show + i18n.t('task.taskExecuteSuccessfully'),
               type: 'success',
               duration: 10000
             })

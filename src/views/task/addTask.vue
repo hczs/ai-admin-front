@@ -13,9 +13,9 @@
           label-position="left"
         >
           <div :data-intro="$t('addTaskIntro.step02')" data-step="4">
-            <el-form-item :label="$t('task.taskName')" prop="task_name">
+            <el-form-item :label="$t('task.taskName')" prop="task_name_show">
               <el-input
-                v-model="task.task_name"
+                v-model="task.task_name_show"
                 autocomplete="off"
                 clearable
                 show-word-limit
@@ -95,7 +95,7 @@
                   :label="file.file_original_name"
                   :value="file.file_name"
                 >
-                  <el-tooltip class="item" effect="dark" :content="file.creator" placement="top">
+                  <el-tooltip class="item" effect="dark" :content="file.creator.toString()" placement="top">
                     <span style="float: left">{{ file.file_original_name }}</span>
                   </el-tooltip>
                 </el-option>
@@ -215,8 +215,9 @@ export default {
       if (value.length === 0) {
         callback(new Error(this.$t('task.taskNameError')))
       } else {
-        this.task.task_name = value
-        taskExists(this.task).then(res => {
+        var temp_obj = {}
+        temp_obj.task_name = this.curUserName + '_' + value
+        taskExists(temp_obj).then(res => {
           if (res.code !== 200 && this.task.id !== res.msg.id) {
             callback(new Error(this.$t('task.taskNameExistsError')))
           } else {
@@ -262,6 +263,7 @@ export default {
     }
     return {
       BASE_API: window.global_url.Base_url,
+      curUserName: this.$store.getters.name,
       // 任务默认值
       task: {
         task_name: '',
@@ -300,7 +302,7 @@ export default {
         { id: '4', label: this.$t('task.eta'), value: 'eta' },
         { id: '5', label: this.$t('task.map_matching'), value: 'map_matching' }],
       rules: {
-        task_name: [{ required: true, trigger: 'blur', validator: validateTaskName }],
+        task_name_show: [{ required: true, trigger: 'blur', validator: validateTaskName }],
         task: [{ required: true, message: this.$t('task.taskError') }],
         model: [{ required: true, message: this.$t('task.modelError') }],
         dataset: [{ required: true, message: this.$t('task.datasetError') }],
@@ -415,6 +417,7 @@ export default {
           background: 'rgba(0, 0, 0, 0.7)'
         })
         // 判断是更新还是新增
+        this.task.task_name = this.curUserName + '_' + this.task.task_name_show
         if (this.task.id) {
           updateTaskById(this.task.id, this.task).then(res => {
             this.$message.success(this.$t('task.taskUpdateSuccess'))
