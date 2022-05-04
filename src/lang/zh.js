@@ -103,7 +103,7 @@ export default {
     passwordError: '密码不能少于6位',
     repeatPasswordError: '两次密码输入不一致',
     permissionIsNull: '该账户没有任何权限',
-    verificationFailed: '验证失败，请重新登录',
+    verificationFailed: '账号或密码错误，请重新登录',
     verificationSuccess: '登录成功',
     // 修改密码相关
     oldPassword: '原密码',
