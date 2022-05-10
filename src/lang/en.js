@@ -109,7 +109,8 @@ export default {
     oldPassword: 'Old password',
     newPassword: 'New password',
     repeatPassword: 'Enter the new password again',
-    updatePasswordSuccess: 'Password changed successfully, please log in again'
+    updatePasswordSuccess: 'Password changed successfully, please log in again',
+    updatePasswordFail: 'Please check whether the old password is entered correctly'
   },
   // 注册相关
   register: {

@@ -109,7 +109,8 @@ export default {
     oldPassword: '原密码',
     newPassword: '新密码',
     repeatPassword: '再次输入新密码',
-    updatePasswordSuccess: '密码修改成功,请重新登录'
+    updatePasswordSuccess: '密码修改成功,请重新登录',
+    updatePasswordFail: '请检查旧密码是否输入正确'
   },
   // 注册相关
   register: {
