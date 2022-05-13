@@ -992,10 +992,10 @@ export default {
       if (this.timeObj) {
         clearTimeout(this.timeObj)
       }
-      // 等待 1 秒再发请求 立刻获取状态会把上次的错误状态获取过来，所以等待他设置好状态了再监控
+      // 等待 10 秒再发请求 立刻获取状态会把上次的错误状态获取过来，所以等待他设置好状态了再监控
       setTimeout(function() {
         console.log('I am the third log after 1 seconds')
-      }, 1000)
+      }, 10 * 1000)
       getTaskStatus(taskId).then(res => {
         if (res.code === 202) {
           this.$nextTick(() => {
@@ -1257,6 +1257,11 @@ export default {
       setTimeout(this.pollingTaskStatus(this.executeId, 30), 1000 * 5)
     },
     executeAtTime() {
+      if (this.analysisExecuteTime(this.executeForm.executeTime)) {
+        // 弹出警告信息
+        this.$message.warning(this.$t('task.selectExecuteTimeError'))
+        return
+      }
       executeTaskById(this.executeId, this.executeForm.executeTime).then(res => {
         this.getList()
       })

@@ -472,6 +472,7 @@ export default {
     selectSameTask: '请选择相同类型的实验',
     selectDifferentModelTask: '请选择使用不同模型的实验',
     selectRoadRepresentation: '该实验类型无评价指标',
+    selectExecuteTimeError: '请选择正确的执行时间',
     clickDownload: '点击下载',
     clickCatConfig: '在线查看',
     configview: '配置文件信息',

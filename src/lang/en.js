@@ -473,6 +473,7 @@ export default {
     selectSameTask: 'Please select the same type of experiment',
     selectDifferentModelTask: 'Please select a experiment that uses a different model',
     selectRoadRepresentation: 'There is no evaluation index for this experiment type',
+    selectExecuteTimeError: 'Please select the correct execution time',
     clickDownload: 'Click here to download',
     clickCatConfig: 'Click here to view online',
     configview: 'Configuration Information',
