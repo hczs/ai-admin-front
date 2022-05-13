@@ -273,7 +273,7 @@
 
               <!-- </el-button-group> -->
               </el-form-item>
-              <el-form-item v-if="task.id" style="text-align: left" :label="$t('task.uploadedConfigFile')">
+              <el-form-item v-if="task.config_file" style="text-align: left" :label="$t('task.uploadedConfigFile')">
                 <el-link type="primary" :underline="false" :href="BASE_API + '/business/task/' + task.id + '/download_task_config/'">
                   {{ $t('task.clickDownload') }}
                 </el-link>
@@ -387,6 +387,7 @@ export default {
     return {
       BASE_API: window.global_url.Base_url,
       curUserName: this.$store.getters.name,
+      paramId: this.$route.params.id,
       // 任务默认值
       task: {
         task_name: '',
@@ -501,8 +502,8 @@ export default {
       this.task.model = this.modelList[0]
     },
     onTaskChange(curValue) {
-      console.log('change:', curValue)
-      console.log('model:', this.taskModelDict[curValue])
+      // console.log('change:', curValue)
+      // console.log('model:', this.taskModelDict[curValue])
       this.modelList = this.taskModelDict[curValue]
       this.task.model = this.modelList[0]
     },
