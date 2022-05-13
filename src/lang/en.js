@@ -437,7 +437,7 @@ export default {
     taskMustParam: 'Task required parameters',
     taskBaseParam: 'basic task information',
     taskNotMustParam: 'Task optional parameters',
-    uploadedConfigFile: 'Uploaded configuration file',
+    uploadedConfigFile: 'current task profile',
     catLog: 'View run log',
     logview: 'Task Log',
     eva_view: 'Evaluation Result',

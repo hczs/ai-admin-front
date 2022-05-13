@@ -436,7 +436,7 @@ export default {
     taskMustParam: '任务必填参数填写',
     taskBaseParam: '任务基本参数填写',
     taskNotMustParam: '任务非必填参数填写',
-    uploadedConfigFile: '已上传的配置文件',
+    uploadedConfigFile: '当前任务配置文件',
     catLog: '查看运行日志',
     logview: '运行日志',
     eva_view: '评价指标查看',

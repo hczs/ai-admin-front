@@ -553,6 +553,8 @@ export default {
         })
         // 判断是更新还是新增
         this.task.task_name = this.curUserName + '_' + this.task.task_name_show
+        // 赋值真正的 config_file
+        this.task.config_file = this.task.tmp_config_file
         if (this.task.id) {
           updateTaskById(this.task.id, this.task).then(res => {
             this.$message.success(this.$t('task.taskUpdateSuccess'))
@@ -567,7 +569,7 @@ export default {
               this.$router.push({ path: '/taskList/index' })
             } else {
               this.$message.error(this.$t('task.taskCreateError'))
-              console.log(res.msg)
+              this.task.config_file = null
             }
           })
         }
@@ -590,7 +592,8 @@ export default {
     // 文件上传相关
     // 上传成功，刷新页面
     handleFileUploadSuccess(response) {
-      this.task.config_file = response.data
+      // this.task.config_file = response.data
+      this.task.tmp_config_file = response.data
       this.$message.success(this.$t('dataset.uploadSuccess'))
     },
     // 上传之前，检查文件类型
