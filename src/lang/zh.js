@@ -88,7 +88,8 @@ export default {
     profile: '个人中心',
     theme: '换肤',
     size: '布局大小',
-    updatePassword: '修改密码'
+    updatePassword: '修改密码',
+    clickToBack: '返回上一页'
   },
   login: {
     title: 'LibCity实验管理系统',
@@ -109,7 +110,8 @@ export default {
     oldPassword: '原密码',
     newPassword: '新密码',
     repeatPassword: '再次输入新密码',
-    updatePasswordSuccess: '密码修改成功,请重新登录'
+    updatePasswordSuccess: '密码修改成功,请重新登录',
+    updatePasswordFail: '请检查旧密码是否输入正确'
   },
   // 注册相关
   register: {
@@ -430,6 +432,11 @@ export default {
     taskParamTip: '注意：任务名、模型名和数据集有严格的对应关系',
     taskMoreParamTip: '如果需要配置更多参数，可以上传配置文件',
     clickViewCorresponding: '任务名、模型名和数据集有严格的对应关系（点击查看）',
+    // 新建任务表单三个小标题
+    taskMustParam: '任务必填参数填写',
+    taskBaseParam: '任务基本参数填写',
+    taskNotMustParam: '任务非必填参数填写',
+    uploadedConfigFile: '当前任务配置文件',
     catLog: '查看运行日志',
     logview: '运行日志',
     eva_view: '评价指标查看',
@@ -466,6 +473,7 @@ export default {
     selectSameTask: '请选择相同类型的实验',
     selectDifferentModelTask: '请选择使用不同模型的实验',
     selectRoadRepresentation: '该实验类型无评价指标',
+    selectExecuteTimeError: '请选择正确的执行时间',
     clickDownload: '点击下载',
     clickCatConfig: '在线查看',
     configview: '配置文件信息',

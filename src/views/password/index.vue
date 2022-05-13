@@ -89,13 +89,21 @@ export default {
           return
         }
         updatePassword(this.formData).then(async(res) => {
-          this.loading = false
-          this.$message({
-            message: this.$t('login.updatePasswordSuccess'),
-            type: 'success'
-          })
-          await this.$store.dispatch('user/logout')
-          this.$router.push(`/login`)
+          if (res.code === 200) {
+            this.loading = false
+            this.$message({
+              message: this.$t('login.updatePasswordSuccess'),
+              type: 'success'
+            })
+            await this.$store.dispatch('user/logout')
+            this.$router.push(`/login`)
+          } else {
+            this.loading = false
+            this.$message({
+              message: this.$t('login.updatePasswordFail'),
+              type: 'error'
+            })
+          }
         }).catch(e => {
           this.loading = false
           console.log('catch')

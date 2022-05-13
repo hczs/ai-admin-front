@@ -201,9 +201,10 @@
         :label="$t('task.expId')"
       />
       <!-- 模型名 -->
-      <af-table-column
+      <el-table-column
         prop="model"
         :label="$t('task.model')"
+        width="130"
       />
       <!-- 数据集名 -->
       <el-table-column
@@ -416,9 +417,9 @@
             >
               {{ $t('task.downloadModel') }}
             </el-link>
-            <!-- 查看日志按钮 -->
+            <!-- 查看日志按钮 实验 不是未开始状态 且 不是已预约实验状态  的时候显示查看日志按钮 -->
             <el-link
-              v-if="scope.row.task_status !== 0"
+              v-if="scope.row.task_status !== 0 && scope.row.task_status !== 3"
               style="margin-left: 10px"
               icon="el-icon-document"
               @click="catLog(scope.row.id)"
@@ -991,6 +992,10 @@ export default {
       if (this.timeObj) {
         clearTimeout(this.timeObj)
       }
+      // 等待 10 秒再发请求 立刻获取状态会把上次的错误状态获取过来，所以等待他设置好状态了再监控
+      setTimeout(function() {
+        console.log('I am the third log after 1 seconds')
+      }, 10 * 1000)
       getTaskStatus(taskId).then(res => {
         if (res.code === 202) {
           this.$nextTick(() => {
@@ -1043,7 +1048,7 @@ export default {
     },
     // 查看任务结果文件
     showResult(taskId, dataset) {
-      // 新窗口打开
+      // 新窗口打开  需求修改 当前页面展示
       const routeData = this.$router.resolve({
         path: '/task/result',
         query: {
@@ -1051,7 +1056,7 @@ export default {
           dataset: dataset
         }
       })
-      window.open(routeData.href, '_blank')
+      window.open(routeData.href, '_self')
     },
     // 深拷贝
     deepCopy(obj) {
@@ -1125,7 +1130,7 @@ export default {
           taskType: defaultTask
         }
       })
-      window.open(routeData.href, '_blank')
+      window.open(routeData.href, '_self')
     },
     // 获取任务列表
     getList() {
@@ -1252,6 +1257,11 @@ export default {
       setTimeout(this.pollingTaskStatus(this.executeId, 30), 1000 * 5)
     },
     executeAtTime() {
+      if (this.analysisExecuteTime(this.executeForm.executeTime)) {
+        // 弹出警告信息
+        this.$message.warning(this.$t('task.selectExecuteTimeError'))
+        return
+      }
       executeTaskById(this.executeId, this.executeForm.executeTime).then(res => {
         this.getList()
       })

@@ -88,7 +88,8 @@ export default {
     profile: 'Profile',
     theme: 'Theme',
     size: 'Global Size',
-    updatePassword: 'Change Password'
+    updatePassword: 'Change Password',
+    clickToBack: 'go back to the last page'
   },
   login: {
     title: 'LibCity Experimental Management System',
@@ -109,7 +110,8 @@ export default {
     oldPassword: 'Old password',
     newPassword: 'New password',
     repeatPassword: 'Enter the new password again',
-    updatePasswordSuccess: 'Password changed successfully, please log in again'
+    updatePasswordSuccess: 'Password changed successfully, please log in again',
+    updatePasswordFail: 'Please check whether the old password is entered correctly'
   },
   // 注册相关
   register: {
@@ -431,6 +433,11 @@ export default {
     taskParamTip: 'Note: task name, model name and dataset have strict correspondence',
     taskMoreParamTip: 'If you need to configure more parameters, you can upload the configuration file',
     clickViewCorresponding: 'There is a strict correspondence between task name, model name and dataset (click to view)',
+    // 新建任务表单三个小标题
+    taskMustParam: 'Task required parameters',
+    taskBaseParam: 'basic task information',
+    taskNotMustParam: 'Task optional parameters',
+    uploadedConfigFile: 'current task profile',
     catLog: 'View run log',
     logview: 'Task Log',
     eva_view: 'Evaluation Result',
@@ -467,6 +474,7 @@ export default {
     selectSameTask: 'Please select the same type of experiment',
     selectDifferentModelTask: 'Please select a experiment that uses a different model',
     selectRoadRepresentation: 'There is no evaluation index for this experiment type',
+    selectExecuteTimeError: 'Please select the correct execution time',
     clickDownload: 'Click here to download',
     clickCatConfig: 'Click here to view online',
     configview: 'Configuration Information',
