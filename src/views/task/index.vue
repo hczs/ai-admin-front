@@ -1048,7 +1048,7 @@ export default {
     },
     // 查看任务结果文件
     showResult(taskId, dataset) {
-      // 新窗口打开
+      // 新窗口打开  需求修改 当前页面展示
       const routeData = this.$router.resolve({
         path: '/task/result',
         query: {
@@ -1056,7 +1056,7 @@ export default {
           dataset: dataset
         }
       })
-      window.open(routeData.href, '_blank')
+      window.open(routeData.href, '_self')
     },
     // 深拷贝
     deepCopy(obj) {
@@ -1130,7 +1130,7 @@ export default {
           taskType: defaultTask
         }
       })
-      window.open(routeData.href, '_blank')
+      window.open(routeData.href, '_self')
     },
     // 获取任务列表
     getList() {

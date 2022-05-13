@@ -6,6 +6,12 @@
 
     <div class="right-menu">
 
+      <el-tooltip class="item" effect="dark" content="返回上一页" placement="bottom">
+        <span class="right-menu-item hover-effect" @click="back">
+          <i class="el-icon-back" />
+        </span>
+      </el-tooltip>
+
       <el-tooltip class="item" effect="dark" :content="$t('intro.viewIntro')" placement="bottom">
         <span class="right-menu-item hover-effect" :data-intro="$t('intro.showIntro')" @click="showIntro()">
           <i class="el-icon-question" />
@@ -75,6 +81,9 @@ export default {
     ])
   },
   methods: {
+    back() {
+      this.$router.go(-1)// 返回上一层
+    },
     showIntro() {
       // console.log('this:', this)
       // console.log('this.$route.path', this.$route.path)

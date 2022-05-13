@@ -1,14 +1,22 @@
 <template>
   <div style="height: auto">
-    <iframe
-      id="iframeBox"
-      :src="reportUrl"
-      frameborder="0"
-      width="100%"
-      height="auto"
-      scrolling="auto"
-      onload="this.height=1000"
-    />
+    <!-- <div style="margin: 10px">
+      <el-button class="el-icon-back" type="success" size="small" @click="back">
+        返回上一页
+      </el-button>
+    </div> -->
+    <div>
+      <iframe
+        id="iframeBox"
+        :src="reportUrl"
+        frameborder="0"
+        width="100%"
+        height="auto"
+        scrolling="auto"
+        onload="this.height=1000"
+      />
+    </div>
+
   </div>
 </template>
 <script>
