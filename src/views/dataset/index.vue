@@ -611,7 +611,11 @@ export default {
     },
     // 上传之前，检查文件类型
     handleBeforeUpload(file) {
-      var isZip = file.type === 'application/x-zip-compressed'
+      // var isZip = file.type === 'application/x-zip-compressed'  // bug mac 上不能识别
+      // 因为 .zip 格式可以有很多种：application/zip, application/octet-stream, application/x-zip-compressed, multipart/x-zip
+      // 所以这里直接判断包含 zip 字符串即可
+      // 判断 file.type 是否包含 zip 字符串
+      var isZip = file.type.includes('zip')
       if (!isZip) {
         this.$message.error(this.$t('dataset.uploadError'))
       }

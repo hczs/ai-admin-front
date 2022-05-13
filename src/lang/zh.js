@@ -431,6 +431,11 @@ export default {
     taskParamTip: '注意：任务名、模型名和数据集有严格的对应关系',
     taskMoreParamTip: '如果需要配置更多参数，可以上传配置文件',
     clickViewCorresponding: '任务名、模型名和数据集有严格的对应关系（点击查看）',
+    // 新建任务表单三个小标题
+    taskMustParam: '任务必填参数填写',
+    taskBaseParam: '任务基本参数填写',
+    taskNotMustParam: '任务非必填参数填写',
+    uploadedConfigFile: '已上传的配置文件',
     catLog: '查看运行日志',
     logview: '运行日志',
     eva_view: '评价指标查看',

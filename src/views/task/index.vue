@@ -201,9 +201,10 @@
         :label="$t('task.expId')"
       />
       <!-- 模型名 -->
-      <af-table-column
+      <el-table-column
         prop="model"
         :label="$t('task.model')"
+        width="130"
       />
       <!-- 数据集名 -->
       <el-table-column

@@ -432,6 +432,11 @@ export default {
     taskParamTip: 'Note: task name, model name and dataset have strict correspondence',
     taskMoreParamTip: 'If you need to configure more parameters, you can upload the configuration file',
     clickViewCorresponding: 'There is a strict correspondence between task name, model name and dataset (click to view)',
+    // 新建任务表单三个小标题
+    taskMustParam: 'Task required parameters',
+    taskBaseParam: 'basic task information',
+    taskNotMustParam: 'Task optional parameters',
+    uploadedConfigFile: 'Uploaded configuration file',
     catLog: 'View run log',
     logview: 'Task Log',
     eva_view: 'Evaluation Result',

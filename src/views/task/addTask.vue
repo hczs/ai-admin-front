@@ -1,48 +1,58 @@
 <template>
   <div class="app-container" style="text-align: center; width: 100%; height: 100%">
-    <div
-      style="width: 99%; margin-left: 13px; height: 90%"
-      :data-intro="$t('addTaskIntro.step01')"
-      data-step="1"
-    >
-      <div style="width: 70%; margin-left: 5%">
-        <el-form
-          ref="elForm"
-          :rules="rules"
-          :model="task"
-          label-position="left"
-        >
-          <div :data-intro="$t('addTaskIntro.step02')" data-step="4">
-            <el-form-item :label="$t('task.taskName')" prop="task_name_show">
-              <el-input
-                v-model="task.task_name_show"
-                autocomplete="off"
-                clearable
-                show-word-limit
-                maxlength="50"
-              />
-            </el-form-item>
-          </div>
-          <el-form-item label-position="right" :label="$t('task.taskDescription')">
-            <el-input
-              v-model="task.task_description"
-              type="textarea"
-              maxlength="100"
-              rows="3"
-              show-word-limit
-              clearable
-            />
-          </el-form-item>
-          <el-form-item :label="$t('dataset.isPublic')" style="text-align: left" prop="visibility">
-            <el-switch
-              v-model="task.visibility"
-              :active-text="$t('dataset.public')"
-              :inactive-text="$t('dataset.private')"
-              :active-value="1"
-              :inactive-value="0"
-            />
-          </el-form-item>
-          <!-- <el-form-item :label="$t('task.dataFile')" prop="data_file">
+    <el-card shadow="nerver">
+      <div
+        style="width: 99%; margin-left: 13px; height: 90%"
+        :data-intro="$t('addTaskIntro.step01')"
+        data-step="1"
+      >
+        <div style="width: 93%; margin: 0 auto; text-align: left;">
+          <el-form
+            ref="elForm"
+            :rules="rules"
+            :model="task"
+            :inline="true"
+            label-position="right"
+            label-width="200px"
+          >
+            <div>
+              <el-card shadow="always" :header="$t('task.taskBaseParam')" style="margin-top:20px">
+                <div :data-intro="$t('addTaskIntro.step02')" data-step="2">
+                  <el-form-item :label="$t('task.taskName')" prop="task_name_show">
+                    <el-input
+                      v-model="task.task_name_show"
+                      autocomplete="off"
+                      clearable
+                      show-word-limit
+                      maxlength="25"
+                      style="width: 650px"
+                    />
+                  </el-form-item>
+                </div>
+                <el-form-item label-position="right" :label="$t('task.taskDescription')">
+                  <el-input
+                    v-model="task.task_description"
+                    type="textarea"
+                    maxlength="100"
+                    rows="3"
+                    show-word-limit
+                    clearable
+                    style="width: 650px"
+                  />
+                </el-form-item>
+                <br>
+                <el-form-item :label="$t('dataset.isPublic')" style="text-align: left" prop="visibility">
+                  <el-switch
+                    v-model="task.visibility"
+                    :active-text="$t('dataset.public')"
+                    :inactive-text="$t('dataset.private')"
+                    :active-value="1"
+                    :inactive-value="0"
+                  />
+                </el-form-item>
+              </el-card>
+            </div>
+            <!-- <el-form-item :label="$t('task.dataFile')" prop="data_file">
           <el-select v-model="task.data_file" style="float: left"  >
             <el-option
               v-for="file in fileList"
@@ -52,165 +62,267 @@
             />
           </el-select>
         </el-form-item> -->
-          <!-- 以下为任务执行参数配置 -->
-          <el-divider content-position="center">
-            <!-- {{ $t('task.taskParamTip') }} -->
-            <el-link target="_blank" type="primary" href="https://github.com/LibCity/Bigscity-LibCity-Docs-zh_CN/blob/master/source/user_guide/data/dataset_for_task.md">
-              <span :data-intro="$t('addTaskIntro.step04')" data-step="3">
-                {{ $t('task.clickViewCorresponding') }}
+            <!-- 以下为任务执行参数配置 -->
+            <el-card shadow="always" :header="$t('task.taskMustParam')" style="margin-top:20px">
+              <span slot="header" class="card-title">
+                {{ $t('task.taskMustParam') }}
+                <el-link target="_blank" type="primary" href="https://github.com/LibCity/Bigscity-LibCity-Docs-zh_CN/blob/master/source/user_guide/data/dataset_for_task.md">
+                  <span :data-intro="$t('addTaskIntro.step04')" data-step="4">
+                    {{ $t('task.clickViewCorresponding') }}
+                  </span>
+                </el-link>
+                <!-- {{ $t('dashboard.introduction') }} -->
               </span>
-            </el-link>
-          </el-divider>
-          <div :data-intro="$t('addTaskIntro.step03')" data-step="2">
-            <el-form-item :label="$t('task.task')" prop="task">
-              <el-select
-                v-model="task.task"
-                style="float: left"
-                :placeholder="$t('common.pleasechoose')"
-                @change="onTaskChange"
-              >
-                <el-option
-                  v-for="item in taskParamList"
-                  :key="item.id"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-            </el-form-item>
-            <el-form-item :label="$t('task.model')" prop="model">
-              <el-select v-model="task.model" default-first-option allow-create filterable style="float: left" :placeholder="$t('common.pleasechoose')">
-                <el-option
-                  v-for="model in modelList"
-                  :key="model"
-                  :label="model"
-                  :value="model"
-                />
-              </el-select>
-            </el-form-item>
-            <el-form-item :label="$t('task.dataset')" prop="dataset">
-              <el-select v-model="task.dataset" filterable style="float: left" :placeholder="$t('common.pleasechoose')">
-                <el-option
-                  v-for="file in fileList"
-                  :key="file.id"
-                  :label="file.file_original_name"
-                  :value="file.file_name"
+              <!-- <el-divider content-position="center">
+
+              </el-divider> -->
+              <div :data-intro="$t('addTaskIntro.step03')" data-step="3">
+                <el-row :gutter="20">
+                  <el-col :span="8">
+                    <el-form-item :label="$t('task.task')" prop="task" label-width="100px">
+                      <el-select
+                        v-model="task.task"
+                        style="float: left"
+                        :placeholder="$t('common.pleasechoose')"
+                        @change="onTaskChange"
+                      >
+                        <el-option
+                          v-for="item in taskParamList"
+                          :key="item.id"
+                          :label="item.label"
+                          :value="item.value"
+                        />
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item :label="$t('task.model')" prop="model" label-width="100px">
+                      <el-select v-model="task.model" default-first-option allow-create filterable style="float: left" :placeholder="$t('common.pleasechoose')">
+                        <el-option
+                          v-for="model in modelList"
+                          :key="model"
+                          :label="model"
+                          :value="model"
+                        />
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item :label="$t('task.dataset')" prop="dataset" label-width="100px">
+                      <el-select v-model="task.dataset" filterable style="float: left" :placeholder="$t('common.pleasechoose')">
+                        <el-option
+                          v-for="file in fileList"
+                          :key="file.id"
+                          :label="file.file_original_name"
+                          :value="file.file_name"
+                        >
+                          <el-tooltip class="item" effect="dark" :content="file.creator.toString()" placement="top">
+                            <span style="float: left">{{ file.file_original_name }}</span>
+                          </el-tooltip>
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+
+              </div>
+            </el-card>
+
+            <!-- 以下非必填参数 -->
+            <el-card shadow="always" :header="$t('task.taskNotMustParam')" style="margin-top:20px">
+              <!-- <el-divider content-position="center">
+                {{ $t('task.otherParamTip') }}
+              </el-divider> -->
+              <el-row :gutter="20">
+                <el-col :span="8">
+                  <!-- 最大训练轮数 -->
+                  <el-form-item :label="$t('task.max_epoch')" prop="max_epoch" style="text-align: left" label-width="110px">
+                    <el-popover
+                      placement="top-start"
+                      width="200"
+                      trigger="hover"
+                      :content="$t('task.maxEpochTip')"
+                    >
+                      <el-input-number slot="reference" v-model.number="task.max_epoch" controls-position="right" />
+                    </el-popover>
+
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <!-- 批次大小 -->
+                  <el-form-item :label="$t('task.batch_size')" prop="batch_size" style="text-align: left" label-width="110px">
+                    <el-input-number v-model.number="task.batch_size" controls-position="right" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <!-- 学习率 -->
+                  <el-form-item
+                    :label="$t('task.learning_rate')"
+                    prop="learning_rate"
+                    label-width="150px"
+                  >
+                    <el-input v-model="task.learning_rate" />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row :gutter="20">
+                <el-col :span="8">
+                  <!-- 训练集所占比例 -->
+                  <el-form-item :label="$t('task.train_rate')" prop="train_rate" label-width="110px">
+                    <el-input v-model="task.train_rate" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <!-- 验证集所占比例 -->
+                  <el-form-item :label="$t('task.eval_rate')" prop="eval_rate" label-width="110px">
+                    <el-input v-model="task.eval_rate" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <!-- 是否保存训练好的模型 -->
+                  <el-form-item :label="$t('task.saved_model')" style="text-align: left" label-width="160px">
+                    <el-radio-group v-model="task.saved_model">
+                      <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
+                      <el-radio :label="false">{{ $t('common.no') }}</el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row :gutter="20">
+                <el-col :span="8">
+                  <!-- 是否使用GPU -->
+                  <el-form-item :label="$t('task.gpu')" style="text-align: left" label-width="110px">
+                    <el-radio-group v-model="task.gpu">
+                      <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
+                      <el-radio :label="false">{{ $t('common.no') }}</el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <!-- GPU编号 -->
+                  <el-form-item v-if="task.gpu" :label="$t('task.gpu_id')" prop="gpu_id" style="text-align: left" label-width="110px">
+                    <el-input-number v-model.number="task.gpu_id" controls-position="right" />
+                  </el-form-item>
+                </el-col>
+                <!-- <el-col :span="8">
+                  <div class="grid-content bg-purple" />
+                </el-col> -->
+              </el-row>
+
+              <el-row :gutter="20">
+                <el-col :span="8">
+                  <!-- 是否使用以往实验保存的模型 -->
+                  <el-form-item :label="$t('task.train')" style="text-align: left" label-width="110px">
+                    <el-radio-group v-model="task.train">
+                      <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
+                      <el-radio :label="false">{{ $t('common.no') }}</el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <!-- expid实验ID -->
+                  <el-form-item v-if="task.train == true" :label="$t('task.expId')" prop="exp_id" style="text-align: left" label-width="110px">
+                    <el-input-number v-model.number="task.exp_id" controls-position="right" />
+                  </el-form-item>
+                </el-col>
+                <!-- <el-col :span="8">
+                  <div class="grid-content bg-purple" />
+                </el-col> -->
+              </el-row>
+
+              <!-- 如果需要配置更多参数，可以上传配置文件 -->
+              <el-divider content-position="center">{{ $t('task.taskMoreParamTip') }}</el-divider>
+              <el-form-item :label="$t('task.config_file')" :data-intro="$t('addTaskIntro.step05')" data-step="5">
+                <!-- <el-button-group> -->
+                <el-upload
+                  ref="upload"
+                  style="text-align: left"
+                  class="upload-demo"
+                  :action="BASE_API + '/business/task/upload/'"
+                  name="config"
+                  :limit="fileLimit"
+                  :on-success="handleFileUploadSuccess"
+                  :before-upload="handleBeforeUpload"
+                  :on-exceed="handleOnExceed"
+                  accept="application/json"
                 >
-                  <el-tooltip class="item" effect="dark" :content="file.creator.toString()" placement="top">
-                    <span style="float: left">{{ file.file_original_name }}</span>
-                  </el-tooltip>
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </div>
-
-          <!-- 以下非必填参数 -->
-          <el-divider content-position="center">
-            {{ $t('task.otherParamTip') }}
-          </el-divider>
-          <el-form-item :label="$t('task.max_epoch')" prop="max_epoch" style="text-align: left">
-            <el-popover
-              placement="top-start"
-              width="200"
-              trigger="hover"
-              :content="$t('task.maxEpochTip')"
-            >
-              <el-input-number slot="reference" v-model.number="task.max_epoch" controls-position="right" />
-            </el-popover>
-
-          </el-form-item>
-
-          <el-form-item :label="$t('task.batch_size')" prop="batch_size" style="text-align: left">
-            <el-input-number v-model.number="task.batch_size" controls-position="right" />
-          </el-form-item>
-
-          <el-form-item
-            :label="$t('task.learning_rate')"
-            prop="learning_rate"
-            style="text-align: left; width: 30%"
-          >
-            <el-input v-model="task.learning_rate" />
-          </el-form-item>
-
-          <el-form-item :label="$t('task.train_rate')" prop="train_rate" style="text-align: left; width: 30%">
-            <el-input v-model="task.train_rate" />
-          </el-form-item>
-          <el-form-item :label="$t('task.eval_rate')" prop="eval_rate" style="text-align: left; width: 30%">
-            <el-input v-model="task.eval_rate" />
-          </el-form-item>
-
-          <el-form-item :label="$t('task.gpu')" style="text-align: left">
-
-            <el-radio-group v-model="task.gpu">
-              <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
-              <el-radio :label="false">{{ $t('common.no') }}</el-radio>
-            </el-radio-group>
-
-          </el-form-item>
-          <el-form-item v-if="task.gpu" :label="$t('task.gpu_id')" prop="gpu_id" style="text-align: left">
-            <el-input-number v-model.number="task.gpu_id" controls-position="right" />
-          </el-form-item>
-
-          <el-form-item :label="$t('task.saved_model')" style="text-align: left">
-            <el-radio-group v-model="task.saved_model">
-              <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
-              <el-radio :label="false">{{ $t('common.no') }}</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item :label="$t('task.train')" style="text-align: left">
-            <el-radio-group v-model="task.train">
-              <el-radio :label="true">{{ $t('common.yes') }}</el-radio>
-              <el-radio :label="false">{{ $t('common.no') }}</el-radio>
-            </el-radio-group>
-          </el-form-item>
-
-          <!-- expid实验ID -->
-          <el-form-item v-if="task.train == true" :label="$t('task.expId')" prop="exp_id" style="text-align: left">
-            <el-input-number v-model.number="task.exp_id" controls-position="right" />
-          </el-form-item>
-
-          <!-- 如果需要配置更多参数，可以上传配置文件 -->
-          <el-divider content-position="center">{{ $t('task.taskMoreParamTip') }}</el-divider>
-          <el-form-item :label="$t('task.config_file')" :data-intro="$t('addTaskIntro.step05')" data-step="5">
-            <!-- <el-button-group> -->
-            <el-upload
-              ref="upload"
-              style="text-align: left"
-              class="upload-demo"
-              :action="BASE_API + '/business/task/upload/'"
-              name="config"
-              :limit="fileLimit"
-              :on-success="handleFileUploadSuccess"
-              :before-upload="handleBeforeUpload"
-              :on-exceed="handleOnExceed"
-              accept="application/json"
-            >
-              <el-button slot="trigger" size="small" type="primary"> {{ $t('task.clickUpload') }}</el-button>
-              <!-- <div slot="tip" class="el-upload__tip">{{ $t('task.uploadTips') }}
+                  <el-button slot="trigger" size="small" type="primary"> {{ $t('task.clickUpload') }}</el-button>
+                  <!-- <div slot="tip" class="el-upload__tip">{{ $t('task.uploadTips') }}
               <a :href="BASE_API + '/business/task/download_config/'" style="margin-left: 10px;">
                 <el-button type="info" size="mini" icon="el-icon-download">{{ $t('task.downloadExample') }}
                 </el-button>
               </a>
             </div> -->
-              <a :href="BASE_API + '/business/task/download_config/'" style="margin-left: 10px;">
-                <el-button type="info" size="mini" icon="el-icon-download">
-                  {{ $t('task.downloadExample') }}
-                </el-button>
-              </a>
+                  <a :href="BASE_API + '/business/task/download_config/'" style="margin-left: 10px;">
+                    <el-button type="info" size="mini" icon="el-icon-download">
+                      {{ $t('task.downloadExample') }}
+                    </el-button>
+                  </a>
+                  <br>
+                  <!-- <span v-if="task.config_file !== null">
+                <el-link type="primary" :underline="false" :href="BASE_API + '/business/task/' + task.id + '/download_task_config/'">
+                  {{ $t('task.clickDownload') }}
+                </el-link>
+                <el-link style="margin-left: 10px" type="primary" :underline="false" @click="catConfig(task.id)">
+                  {{ $t('task.clickCatConfig') }}
+                </el-link>
+              </span> -->
+                </el-upload>
 
-            </el-upload>
+              <!-- </el-button-group> -->
+              </el-form-item>
+              <el-form-item v-if="task.id" style="text-align: left" :label="$t('task.uploadedConfigFile')">
+                <el-link type="primary" :underline="false" :href="BASE_API + '/business/task/' + task.id + '/download_task_config/'">
+                  {{ $t('task.clickDownload') }}
+                </el-link>
+                <el-link style="margin-left: 10px" type="primary" :underline="false" @click="catConfig(task.id)">
+                  {{ $t('task.clickCatConfig') }}
+                </el-link>
+              </el-form-item>
+            </el-card>
+          </el-form>
+          <div style="text-align: center; margin-top: 10px">
+            <el-button
+              @click="resetForm()"
+            >{{ $t('common.clear') }}</el-button>
+            <el-button
+              :data-intro="$t('addTaskIntro.step06')"
+              style="margin-left: 20px"
+              data-step="6"
+              type="primary"
+              @click="submit()"
+            >{{ $t('common.confirm') }}</el-button>
+          </div>
 
-          <!-- </el-button-group> -->
-          </el-form-item>
-        </el-form>
-        <el-button @click="resetForm()">{{ $t('common.clear') }}</el-button>
-        <el-button :data-intro="$t('addTaskIntro.step06')" data-step="6" type="primary" @click="submit()">{{ $t('common.confirm') }}</el-button>
+        </div>
       </div>
-    </div>
+    </el-card>
+
+    <!-- 配置文件查看弹出框 -->
+    <el-dialog
+      :title="$t('task.configview')"
+      :visible.sync="configDialogVisible"
+      width="80%"
+      class="dialog-div"
+      style="text-align: left"
+    >
+      <!-- <div style="white-space: pre-line; margin: 20px" v-html="configData" /> -->
+      <pre style="margin: 20px; background-color: black; color: white; font-family: Consolas; font-size: 16px; padding: 10px">{{ configData }}</pre>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="configDialogVisible = false">{{ $t('common.cancel') }}</el-button>
+        <!-- <a style="margin-left: 10px" :href="BASE_API + '/business/task/' + task.id + '/download_log/'">
+          <el-button type="primary" icon="el-icon-download">
+            {{ $t('task.downloadLog') }}
+          </el-button></a> -->
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { getFileListAll } from '@/api/file'
-import { addTask, taskExists, getTaskById, updateTaskById } from '@/api/task'
+import { addTask, taskExists, getTaskById, updateTaskById, getConfigDataById } from '@/api/task'
 import { getSimpleAccountList } from '@/api/account'
 export default {
   data() {
@@ -286,6 +398,8 @@ export default {
         saved_model: true,
         train: false
       },
+      configDialogVisible: false,
+      configData: '',
       fileLimit: 1,
       formLabelWidth: '10%',
       fileList: [],
@@ -329,7 +443,6 @@ export default {
     }
   },
   computed: {
-    // TODO 下拉列表中英文切换
     isEdit() {
       return this.$store.state.app.language // 需要监听的数据
     }
@@ -375,6 +488,14 @@ export default {
     //   { id: '5', label: this.$t('task.map_matching'), value: 'map_matching' }]
   },
   methods: {
+    // 查看配置文件信息
+    catConfig(id) {
+      this.task.id = id
+      this.configDialogVisible = true
+      getConfigDataById(id).then(res => {
+        this.configData = res.data
+      })
+    },
     initSelect() {
       this.modelList = this.taskModelDict[this.task.task]
       this.task.model = this.modelList[0]
@@ -486,6 +607,56 @@ export default {
   }
 }
 </script>
+<style scoped>
+/* dialog进度条 */
+/* 使顶部进行吸顶 */
+.dialog-div .top {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0px;
+ }
+
+/* 表单大小设置 */
+.dialog-div .el-dialog {
+  margin: 0 auto !important;
+  height: 90%;
+  overflow: hidden;
+}
+
+.dialog-div .el-dialog__body {
+  position: absolute;
+  left: 0;
+  top: 54px;
+  bottom: 70px;
+  right: 0;
+  padding: 0;
+  z-index: 1;
+  overflow: hidden;
+  overflow-y: auto;
+}
+/**表单 确定和取消 按钮的位置 */
+.dialog-div .el-dialog__footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* 弹出框滚动条 */
+/* 设置滚动条的样式 */
+/**解决了滚动条之间发生错位的现象 */
+::-webkit-scrollbar {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+  /* 滚动条的颜色 */
+  background-color: #e4e4e4;
+ }
+</style>
 <style lang="scss" scoped>
 .requiredBox {
 
