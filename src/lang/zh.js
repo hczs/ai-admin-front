@@ -88,7 +88,8 @@ export default {
     profile: '个人中心',
     theme: '换肤',
     size: '布局大小',
-    updatePassword: '修改密码'
+    updatePassword: '修改密码',
+    clickToBack: '返回上一页'
   },
   login: {
     title: 'LibCity实验管理系统',

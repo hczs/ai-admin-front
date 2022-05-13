@@ -88,7 +88,8 @@ export default {
     profile: 'Profile',
     theme: 'Theme',
     size: 'Global Size',
-    updatePassword: 'Change Password'
+    updatePassword: 'Change Password',
+    clickToBack: 'go back to the last page'
   },
   login: {
     title: 'LibCity Experimental Management System',

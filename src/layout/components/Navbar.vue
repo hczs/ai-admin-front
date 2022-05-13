@@ -6,7 +6,7 @@
 
     <div class="right-menu">
 
-      <el-tooltip class="item" effect="dark" content="返回上一页" placement="bottom">
+      <el-tooltip class="item" effect="dark" :content="$t('navbar.clickToBack')" placement="bottom">
         <span class="right-menu-item hover-effect" @click="back">
           <i class="el-icon-back" />
         </span>
