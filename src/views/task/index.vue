@@ -417,9 +417,9 @@
             >
               {{ $t('task.downloadModel') }}
             </el-link>
-            <!-- 查看日志按钮 -->
+            <!-- 查看日志按钮 实验 不是未开始状态 且 不是已预约实验状态  的时候显示查看日志按钮 -->
             <el-link
-              v-if="scope.row.task_status !== 0"
+              v-if="scope.row.task_status !== 0 && scope.row.task_status !== 3"
               style="margin-left: 10px"
               icon="el-icon-document"
               @click="catLog(scope.row.id)"
@@ -992,6 +992,10 @@ export default {
       if (this.timeObj) {
         clearTimeout(this.timeObj)
       }
+      // 等待 1 秒再发请求 立刻获取状态会把上次的错误状态获取过来，所以等待他设置好状态了再监控
+      setTimeout(function() {
+        console.log('I am the third log after 1 seconds')
+      }, 1000)
       getTaskStatus(taskId).then(res => {
         if (res.code === 202) {
           this.$nextTick(() => {
