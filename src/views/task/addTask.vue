@@ -97,7 +97,7 @@
                   </el-col>
                   <el-col :span="8">
                     <el-form-item :label="$t('task.model')" prop="model" label-width="100px">
-                      <el-select v-model="task.model" default-first-option allow-create filterable style="float: left" :placeholder="$t('common.pleasechoose')">
+                      <el-select v-model="task.model" default-first-option filterable style="float: left" :placeholder="$t('common.pleasechoose')">
                         <el-option
                           v-for="model in modelList"
                           :key="model"
@@ -116,7 +116,7 @@
                           :label="file.file_original_name"
                           :value="file.file_name"
                         >
-                          <el-tooltip class="item" effect="dark" :content="file.creator.toString()" placement="top">
+                          <el-tooltip :open-delay="500" class="item" effect="dark" :content="file.creator.toString()" placement="top">
                             <span style="float: left">{{ file.file_original_name }}</span>
                           </el-tooltip>
                         </el-option>
@@ -322,13 +322,13 @@
 </template>
 <script>
 import { getFileListAll } from '@/api/file'
-import { addTask, taskExists, getTaskById, updateTaskById, getConfigDataById } from '@/api/task'
+import { addTask, taskExists, getTaskById, updateTaskById, getConfigDataById, getTaskModelConfig } from '@/api/task'
 import { getSimpleAccountList } from '@/api/account'
 export default {
   data() {
     // 任务名称校验
     const validateTaskName = (rule, value, callback) => {
-      if (value.length === 0) {
+      if (!value || value.length === 0) {
         callback(new Error(this.$t('task.taskNameError')))
       } else {
         var temp_obj = {}
@@ -405,23 +405,25 @@ export default {
       formLabelWidth: '10%',
       fileList: [],
       accountList: [],
-      taskModelDict: {
-        'traffic_state_pred': [
-          'GRU', 'ACFM', 'STResNet', 'DSAN', 'ACFMCommon', 'STResNetCommon', 'RNN', 'FNN', 'AutoEncoder',
-          'Seq2Seq', 'AGCRN', 'ASTGCNCommon', 'MSTGCNCommon', 'STSGCN', 'CONVGCNCommon', 'ToGCN', 'MultiSTGCnetCommon',
-          'STNN', 'ASTGCN', 'MSTGCN', 'CONVGCN', 'DGCN', 'ResLSTM', 'MultiSTGCnet', 'CRANN', 'STDN', 'DCRNN',
-          'STGCN', 'GWNET', 'MTGNN', 'STMGAT', 'TGCN', 'ATDM', 'HGCN', 'DKFN', 'STTN', 'GTS', 'GMAN', 'STAGGCN',
-          'TGCLSTM', 'DMVSTNet', 'CCRNN', 'STG2Seq', 'GEML', 'CSTN', 'GSNet'],
-        'traj_loc_pred': [
-          'FPMC', 'RNN', 'ST-RNN', 'ATST-LSTM', 'DeepMove', 'HST-LSTM', 'LSTPM', 'STAN',
-          'GeoSAN', 'SERM', 'CARA'],
-        'eta': [
-          'DeepTTE', 'TTPNet'
-        ],
-        'map_matching': ['STMatching', 'IVMM', 'HMMM'],
-        'road_representation': ['ChebConv', 'LINE']
-      },
-      modelList: ['CRANN', 'DeepTTE', 'IVMM', 'GeoSAN', 'AutoEncoder', 'MultiSTGCnet', 'DKFN', 'FNN', 'GWNET', 'MSTGCN', 'STTN', ' STNN', 'RNN', 'MSTGCNCommon', 'CONVGCNCommon', 'STGCN', 'GSNet', 'FPMC', 'HMMM', 'GTS', 'STMGAT', 'DMVSTNet', 'ASTGCN', 'ToGCN', 'DSAN', 'ATST-LSTM', 'ChebConv', 'MultiSTGCnetCommon', 'CCRNN', 'TGCN', 'STDN', 'ST-RNN', 'ATDM', 'SERM', 'DCRNN', 'DeepMove', 'LINE', ' GMAN', 'CARA', 'CSTN', ' ASTGCN', 'ACFM', 'MTGNN', 'STMatching', 'STAGGCN', 'TTPNet', 'HGCN', 'ACFMCommon', ' ATST-LSTM', 'STResNet', 'STResNetCommon', 'STNN', 'CONVGCN', ' ASTGCNCommon', 'GEML', 'STG2Seq', 'STAN', 'HST-LSTM', 'GMAN', ' STAGGCN', 'LSTPM', 'STSGCN', 'ResLSTM', 'AGCRN', 'Seq2Seq', 'DGCN', 'ASTGCNCommon', 'TGCLSTM'],
+      // taskModelDict: {
+      //   'traffic_state_pred': [
+      //     'GRU', 'ACFM', 'STResNet', 'DSAN', 'ACFMCommon', 'STResNetCommon', 'RNN', 'FNN', 'AutoEncoder',
+      //     'Seq2Seq', 'AGCRN', 'ASTGCNCommon', 'MSTGCNCommon', 'STSGCN', 'CONVGCNCommon', 'ToGCN', 'MultiSTGCnetCommon',
+      //     'STNN', 'ASTGCN', 'MSTGCN', 'CONVGCN', 'DGCN', 'ResLSTM', 'MultiSTGCnet', 'CRANN', 'STDN', 'DCRNN',
+      //     'STGCN', 'GWNET', 'MTGNN', 'STMGAT', 'TGCN', 'ATDM', 'HGCN', 'DKFN', 'STTN', 'GTS', 'GMAN', 'STAGGCN',
+      //     'TGCLSTM', 'DMVSTNet', 'CCRNN', 'STG2Seq', 'GEML', 'CSTN', 'GSNet'],
+      //   'traj_loc_pred': [
+      //     'FPMC', 'RNN', 'ST-RNN', 'ATST-LSTM', 'DeepMove', 'HST-LSTM', 'LSTPM', 'STAN',
+      //     'GeoSAN', 'SERM', 'CARA'],
+      //   'eta': [
+      //     'DeepTTE', 'TTPNet'
+      //   ],
+      //   'map_matching': ['STMatching', 'IVMM', 'HMMM'],
+      //   'road_representation': ['ChebConv', 'LINE']
+      // },
+      taskModelDict: {},
+      // modelList: ['CRANN', 'DeepTTE', 'IVMM', 'GeoSAN', 'AutoEncoder', 'MultiSTGCnet', 'DKFN', 'FNN', 'GWNET', 'MSTGCN', 'STTN', ' STNN', 'RNN', 'MSTGCNCommon', 'CONVGCNCommon', 'STGCN', 'GSNet', 'FPMC', 'HMMM', 'GTS', 'STMGAT', 'DMVSTNet', 'ASTGCN', 'ToGCN', 'DSAN', 'ATST-LSTM', 'ChebConv', 'MultiSTGCnetCommon', 'CCRNN', 'TGCN', 'STDN', 'ST-RNN', 'ATDM', 'SERM', 'DCRNN', 'DeepMove', 'LINE', ' GMAN', 'CARA', 'CSTN', ' ASTGCN', 'ACFM', 'MTGNN', 'STMatching', 'STAGGCN', 'TTPNet', 'HGCN', 'ACFMCommon', ' ATST-LSTM', 'STResNet', 'STResNetCommon', 'STNN', 'CONVGCN', ' ASTGCNCommon', 'GEML', 'STG2Seq', 'STAN', 'HST-LSTM', 'GMAN', ' STAGGCN', 'LSTPM', 'STSGCN', 'ResLSTM', 'AGCRN', 'Seq2Seq', 'DGCN', 'ASTGCNCommon', 'TGCLSTM'],
+      modelList: [],
       // modelList: this.taskModelDict['traffic_state_pred'],
       taskParamList: [
         { id: '1', label: this.$t('task.traffic_state_pred'), value: 'traffic_state_pred' },
@@ -498,8 +500,14 @@ export default {
       })
     },
     initSelect() {
-      this.modelList = this.taskModelDict[this.task.task]
-      this.task.model = this.modelList[0]
+      // 获取任务模型对应关系
+      getTaskModelConfig()
+        .then(res => {
+          console.log(res)
+          this.taskModelDict = res.data
+          this.modelList = this.taskModelDict[this.task.task]
+          // this.task.model = this.modelList[0]
+        })
     },
     onTaskChange(curValue) {
       // console.log('change:', curValue)
@@ -585,7 +593,10 @@ export default {
         max_epoch: 1,
         task: 'traffic_state_pred',
         model: 'GRU',
-        gpu: false
+        gpu: true,
+        gpu_id: 0,
+        saved_model: true,
+        train: false
       }
     },
 

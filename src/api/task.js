@@ -162,3 +162,11 @@ export function getTaskStatus(taskId) {
     method: 'get'
   })
 }
+
+// 获取任务模型对应关系字典
+export function getTaskModelConfig() {
+  return request({
+    url: `/business/task/get_task_model_dict/`,
+    method: 'get'
+  })
+}
