@@ -992,10 +992,6 @@ export default {
       if (this.timeObj) {
         clearTimeout(this.timeObj)
       }
-      // 等待 10 秒再发请求 立刻获取状态会把上次的错误状态获取过来，所以等待他设置好状态了再监控
-      setTimeout(function() {
-        console.log('I am the third log after 1 seconds')
-      }, 10 * 1000)
       getTaskStatus(taskId).then(res => {
         if (res.code === 202) {
           this.$nextTick(() => {
@@ -1251,10 +1247,13 @@ export default {
     executeNow() {
       executeTaskById(this.executeId).then(res => {
         this.getList()
+        // 5 秒后再开始轮询，因为有一种情况是状态为执行错误的实验，重新执行后第一时间获取到的状态是错误，轮询就会停止
+        // setTimeout(this.pollingTaskStatus(this.executeId, 30), 1000 * 5)
+        setTimeout(() => {
+          this.pollingTaskStatus(this.executeId, 5)
+        }, 1000 * 5)
       })
       this.executeTaskDialogVisible = false
-      // 5 秒后再开始轮询，因为有一种情况是状态为执行错误的实验，重新执行后第一时间获取到的状态是错误，轮询就会停止
-      setTimeout(this.pollingTaskStatus(this.executeId, 30), 1000 * 5)
     },
     executeAtTime() {
       if (this.analysisExecuteTime(this.executeForm.executeTime)) {
@@ -1264,10 +1263,13 @@ export default {
       }
       executeTaskById(this.executeId, this.executeForm.executeTime).then(res => {
         this.getList()
+        // 5 秒后再开始轮询，因为有一种情况是状态为执行错误的实验，重新执行后第一时间获取到的状态是错误，轮询就会停止
+        // setTimeout(this.pollingTaskStatus(this.executeId, 30), 1000 * 5)
+        setTimeout(() => {
+          this.pollingTaskStatus(this.executeId, 5)
+        }, 1000 * 5)
       })
       this.executeTaskDialogVisible = false
-      // 5 秒后再开始轮询，因为有一种情况是状态为执行错误的实验，重新执行后第一时间获取到的状态是错误，轮询就会停止
-      setTimeout(this.pollingTaskStatus(this.executeId, 30), 1000 * 5)
     },
     // 清空查询条件，重新获取数据
     resetData() {
