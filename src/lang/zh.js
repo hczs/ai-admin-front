@@ -380,7 +380,7 @@ export default {
     config_file: '自定义的配置文件名',
     config_file1: '自定义的配置文件',
     saved_model: '是否保存训练好的模型',
-    train: '是否使用以往实验保存的模型',
+    train: '是否训练',
     batch_size: '批次大小',
     train_rate: '训练集所占比例',
     eval_rate: '验证集所占比例',

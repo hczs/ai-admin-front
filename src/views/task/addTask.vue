@@ -223,7 +223,7 @@
                 </el-col>
                 <el-col :span="8">
                   <!-- expid实验ID -->
-                  <el-form-item v-if="task.train == true" :label="$t('task.expId')" prop="exp_id" style="text-align: left" label-width="110px">
+                  <el-form-item v-if="task.train == false" :label="$t('task.expId')" prop="exp_id" style="text-align: left" label-width="110px">
                     <el-input-number v-model.number="task.exp_id" controls-position="right" />
                   </el-form-item>
                 </el-col>
@@ -397,7 +397,7 @@ export default {
         gpu: true,
         gpu_id: 0,
         saved_model: true,
-        train: false
+        train: true
       },
       configDialogVisible: false,
       configData: '',
@@ -596,7 +596,7 @@ export default {
         gpu: true,
         gpu_id: 0,
         saved_model: true,
-        train: false
+        train: true
       }
     },
 
